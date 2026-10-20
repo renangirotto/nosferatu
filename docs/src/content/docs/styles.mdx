@@ -1,0 +1,95 @@
+---
+title: Styles
+description: The stylesheets astro-nosferatu exports, how they are layered, and how to theme them with --nf-* tokens.
+---
+
+## Import everything
+
+Load `index.css` once, for example in your base layout:
+
+```astro
+---
+import 'astro-nosferatu/styles/index.css';
+---
+```
+
+It includes, in order:
+
+| File | What it contains |
+|---|---|
+| `tokens.css` | `--nf-*` custom properties on `:root` (colors, spacing, fonts, radius) |
+| `reset.css` | box-sizing, margin reset, media and form-control defaults |
+| `base.css` | `html`/`body` defaults, focus ring, text selection |
+| `typography.css` | headings, paragraphs, lists, links, code |
+
+## Cascade layers
+
+`index.css` puts the reset, base and typography rules in cascade layers:
+
+```css
+@layer nosferatu.reset, nosferatu.base, nosferatu.typography;
+```
+
+```
+nosferatu.reset < nosferatu.base < nosferatu.typography < your unlayered CSS
+```
+
+Any CSS you write outside a layer wins over the library, whatever its specificity. No `!important` needed:
+
+```css
+/* your stylesheet, loaded after index.css */
+h1 {
+	color: rebeccapurple;
+}
+```
+
+Tokens are not layered: custom properties on `:root` don't compete with your rules.
+
+## Import single files
+
+Each file can be imported on its own, for example to keep your own reset:
+
+```astro
+---
+import 'astro-nosferatu/styles/tokens.css';
+import 'astro-nosferatu/styles/typography.css';
+---
+```
+
+:::caution
+Files imported on their own are **not** layered. Only `index.css` adds the `nosferatu.*` layers.
+:::
+
+## Tokens
+
+Every value the library uses is a custom property prefixed with `--nf-`:
+
+| Group | Tokens |
+|---|---|
+| Color | `--nf-color-primary`, `--nf-color-primary-hover`, `--nf-color-on-primary`, `--nf-color-text`, `--nf-color-text-muted`, `--nf-color-background`, `--nf-color-surface`, `--nf-color-border`, `--nf-color-focus` |
+| Spacing | `--nf-space-1` (0.25rem), `--nf-space-2`, `--nf-space-3`, `--nf-space-4`, `--nf-space-6`, `--nf-space-8` (2rem) |
+| Font family | `--nf-font-body`, `--nf-font-heading`, `--nf-font-mono` |
+| Font size | `--nf-font-size-sm`, `-md`, `-lg`, `-xl`, `-2xl`, `-3xl` |
+| Font weight | `--nf-font-weight-normal`, `-medium`, `-bold` |
+| Line height | `--nf-line-height-body`, `--nf-line-height-heading` |
+| Radius | `--nf-radius-sm`, `--nf-radius-md`, `--nf-radius-full` |
+
+## Theming
+
+Override tokens after loading the styles to re-theme the library, including components:
+
+```css
+:root {
+	--nf-color-primary: #7c3aed;
+	--nf-color-primary-hover: #6d28d9;
+	--nf-font-body: 'Inter', sans-serif;
+}
+```
+
+You can also scope an override to part of a page:
+
+```css
+.promo {
+	--nf-color-primary: #059669;
+}
+```

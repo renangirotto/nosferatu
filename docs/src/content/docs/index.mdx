@@ -1,0 +1,29 @@
+---
+title: Getting started
+description: Install astro-nosferatu and use its styles and components in an Astro 7 project.
+---
+
+`astro-nosferatu` is a library of styles and `.astro` components for [Astro](https://astro.build) 7. It ships source files, so your Astro project compiles them like its own components.
+
+## Install
+
+```sh
+npm install astro-nosferatu
+```
+
+It needs `astro` 7 in your project.
+
+## Use
+
+Load the styles once, for example in your base layout, then import components where you need them:
+
+```astro
+---
+import 'astro-nosferatu/styles/index.css';
+import Button from 'astro-nosferatu/components/Button.astro';
+---
+<Button>Save</Button>
+```
+
+- [Styles](/styles/): the stylesheets, cascade layers and `--nf-*` tokens.
+- [Components](/components/button/): every component, with live demos.

@@ -1,0 +1,70 @@
+---
+title: Button
+description: A button with primary and secondary variants, styled through --nf-* tokens.
+---
+
+import Button from 'astro-nosferatu/components/Button.astro';
+
+```astro
+---
+import Button from 'astro-nosferatu/components/Button.astro';
+---
+```
+
+## Variants
+
+<div class="not-content demo">
+	<Button>Primary</Button>
+	<Button variant="secondary">Secondary</Button>
+	<Button disabled>Disabled</Button>
+</div>
+
+```astro
+<Button>Primary</Button>
+<Button variant="secondary">Secondary</Button>
+<Button disabled>Disabled</Button>
+```
+
+## Props
+
+| Prop | Type | Default | Notes |
+|---|---|---|---|
+| `variant` | `'primary' \| 'secondary'` | `'primary'` | |
+| `type` | `'button' \| 'submit' \| 'reset'` | `'button'` | Set `type="submit"` inside forms. |
+
+Every other `<button>` attribute (`disabled`, `name`, `aria-*`, `class`, event attributes...) is passed through to the element.
+
+## Theming
+
+The button reads its colors from tokens. Overriding them changes the button, here on a wrapper element:
+
+<div class="not-content demo" style="--nf-color-primary: #059669; --nf-color-primary-hover: #047857;">
+	<Button>Themed</Button>
+</div>
+
+```astro
+<div style="--nf-color-primary: #059669; --nf-color-primary-hover: #047857;">
+	<Button>Themed</Button>
+</div>
+```
+
+## Scoped styles
+
+The button's styles only apply to the button itself. A plain `<button>` next to it is left alone:
+
+<div class="not-content demo">
+	<Button>Component</Button>
+	<button type="button">Plain button</button>
+</div>
+
+<style>{`
+	.demo {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		padding: 1.5rem;
+		margin-block: 1rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 0.5rem;
+	}
+`}</style>
