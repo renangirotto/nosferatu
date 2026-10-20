@@ -1,8 +1,16 @@
 {
   "name": "astro-nosferatu",
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "author": "renangirotto",
   "description": "Astro component library: styles and .astro components.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/renangirotto/nosferatu.git",
+    "directory": "packages/ui"
+  },
+  "homepage": "https://github.com/renangirotto/nosferatu#readme",
+  "bugs": "https://github.com/renangirotto/nosferatu/issues",
   "type": "module",
   "keywords": [
     "astro-component",
