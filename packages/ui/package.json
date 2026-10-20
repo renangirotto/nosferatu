@@ -1,0 +1,27 @@
+{
+  "name": "astro-nosferatu",
+  "version": "0.0.0",
+  "description": "Astro component library: styles and .astro components.",
+  "license": "MIT",
+  "type": "module",
+  "keywords": [
+    "astro-component",
+    "astro",
+    "ui",
+    "css"
+  ],
+  "exports": {
+    "./components/*": "./src/components/*",
+    "./styles/*": "./src/styles/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src"
+  ],
+  "peerDependencies": {
+    "astro": "^7.0.0"
+  },
+  "devDependencies": {
+    "astro": "^7.4.1"
+  }
+}

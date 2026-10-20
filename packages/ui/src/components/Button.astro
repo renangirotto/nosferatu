@@ -1,0 +1,59 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'button'> {
+	variant?: 'primary' | 'secondary';
+}
+
+const { variant = 'primary', type = 'button', class: className, ...attrs } = Astro.props;
+---
+
+<button type={type} class:list={['nf-button', `nf-button--${variant}`, className]} {...attrs}>
+	<slot />
+</button>
+
+<style>
+	.nf-button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: var(--nf-space-2);
+		padding: var(--nf-space-2) var(--nf-space-4);
+		border: 1px solid transparent;
+		border-radius: var(--nf-radius-md);
+		font-family: var(--nf-font-body);
+		font-size: var(--nf-font-size-md);
+		font-weight: var(--nf-font-weight-medium);
+		line-height: var(--nf-line-height-heading);
+		cursor: pointer;
+	}
+
+	.nf-button:focus-visible {
+		outline: 2px solid var(--nf-color-focus);
+		outline-offset: 2px;
+	}
+
+	.nf-button:disabled {
+		cursor: not-allowed;
+		opacity: 0.5;
+	}
+
+	.nf-button--primary {
+		background-color: var(--nf-color-primary);
+		color: var(--nf-color-on-primary);
+	}
+
+	.nf-button--primary:hover:not(:disabled) {
+		background-color: var(--nf-color-primary-hover);
+	}
+
+	.nf-button--secondary {
+		background-color: var(--nf-color-background);
+		border-color: var(--nf-color-border);
+		color: var(--nf-color-text);
+	}
+
+	.nf-button--secondary:hover:not(:disabled) {
+		background-color: var(--nf-color-surface);
+	}
+</style>

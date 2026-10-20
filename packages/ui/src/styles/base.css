@@ -1,0 +1,24 @@
+html {
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+}
+
+body {
+	min-height: 100vh;
+	background-color: var(--nf-color-background);
+	color: var(--nf-color-text);
+	font-family: var(--nf-font-body);
+	font-size: var(--nf-font-size-md);
+	line-height: var(--nf-line-height-body);
+	-webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+	outline: 2px solid var(--nf-color-focus);
+	outline-offset: 2px;
+}
+
+::selection {
+	background-color: var(--nf-color-primary);
+	color: var(--nf-color-on-primary);
+}
