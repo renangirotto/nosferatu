@@ -17,21 +17,22 @@ It includes, in order:
 
 | File | What it contains |
 |---|---|
-| `tokens.css` | `--nf-*` custom properties on `:root` (colors, spacing, fonts, radius) |
-| `reset.css` | box-sizing, margin reset, media and form-control defaults |
+| `tokens.css` | `--nf-*` custom properties on `:root` (spacing, fonts, radius) |
+| `colors.css` | `--nf-*` color palette on `:root` (light and dark scales) |
+| `reset.css` | box-sizing, margin reset, `100dvh` body container, media and form-control defaults, text wrapping |
 | `base.css` | `html`/`body` defaults, focus ring, text selection |
 | `typography.css` | headings, paragraphs, lists, links, code |
 
 ## Cascade layers
 
-`index.css` puts the reset, base and typography rules in cascade layers:
+`index.css` puts every file in its own cascade layer:
 
 ```css
-@layer nosferatu.reset, nosferatu.base, nosferatu.typography;
+@layer nosferatu.tokens, nosferatu.colors, nosferatu.reset, nosferatu.base, nosferatu.typography;
 ```
 
 ```
-nosferatu.reset < nosferatu.base < nosferatu.typography < your unlayered CSS
+nosferatu.tokens < nosferatu.colors < nosferatu.reset < nosferatu.base < nosferatu.typography < your unlayered CSS
 ```
 
 Any CSS you write outside a layer wins over the library, whatever its specificity. No `!important` needed:
@@ -43,7 +44,7 @@ h1 {
 }
 ```
 
-Tokens are not layered: custom properties on `:root` don't compete with your rules.
+Tokens and colors are layered too, so an unlayered `:root { --nf-… }` override wins whether it loads before or after `index.css`.
 
 ## Import single files
 
@@ -52,6 +53,7 @@ Each file can be imported on its own, for example to keep your own reset:
 ```astro
 ---
 import 'astro-nosferatu/styles/tokens.css';
+import 'astro-nosferatu/styles/colors.css';
 import 'astro-nosferatu/styles/typography.css';
 ---
 ```
@@ -66,7 +68,6 @@ Every value the library uses is a custom property prefixed with `--nf-`:
 
 | Group | Tokens |
 |---|---|
-| Color | `--nf-color-primary`, `--nf-color-primary-hover`, `--nf-color-on-primary`, `--nf-color-text`, `--nf-color-text-muted`, `--nf-color-background`, `--nf-color-surface`, `--nf-color-border`, `--nf-color-focus` |
 | Spacing | `--nf-space-1` (0.25rem), `--nf-space-2`, `--nf-space-3`, `--nf-space-4`, `--nf-space-6`, `--nf-space-8` (2rem) |
 | Font family | `--nf-font-body`, `--nf-font-heading`, `--nf-font-mono` |
 | Font size | `--nf-font-size-sm`, `-md`, `-lg`, `-xl`, `-2xl`, `-3xl` |
@@ -74,14 +75,35 @@ Every value the library uses is a custom property prefixed with `--nf-`:
 | Line height | `--nf-line-height-body`, `--nf-line-height-heading` |
 | Radius | `--nf-radius-sm`, `--nf-radius-md`, `--nf-radius-full` |
 
+## Colors
+
+`colors.css` holds the color palette. There are no semantic color tokens: styles and components use palette steps directly.
+
+Each token is named `--nf-<hue>-<scale>-<step>`:
+
+- **hue**: `blue`, `cyan`, `green`, `orange`, `pink`, `purple`, `red`, `yellow`
+- **scale**: `d` for dark mode, `l` for light mode
+- **step**: `10` to `100`, in tens
+
+For example `--nf-red-l-80` or `--nf-blue-d-20`. All values are OKLCH. The library styles currently use the light (`-l-`) scale:
+
+| Role | Token |
+|---|---|
+| Text | `--nf-blue-l-100` |
+| Muted text | `--nf-blue-l-80` |
+| Surface (code, hover) | `--nf-blue-l-10` |
+| Border | `--nf-blue-l-30` |
+| Focus ring | `--nf-blue-l-60` |
+| Links, primary button, selection | `--nf-red-l-80` (hover `--nf-red-l-90`, text on it `--nf-red-l-10`) |
+
 ## Theming
 
 Override tokens after loading the styles to re-theme the library, including components:
 
 ```css
 :root {
-	--nf-color-primary: #7c3aed;
-	--nf-color-primary-hover: #6d28d9;
+	--nf-red-l-80: var(--nf-purple-l-80);
+	--nf-red-l-90: var(--nf-purple-l-90);
 	--nf-font-body: 'Inter', sans-serif;
 }
 ```
@@ -90,6 +112,6 @@ You can also scope an override to part of a page:
 
 ```css
 .promo {
-	--nf-color-primary: #059669;
+	--nf-red-l-80: var(--nf-green-l-80);
 }
 ```

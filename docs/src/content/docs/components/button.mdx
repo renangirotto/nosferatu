@@ -38,12 +38,12 @@ Every other `<button>` attribute (`disabled`, `name`, `aria-*`, `class`, event a
 
 The button reads its colors from tokens. Overriding them changes the button, here on a wrapper element:
 
-<div class="not-content demo" style="--nf-color-primary: #059669; --nf-color-primary-hover: #047857;">
+<div class="not-content demo" style="--nf-red-l-80: var(--nf-green-l-80); --nf-red-l-90: var(--nf-green-l-90);">
 	<Button>Themed</Button>
 </div>
 
 ```astro
-<div style="--nf-color-primary: #059669; --nf-color-primary-hover: #047857;">
+<div style="--nf-red-l-80: var(--nf-green-l-80); --nf-red-l-90: var(--nf-green-l-90);">
 	<Button>Themed</Button>
 </div>
 ```

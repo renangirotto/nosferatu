@@ -4,21 +4,18 @@ html {
 }
 
 body {
-	min-height: 100vh;
-	background-color: var(--nf-color-background);
-	color: var(--nf-color-text);
+	color: var(--nf-blue-l-100);
 	font-family: var(--nf-font-body);
 	font-size: var(--nf-font-size-md);
 	line-height: var(--nf-line-height-body);
-	-webkit-font-smoothing: antialiased;
 }
 
 :focus-visible {
-	outline: 2px solid var(--nf-color-focus);
+	outline: 2px solid var(--nf-blue-l-60);
 	outline-offset: 2px;
 }
 
 ::selection {
-	background-color: var(--nf-color-primary);
-	color: var(--nf-color-on-primary);
+	background-color: var(--nf-red-l-80);
+	color: var(--nf-red-l-10);
 }

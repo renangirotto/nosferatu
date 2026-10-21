@@ -1,15 +1,4 @@
 :root {
-	/* Color */
-	--nf-color-primary: #b91c1c;
-	--nf-color-primary-hover: #991b1b;
-	--nf-color-on-primary: #ffffff;
-	--nf-color-text: #18181b;
-	--nf-color-text-muted: #52525b;
-	--nf-color-background: #ffffff;
-	--nf-color-surface: #f4f4f5;
-	--nf-color-border: #d4d4d8;
-	--nf-color-focus: #2563eb;
-
 	/* Spacing */
 	--nf-space-1: 0.25rem;
 	--nf-space-2: 0.5rem;

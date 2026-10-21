@@ -42,12 +42,12 @@ ol {
 }
 
 a {
-	color: var(--nf-color-primary);
+	color: var(--nf-red-l-80);
 	text-underline-offset: 0.15em;
 }
 
 a:hover {
-	color: var(--nf-color-primary-hover);
+	color: var(--nf-red-l-90);
 }
 
 code,
@@ -60,13 +60,13 @@ pre {
 code {
 	padding: 0.1em 0.3em;
 	border-radius: var(--nf-radius-sm);
-	background-color: var(--nf-color-surface);
+	background-color: var(--nf-blue-l-10);
 }
 
 pre {
 	padding: var(--nf-space-4);
 	border-radius: var(--nf-radius-md);
-	background-color: var(--nf-color-surface);
+	background-color: var(--nf-blue-l-10);
 	overflow-x: auto;
 }
 
@@ -77,5 +77,5 @@ pre code {
 
 small {
 	font-size: var(--nf-font-size-sm);
-	color: var(--nf-color-text-muted);
+	color: var(--nf-blue-l-80);
 }
