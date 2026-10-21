@@ -1,59 +1,141 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
+import type { HTMLAttributes } from "astro/types";
 
-interface Props extends HTMLAttributes<'button'> {
-	variant?: 'primary' | 'secondary';
+interface Props extends HTMLAttributes<"button"> {
+  color?:
+    "blue" | "cyan" | "green" | "orange" | "pink" | "purple" | "red" | "yellow";
 }
 
-const { variant = 'primary', type = 'button', class: className, ...attrs } = Astro.props;
+const {
+  color = "purple",
+  type = "button",
+  class: className,
+  "data-ui-color": _controlled,
+  ...attrs
+} = Astro.props;
 ---
 
-<button type={type} class:list={['nf-button', `nf-button--${variant}`, className]} {...attrs}>
-	<slot />
+<button
+  {...attrs}
+  type={type}
+  data-ui-color={color}
+  class:list={["nf-button", className]}
+>
+  <slot />
 </button>
 
 <style>
-	.nf-button {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		gap: var(--nf-space-2);
-		padding: var(--nf-space-2) var(--nf-space-4);
-		border: 1px solid transparent;
-		border-radius: var(--nf-radius-md);
-		font-family: var(--nf-font-body);
-		font-size: var(--nf-font-size-md);
-		font-weight: var(--nf-font-weight-medium);
-		line-height: var(--nf-line-height-heading);
-		cursor: pointer;
-	}
+  .nf-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--nf-space-2);
+    padding-block: var(--nf-space-2);
+    padding-inline: var(--nf-space-4);
+    border: none;
+    border-radius: var(--nf-radius-md);
+    color: var(--nf-btn-accent-color);
+    font-family: var(--nf-font-body);
+    font-size: var(--nf-font-size-md);
+    font-weight: 600;
+    line-height: var(--nf-line-height-heading);
+    background-color: var(--nf-btn-color);
+    box-shadow: 0px var(--nf-btn-depth, 4px) 0px var(--nf-btn-accent-color);
+    translate: 0 var(--nf-btn-lift, 0px);
+    cursor: pointer;
+    transition-property:
+      translate, box-shadow, background-color, color, border-color;
+    transition-duration: var(--nf-btn-transition-duration, 0.15s);
+    transition-timing-function: ease-in-out;
 
-	.nf-button:focus-visible {
-		outline: 2px solid var(--nf-blue-l-60);
-		outline-offset: 2px;
-	}
+    &[data-ui-color="blue"] {
+      --nf-btn-color: light-dark(var(--nf-blue-l-40), var(--nf-blue-d-50));
+      --nf-btn-accent-color: light-dark(
+        var(--nf-blue-l-80),
+        var(--nf-blue-d-90)
+      );
+    }
 
-	.nf-button:disabled {
-		cursor: not-allowed;
-		opacity: 0.5;
-	}
+    &[data-ui-color="cyan"] {
+      --nf-btn-color: light-dark(var(--nf-cyan-l-40), var(--nf-cyan-d-50));
+      --nf-btn-accent-color: light-dark(
+        var(--nf-cyan-l-80),
+        var(--nf-cyan-d-90)
+      );
+    }
 
-	.nf-button--primary {
-		background-color: var(--nf-red-l-80);
-		color: var(--nf-red-l-10);
-	}
+    &[data-ui-color="green"] {
+      --nf-btn-color: light-dark(var(--nf-green-l-40), var(--nf-green-d-50));
+      --nf-btn-accent-color: light-dark(
+        var(--nf-green-l-80),
+        var(--nf-green-d-90)
+      );
+    }
 
-	.nf-button--primary:hover:not(:disabled) {
-		background-color: var(--nf-red-l-90);
-	}
+    &[data-ui-color="orange"] {
+      --nf-btn-color: light-dark(var(--nf-orange-l-40), var(--nf-orange-d-50));
+      --nf-btn-accent-color: light-dark(
+        var(--nf-orange-l-80),
+        var(--nf-orange-d-90)
+      );
+    }
 
-	.nf-button--secondary {
-		background-color: transparent;
-		border-color: var(--nf-blue-l-30);
-		color: var(--nf-blue-l-100);
-	}
+    &[data-ui-color="pink"] {
+      --nf-btn-color: light-dark(var(--nf-pink-l-40), var(--nf-pink-d-50));
+      --nf-btn-accent-color: light-dark(
+        var(--nf-pink-l-80),
+        var(--nf-pink-d-90)
+      );
+    }
 
-	.nf-button--secondary:hover:not(:disabled) {
-		background-color: var(--nf-blue-l-10);
-	}
+    &[data-ui-color="purple"] {
+      --nf-btn-color: light-dark(var(--nf-purple-l-40), var(--nf-purple-d-50));
+      --nf-btn-accent-color: light-dark(
+        var(--nf-purple-l-80),
+        var(--nf-purple-d-90)
+      );
+    }
+
+    &[data-ui-color="red"] {
+      --nf-btn-color: light-dark(var(--nf-red-l-40), var(--nf-red-d-50));
+      --nf-btn-accent-color: light-dark(var(--nf-red-l-80), var(--nf-red-d-90));
+    }
+
+    &[data-ui-color="yellow"] {
+      --nf-btn-color: light-dark(var(--nf-yellow-l-40), var(--nf-yellow-d-50));
+      --nf-btn-accent-color: light-dark(
+        var(--nf-yellow-l-80),
+        var(--nf-yellow-d-90)
+      );
+    }
+
+    &:hover:not(:disabled),
+    &:focus-within:not(:disabled) {
+      --nf-btn-depth: 2px;
+      --nf-btn-lift: 2px;
+    }
+
+    &:active:not(:disabled) {
+      --nf-btn-depth: 0px;
+      --nf-btn-lift: 4px;
+    }
+
+    /* The button has no border, so the focus ring is drawn inside its edge as one */
+    &:focus-visible {
+      outline: var(--nf-btn-outline-width, 2px) solid var(--nf-btn-accent-color);
+      outline-offset: calc(-1 * var(--nf-btn-outline-width, 1px));
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+  }
+
+  /* Keep the states and their feedback, drop the animation between them */
+  @media (prefers-reduced-motion: reduce) {
+    .nf-button {
+      --nf-btn-transition-duration: 0s;
+    }
+  }
 </style>

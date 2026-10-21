@@ -1,32 +1,89 @@
 schema: spec-driven
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+# Project context — shown to AI when creating artifacts.
+context: |
+  Project: nosferatu, a pnpm workspace (Node >= 22.22, pnpm via Corepack).
+    packages/ui/  -> astro-nosferatu, the published npm package (src/components, src/styles)
+    docs/         -> Starlight documentation site, private, never published
+  If pnpm/node/openspec are missing from PATH, they live in /usr/local/bin.
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+  Tech stack: Astro 7 (peer `astro` ^7.0.0), plain CSS, TypeScript only for Astro
+  component prop types. No framework runtime, no runtime dependencies.
 
-# Per-operation guidance (optional)
-# Add advisory guidance for how apply and archive work should be conducted.
-# This is separate from artifact rules above.
-# Example:
-#   operations:
-#     apply:
-#       guidance:
-#         - Keep test summaries concise
-#     archive:
-#       guidance:
-#         - Summarize the archive outcome before finishing
+  Distribution model: the library ships SOURCE. `.astro` and `.css` files are
+  published as-is and compiled by the consumer's Astro build. There is no build
+  step, no bundler, and no test runner. Do not propose adding one as an
+  incidental implementation detail; it is a breaking architectural change that
+  needs its own explicit proposal.
+
+  Verification available to tasks:
+    pnpm build                 docs build — resolves the real package exports
+    pnpm pack:check            dry-run pack — what would actually be published
+    pnpm --filter docs check   astro check over the docs site
+  There are no unit tests. Write verification steps in terms of these commands
+  plus concrete manual browser checks; never invent a test command.
+
+  Invariants (from openspec/specs — violating one is a bug, not a tradeoff):
+    1. Every CSS custom property is `--nf-` prefixed.
+    2. No semantic color tokens. Never define or use `--nf-color-*`. Colors come
+       only from the palette in colors.css, named `--nf-<hue>-<d|l>-<step>`
+       (8 hues x dark/light x steps 10..100 in tens = 160 tokens, OKLCH).
+    3. Cascade layer order is fixed in index.css: nosferatu.tokens, nosferatu.colors,
+       nosferatu.reset, nosferatu.base, nosferatu.typography. Unlayered consumer CSS
+       must keep winning over all library CSS — never raise specificity to force an override.
+    4. Each stylesheet is independently importable; index.css includes all of them.
+    5. Components are self-styled: scoped <style> only, design values exclusively
+       through var(--nf-*), and no selector may reach outside the component's own markup.
+    6. Public import paths only: astro-nosferatu/components/<Name>.astro and
+       astro-nosferatu/styles/<name>.css. Docs import by package name, never by
+       relative path into packages/ui/src.
+    7. The published tarball contains only src/components, src/styles, package.json,
+       README.md, LICENSE.
+    8. docs stays private and never becomes a dependency of the library.
+
+  Conventions: tabs in .astro and .css sources; component classes are `nf-` prefixed
+  and BEM-ish (.nf-button, .nf-button--primary); components extend native element
+  attribute types, merge a consumer `class` via class:list, and spread the rest;
+  Conventional Commits, scoped (feat(ui)!:, docs(openspec):, chore:).
+
+  Every new or changed component needs a docs page under
+  docs/src/content/docs/components/ with a live demo and its import line — the
+  sidebar autogenerates, so no config edit is needed.
+
+# Per-artifact rules
+rules:
+  proposal:
+    - State plainly whether the change is consumer-visible; a change to published
+      CSS, tokens, component markup or package exports is a breaking change for
+      consumers unless argued otherwise.
+    - Always include a "Non-goals" section.
+  specs:
+    - Write requirements against observable consumer behaviour (what a consuming
+      Astro project sees), not internal file organisation.
+    - Scenarios must be checkable by a human in a browser or by one of the
+      repository's verification commands.
+  design:
+    - Only write design.md when there is a real decision to record (cascade or
+      layering impact, token naming, public export surface, breaking change).
+      Skip it for additive, mechanical work.
+    - Record which existing invariant the design upholds, and name any it bends.
+  tasks:
+    - Order tasks so the library change comes first and its docs page lands in the
+      same change, never as follow-up work.
+    - End every change with a verification task naming the exact commands
+      (pnpm build, pnpm pack:check) and what a passing result looks like.
+
+# Per-operation guidance
+operations:
+  apply:
+    guidance:
+      - Read the relevant spec in openspec/specs before editing code; the spec wins
+        over the existing implementation when they disagree.
+      - Match the surrounding file's style exactly, tabs included.
+      - Run pnpm build before reporting the work done; add pnpm pack:check whenever
+        packages/ui/package.json or the set of published files changed.
+  archive:
+    guidance:
+      - Confirm the docs page for any touched component exists and renders a live demo.
+      - Summarise the consumer-visible effect in one line, and flag it explicitly
+        when the change warrants a major version bump.
