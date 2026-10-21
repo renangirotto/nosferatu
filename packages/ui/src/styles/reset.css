@@ -10,6 +10,11 @@
 	margin: 0;
 }
 
+/* Follow the user's preferred color scheme, so light-dark() resolves both branches */
+:root {
+	color-scheme: light dark;
+}
+
 /* Enable keyword animations */
 @media (prefers-reduced-motion: no-preference) {
 	html {

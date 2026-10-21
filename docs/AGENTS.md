@@ -19,6 +19,8 @@ src/content/docs/components/*.mdx   One page per component (sidebar autogenerate
 
 New component → new `src/content/docs/components/<name>.mdx`. The sidebar picks it up automatically via `autogenerate`; no config edit needed.
 
+The `component-doc` skill in [.agents/skills/component-doc](../.agents/skills/component-doc/SKILL.md) is the full procedure for one of these pages, including the sections every page must have.
+
 ## Checks
 
 ```

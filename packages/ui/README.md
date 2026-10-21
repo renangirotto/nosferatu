@@ -19,12 +19,12 @@ import 'astro-nosferatu/styles/index.css';
 `index.css` puts every stylesheet in its own cascade layer, in this order:
 
 ```
-nosferatu.tokens < nosferatu.colors < nosferatu.reset < nosferatu.base < nosferatu.typography < your unlayered CSS
+nosferatu.tokens < nosferatu.colors < nosferatu.reset < nosferatu.typography < your unlayered CSS
 ```
 
 Any CSS you write outside a layer wins, with no `!important` or extra specificity needed.
 
-You can also import single files: `tokens.css`, `colors.css`, `reset.css`, `base.css`, `typography.css`. Files imported on their own are **not** layered; only `index.css` adds the layers.
+You can also import single files: `tokens.css`, `colors.css`, `reset.css`, `typography.css`. Files imported on their own are **not** layered; only `index.css` adds the layers.
 
 ### Theming
 
@@ -43,10 +43,12 @@ Every design value is a CSS custom property prefixed with `--nf-`. Colors come f
 import Button from 'astro-nosferatu/components/Button.astro';
 ---
 <Button>Save</Button>
-<Button variant="secondary">Cancel</Button>
+<Button color="red">Delete</Button>
 ```
 
-Components read their values from the `--nf-*` tokens, so load `tokens.css` and `colors.css` (or `index.css`) on the page.
+`Button` takes a `color` of `blue`, `cyan`, `green`, `orange`, `pink`, `purple` (default), `red` or `yellow`, and passes every other `<button>` attribute through.
+
+Components read their values from the `--nf-*` tokens, so load `tokens.css` and `colors.css` (or `index.css`) on the page. `reset.css` sets `color-scheme: light dark`, so components that use `light-dark()` follow the reader's preferred scheme; set `color-scheme` yourself in unlayered CSS to pin one.
 
 ## License
 

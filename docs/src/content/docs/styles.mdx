@@ -19,8 +19,7 @@ It includes, in order:
 |---|---|
 | `tokens.css` | `--nf-*` custom properties on `:root` (spacing, fonts, radius) |
 | `colors.css` | `--nf-*` color palette on `:root` (light and dark scales) |
-| `reset.css` | box-sizing, margin reset, `100dvh` body container, media and form-control defaults, text wrapping |
-| `base.css` | `html`/`body` defaults, focus ring, text selection |
+| `reset.css` | box-sizing, margin reset, `color-scheme`, `100dvh` body container, media and form-control defaults, text wrapping |
 | `typography.css` | headings, paragraphs, lists, links, code |
 
 ## Cascade layers
@@ -28,11 +27,11 @@ It includes, in order:
 `index.css` puts every file in its own cascade layer:
 
 ```css
-@layer nosferatu.tokens, nosferatu.colors, nosferatu.reset, nosferatu.base, nosferatu.typography;
+@layer nosferatu.tokens, nosferatu.colors, nosferatu.reset, nosferatu.typography;
 ```
 
 ```
-nosferatu.tokens < nosferatu.colors < nosferatu.reset < nosferatu.base < nosferatu.typography < your unlayered CSS
+nosferatu.tokens < nosferatu.colors < nosferatu.reset < nosferatu.typography < your unlayered CSS
 ```
 
 Any CSS you write outside a layer wins over the library, whatever its specificity. No `!important` needed:
@@ -89,12 +88,11 @@ For example `--nf-red-l-80` or `--nf-blue-d-20`. All values are OKLCH. The libra
 
 | Role | Token |
 |---|---|
-| Text | `--nf-blue-l-100` |
-| Muted text | `--nf-blue-l-80` |
-| Surface (code, hover) | `--nf-blue-l-10` |
-| Border | `--nf-blue-l-30` |
-| Focus ring | `--nf-blue-l-60` |
-| Links, primary button, selection | `--nf-red-l-80` (hover `--nf-red-l-90`, text on it `--nf-red-l-10`) |
+| Headings, body copy | inherited from the page — the library sets no `body` color |
+| Muted text (`small`) | `--nf-blue-l-80` |
+| Surface (`code`, `pre`) | `--nf-blue-l-10` |
+| Links | `--nf-red-l-80` (hover `--nf-red-l-90`) |
+| Components | their own `--nf-<component>-*` properties, resolved from the palette |
 
 ## Theming
 
