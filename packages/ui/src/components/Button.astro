@@ -29,7 +29,7 @@ const { variant = 'primary', type = 'button', class: className, ...attrs } = Ast
 	}
 
 	.nf-button:focus-visible {
-		outline: 2px solid var(--nf-color-focus);
+		outline: 2px solid var(--nf-blue-l-60);
 		outline-offset: 2px;
 	}
 
@@ -39,21 +39,21 @@ const { variant = 'primary', type = 'button', class: className, ...attrs } = Ast
 	}
 
 	.nf-button--primary {
-		background-color: var(--nf-color-primary);
-		color: var(--nf-color-on-primary);
+		background-color: var(--nf-red-l-80);
+		color: var(--nf-red-l-10);
 	}
 
 	.nf-button--primary:hover:not(:disabled) {
-		background-color: var(--nf-color-primary-hover);
+		background-color: var(--nf-red-l-90);
 	}
 
 	.nf-button--secondary {
-		background-color: var(--nf-color-background);
-		border-color: var(--nf-color-border);
-		color: var(--nf-color-text);
+		background-color: transparent;
+		border-color: var(--nf-blue-l-30);
+		color: var(--nf-blue-l-100);
 	}
 
 	.nf-button--secondary:hover:not(:disabled) {
-		background-color: var(--nf-color-surface);
+		background-color: var(--nf-blue-l-10);
 	}
 </style>
