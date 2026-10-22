@@ -18,7 +18,8 @@ It includes, in order:
 | File | What it contains |
 |---|---|
 | `tokens.css` | `--nf-*` custom properties on `:root` (spacing, fonts, radius) |
-| `colors.css` | `--nf-*` color palette on `:root` (light and dark scales) |
+| `colors.css` | `--nf-*` color palette on `:root` (light and dark scales, opaque and 25% opacity) |
+| `shadows.css` | `--nf-shadow-*` box-shadow values on `:root`, one per palette color, plus `--nf-shadow-depth` |
 | `reset.css` | box-sizing, margin reset, `color-scheme`, `100dvh` body container, media and form-control defaults, text wrapping |
 | `typography.css` | headings, paragraphs, lists, links, code |
 
@@ -27,11 +28,11 @@ It includes, in order:
 `index.css` puts every file in its own cascade layer:
 
 ```css
-@layer nosferatu.tokens, nosferatu.colors, nosferatu.reset, nosferatu.typography;
+@layer nosferatu.tokens, nosferatu.colors, nosferatu.shadows, nosferatu.reset, nosferatu.typography;
 ```
 
 ```
-nosferatu.tokens < nosferatu.colors < nosferatu.reset < nosferatu.typography < your unlayered CSS
+nosferatu.tokens < nosferatu.colors < nosferatu.shadows < nosferatu.reset < nosferatu.typography < your unlayered CSS
 ```
 
 Any CSS you write outside a layer wins over the library, whatever its specificity. No `!important` needed:
@@ -53,6 +54,7 @@ Each file can be imported on its own, for example to keep your own reset:
 ---
 import 'astro-nosferatu/styles/tokens.css';
 import 'astro-nosferatu/styles/colors.css';
+import 'astro-nosferatu/styles/shadows.css';
 import 'astro-nosferatu/styles/typography.css';
 ---
 ```
@@ -84,7 +86,18 @@ Each token is named `--nf-<hue>-<scale>-<step>`:
 - **scale**: `d` for dark mode, `l` for light mode
 - **step**: `10` to `100`, in tens
 
-For example `--nf-red-l-80` or `--nf-blue-d-20`. All values are OKLCH. The library styles currently use the light (`-l-`) scale:
+For example `--nf-red-l-80` or `--nf-blue-d-20`. All values are OKLCH.
+
+Every one of those tokens has a translucent sibling with the same color at 25% alpha, named with a `-25` suffix: `--nf-red-l-80-25`, `--nf-blue-d-20-25`. Use them for tinted surfaces and hairlines that should let the page show through — that is how `Callout` draws its panel and its separator rule. The values are written out literally, so they need no `color-mix()` or relative-color support:
+
+```css
+:root {
+	--nf-purple-l-40: oklch(0.76 0.13 301.9);
+	--nf-purple-l-40-25: oklch(0.76 0.13 301.9 / 25%);
+}
+```
+
+The library styles currently use the light (`-l-`) scale:
 
 | Role | Token |
 |---|---|
@@ -93,6 +106,45 @@ For example `--nf-red-l-80` or `--nf-blue-d-20`. All values are OKLCH. The libra
 | Surface (`code`, `pre`) | `--nf-blue-l-10` |
 | Links | `--nf-red-l-80` (hover `--nf-red-l-90`) |
 | Components | their own `--nf-<component>-*` properties, resolved from the palette |
+
+## Shadows
+
+`shadows.css` turns the library's one house shadow — a solid `0px 4px 0px` offset, the raised look `Button` and `Callout` share — into a token per palette color:
+
+```astro
+---
+import 'astro-nosferatu/styles/shadows.css';
+---
+```
+
+Each token is named `--nf-shadow-<hue>-<scale>-<step>` and holds the **complete** `box-shadow` value for the palette color of the same name, so you apply it in one declaration:
+
+```css
+.card {
+	box-shadow: var(--nf-shadow-purple-l-80);
+}
+```
+
+<div class="not-content demo">
+	<div class="demo-card" style="box-shadow: var(--nf-shadow-purple-l-80); background-color: var(--nf-purple-l-40-25);">box-shadow: var(--nf-shadow-purple-l-80)</div>
+	<div class="demo-card" style="box-shadow: var(--nf-shadow-green-l-80); background-color: var(--nf-green-l-40-25);">box-shadow: var(--nf-shadow-green-l-80)</div>
+</div>
+
+A shadow token resolves the palette token it names, so overriding `--nf-purple-l-80` moves both the color and its shadow. The tokens exist only for the opaque palette — there is no `-25` shadow — and `shadows.css` needs `colors.css` loaded to resolve.
+
+One more token holds the offsets on their own:
+
+```css
+.card {
+	box-shadow: var(--nf-shadow-depth) var(--my-accent);
+}
+```
+
+Use `--nf-shadow-depth` when the shadow's color is decided somewhere else — in particular when it has to follow the color scheme. `light-dark()` resolves *colors*, not whole values, so it cannot pick between two complete shadow tokens; it can pick the color you hand to `--nf-shadow-depth`. That is exactly how `Callout` draws its shadow.
+
+:::note
+These are plain custom properties, not a function: the color is baked into the name. When CSS custom functions are available everywhere, this file collapses into one function without changing a single call site.
+:::
 
 ## Theming
 
@@ -113,3 +165,22 @@ You can also scope an override to part of a page:
 	--nf-red-l-80: var(--nf-green-l-80);
 }
 ```
+
+<style>{`
+	.demo {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 1.25rem;
+		padding: 1.5rem;
+		margin-block: 1rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 0.5rem;
+	}
+
+	.demo-card {
+		padding: 1rem;
+		border-radius: 0.5rem;
+		font-size: 0.875rem;
+	}
+`}</style>

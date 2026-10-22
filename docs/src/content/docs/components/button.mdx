@@ -1,6 +1,6 @@
 ---
 title: Button
-description: A raised button whose palette hue is chosen with the color prop and driven by --nf-btn-* custom properties.
+description: A raised button whose palette hue is chosen with the color prop and driven by --nf-button-* custom properties.
 ---
 
 import Button from 'astro-nosferatu/components/Button.astro';
@@ -104,14 +104,14 @@ Every other `<button>` attribute (`disabled`, `name`, `aria-*`, `class`, event a
 
 ## Theming
 
-The button reads its colors from exactly two custom properties — `--nf-btn-color` for the background and `--nf-btn-accent-color` for the text, the shadow and the focus outline. Set them on an ancestor to theme one button without touching any other:
+The button reads its colors from exactly two custom properties — `--nf-button-color` for the background and `--nf-button-accent-color` for the text, the shadow and the focus outline. Set them on an ancestor to theme one button without touching any other:
 
-<div class="not-content demo" style="--nf-btn-color: var(--nf-green-l-20); --nf-btn-accent-color: var(--nf-blue-l-90);">
+<div class="not-content demo" style="--nf-button-color: var(--nf-green-l-20); --nf-button-accent-color: var(--nf-blue-l-90);">
 	<Button>Themed</Button>
 </div>
 
 ```astro
-<div style="--nf-btn-color: var(--nf-green-l-20); --nf-btn-accent-color: var(--nf-blue-l-90);">
+<div style="--nf-button-color: var(--nf-green-l-20); --nf-button-accent-color: var(--nf-blue-l-90);">
 	<Button>Themed</Button>
 </div>
 ```
