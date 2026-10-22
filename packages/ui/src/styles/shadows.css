@@ -1,0 +1,180 @@
+:root {
+	/* The offsets on their own, for a shadow whose color is resolved elsewhere */
+	--nf-shadow-depth: 0px 4px 0px;
+
+	--nf-shadow-blue-d-10: 0px 4px 0px var(--nf-blue-d-10);
+	--nf-shadow-blue-d-20: 0px 4px 0px var(--nf-blue-d-20);
+	--nf-shadow-blue-d-30: 0px 4px 0px var(--nf-blue-d-30);
+	--nf-shadow-blue-d-40: 0px 4px 0px var(--nf-blue-d-40);
+	--nf-shadow-blue-d-50: 0px 4px 0px var(--nf-blue-d-50);
+	--nf-shadow-blue-d-60: 0px 4px 0px var(--nf-blue-d-60);
+	--nf-shadow-blue-d-70: 0px 4px 0px var(--nf-blue-d-70);
+	--nf-shadow-blue-d-80: 0px 4px 0px var(--nf-blue-d-80);
+	--nf-shadow-blue-d-90: 0px 4px 0px var(--nf-blue-d-90);
+	--nf-shadow-blue-d-100: 0px 4px 0px var(--nf-blue-d-100);
+
+	--nf-shadow-blue-l-10: 0px 4px 0px var(--nf-blue-l-10);
+	--nf-shadow-blue-l-20: 0px 4px 0px var(--nf-blue-l-20);
+	--nf-shadow-blue-l-30: 0px 4px 0px var(--nf-blue-l-30);
+	--nf-shadow-blue-l-40: 0px 4px 0px var(--nf-blue-l-40);
+	--nf-shadow-blue-l-50: 0px 4px 0px var(--nf-blue-l-50);
+	--nf-shadow-blue-l-60: 0px 4px 0px var(--nf-blue-l-60);
+	--nf-shadow-blue-l-70: 0px 4px 0px var(--nf-blue-l-70);
+	--nf-shadow-blue-l-80: 0px 4px 0px var(--nf-blue-l-80);
+	--nf-shadow-blue-l-90: 0px 4px 0px var(--nf-blue-l-90);
+	--nf-shadow-blue-l-100: 0px 4px 0px var(--nf-blue-l-100);
+
+	--nf-shadow-cyan-d-10: 0px 4px 0px var(--nf-cyan-d-10);
+	--nf-shadow-cyan-d-20: 0px 4px 0px var(--nf-cyan-d-20);
+	--nf-shadow-cyan-d-30: 0px 4px 0px var(--nf-cyan-d-30);
+	--nf-shadow-cyan-d-40: 0px 4px 0px var(--nf-cyan-d-40);
+	--nf-shadow-cyan-d-50: 0px 4px 0px var(--nf-cyan-d-50);
+	--nf-shadow-cyan-d-60: 0px 4px 0px var(--nf-cyan-d-60);
+	--nf-shadow-cyan-d-70: 0px 4px 0px var(--nf-cyan-d-70);
+	--nf-shadow-cyan-d-80: 0px 4px 0px var(--nf-cyan-d-80);
+	--nf-shadow-cyan-d-90: 0px 4px 0px var(--nf-cyan-d-90);
+	--nf-shadow-cyan-d-100: 0px 4px 0px var(--nf-cyan-d-100);
+
+	--nf-shadow-cyan-l-10: 0px 4px 0px var(--nf-cyan-l-10);
+	--nf-shadow-cyan-l-20: 0px 4px 0px var(--nf-cyan-l-20);
+	--nf-shadow-cyan-l-30: 0px 4px 0px var(--nf-cyan-l-30);
+	--nf-shadow-cyan-l-40: 0px 4px 0px var(--nf-cyan-l-40);
+	--nf-shadow-cyan-l-50: 0px 4px 0px var(--nf-cyan-l-50);
+	--nf-shadow-cyan-l-60: 0px 4px 0px var(--nf-cyan-l-60);
+	--nf-shadow-cyan-l-70: 0px 4px 0px var(--nf-cyan-l-70);
+	--nf-shadow-cyan-l-80: 0px 4px 0px var(--nf-cyan-l-80);
+	--nf-shadow-cyan-l-90: 0px 4px 0px var(--nf-cyan-l-90);
+	--nf-shadow-cyan-l-100: 0px 4px 0px var(--nf-cyan-l-100);
+
+	--nf-shadow-green-d-10: 0px 4px 0px var(--nf-green-d-10);
+	--nf-shadow-green-d-20: 0px 4px 0px var(--nf-green-d-20);
+	--nf-shadow-green-d-30: 0px 4px 0px var(--nf-green-d-30);
+	--nf-shadow-green-d-40: 0px 4px 0px var(--nf-green-d-40);
+	--nf-shadow-green-d-50: 0px 4px 0px var(--nf-green-d-50);
+	--nf-shadow-green-d-60: 0px 4px 0px var(--nf-green-d-60);
+	--nf-shadow-green-d-70: 0px 4px 0px var(--nf-green-d-70);
+	--nf-shadow-green-d-80: 0px 4px 0px var(--nf-green-d-80);
+	--nf-shadow-green-d-90: 0px 4px 0px var(--nf-green-d-90);
+	--nf-shadow-green-d-100: 0px 4px 0px var(--nf-green-d-100);
+
+	--nf-shadow-green-l-10: 0px 4px 0px var(--nf-green-l-10);
+	--nf-shadow-green-l-20: 0px 4px 0px var(--nf-green-l-20);
+	--nf-shadow-green-l-30: 0px 4px 0px var(--nf-green-l-30);
+	--nf-shadow-green-l-40: 0px 4px 0px var(--nf-green-l-40);
+	--nf-shadow-green-l-50: 0px 4px 0px var(--nf-green-l-50);
+	--nf-shadow-green-l-60: 0px 4px 0px var(--nf-green-l-60);
+	--nf-shadow-green-l-70: 0px 4px 0px var(--nf-green-l-70);
+	--nf-shadow-green-l-80: 0px 4px 0px var(--nf-green-l-80);
+	--nf-shadow-green-l-90: 0px 4px 0px var(--nf-green-l-90);
+	--nf-shadow-green-l-100: 0px 4px 0px var(--nf-green-l-100);
+
+	--nf-shadow-orange-d-10: 0px 4px 0px var(--nf-orange-d-10);
+	--nf-shadow-orange-d-20: 0px 4px 0px var(--nf-orange-d-20);
+	--nf-shadow-orange-d-30: 0px 4px 0px var(--nf-orange-d-30);
+	--nf-shadow-orange-d-40: 0px 4px 0px var(--nf-orange-d-40);
+	--nf-shadow-orange-d-50: 0px 4px 0px var(--nf-orange-d-50);
+	--nf-shadow-orange-d-60: 0px 4px 0px var(--nf-orange-d-60);
+	--nf-shadow-orange-d-70: 0px 4px 0px var(--nf-orange-d-70);
+	--nf-shadow-orange-d-80: 0px 4px 0px var(--nf-orange-d-80);
+	--nf-shadow-orange-d-90: 0px 4px 0px var(--nf-orange-d-90);
+	--nf-shadow-orange-d-100: 0px 4px 0px var(--nf-orange-d-100);
+
+	--nf-shadow-orange-l-10: 0px 4px 0px var(--nf-orange-l-10);
+	--nf-shadow-orange-l-20: 0px 4px 0px var(--nf-orange-l-20);
+	--nf-shadow-orange-l-30: 0px 4px 0px var(--nf-orange-l-30);
+	--nf-shadow-orange-l-40: 0px 4px 0px var(--nf-orange-l-40);
+	--nf-shadow-orange-l-50: 0px 4px 0px var(--nf-orange-l-50);
+	--nf-shadow-orange-l-60: 0px 4px 0px var(--nf-orange-l-60);
+	--nf-shadow-orange-l-70: 0px 4px 0px var(--nf-orange-l-70);
+	--nf-shadow-orange-l-80: 0px 4px 0px var(--nf-orange-l-80);
+	--nf-shadow-orange-l-90: 0px 4px 0px var(--nf-orange-l-90);
+	--nf-shadow-orange-l-100: 0px 4px 0px var(--nf-orange-l-100);
+
+	--nf-shadow-pink-d-10: 0px 4px 0px var(--nf-pink-d-10);
+	--nf-shadow-pink-d-20: 0px 4px 0px var(--nf-pink-d-20);
+	--nf-shadow-pink-d-30: 0px 4px 0px var(--nf-pink-d-30);
+	--nf-shadow-pink-d-40: 0px 4px 0px var(--nf-pink-d-40);
+	--nf-shadow-pink-d-50: 0px 4px 0px var(--nf-pink-d-50);
+	--nf-shadow-pink-d-60: 0px 4px 0px var(--nf-pink-d-60);
+	--nf-shadow-pink-d-70: 0px 4px 0px var(--nf-pink-d-70);
+	--nf-shadow-pink-d-80: 0px 4px 0px var(--nf-pink-d-80);
+	--nf-shadow-pink-d-90: 0px 4px 0px var(--nf-pink-d-90);
+	--nf-shadow-pink-d-100: 0px 4px 0px var(--nf-pink-d-100);
+
+	--nf-shadow-pink-l-10: 0px 4px 0px var(--nf-pink-l-10);
+	--nf-shadow-pink-l-20: 0px 4px 0px var(--nf-pink-l-20);
+	--nf-shadow-pink-l-30: 0px 4px 0px var(--nf-pink-l-30);
+	--nf-shadow-pink-l-40: 0px 4px 0px var(--nf-pink-l-40);
+	--nf-shadow-pink-l-50: 0px 4px 0px var(--nf-pink-l-50);
+	--nf-shadow-pink-l-60: 0px 4px 0px var(--nf-pink-l-60);
+	--nf-shadow-pink-l-70: 0px 4px 0px var(--nf-pink-l-70);
+	--nf-shadow-pink-l-80: 0px 4px 0px var(--nf-pink-l-80);
+	--nf-shadow-pink-l-90: 0px 4px 0px var(--nf-pink-l-90);
+	--nf-shadow-pink-l-100: 0px 4px 0px var(--nf-pink-l-100);
+
+	--nf-shadow-purple-d-10: 0px 4px 0px var(--nf-purple-d-10);
+	--nf-shadow-purple-d-20: 0px 4px 0px var(--nf-purple-d-20);
+	--nf-shadow-purple-d-30: 0px 4px 0px var(--nf-purple-d-30);
+	--nf-shadow-purple-d-40: 0px 4px 0px var(--nf-purple-d-40);
+	--nf-shadow-purple-d-50: 0px 4px 0px var(--nf-purple-d-50);
+	--nf-shadow-purple-d-60: 0px 4px 0px var(--nf-purple-d-60);
+	--nf-shadow-purple-d-70: 0px 4px 0px var(--nf-purple-d-70);
+	--nf-shadow-purple-d-80: 0px 4px 0px var(--nf-purple-d-80);
+	--nf-shadow-purple-d-90: 0px 4px 0px var(--nf-purple-d-90);
+	--nf-shadow-purple-d-100: 0px 4px 0px var(--nf-purple-d-100);
+
+	--nf-shadow-purple-l-10: 0px 4px 0px var(--nf-purple-l-10);
+	--nf-shadow-purple-l-20: 0px 4px 0px var(--nf-purple-l-20);
+	--nf-shadow-purple-l-30: 0px 4px 0px var(--nf-purple-l-30);
+	--nf-shadow-purple-l-40: 0px 4px 0px var(--nf-purple-l-40);
+	--nf-shadow-purple-l-50: 0px 4px 0px var(--nf-purple-l-50);
+	--nf-shadow-purple-l-60: 0px 4px 0px var(--nf-purple-l-60);
+	--nf-shadow-purple-l-70: 0px 4px 0px var(--nf-purple-l-70);
+	--nf-shadow-purple-l-80: 0px 4px 0px var(--nf-purple-l-80);
+	--nf-shadow-purple-l-90: 0px 4px 0px var(--nf-purple-l-90);
+	--nf-shadow-purple-l-100: 0px 4px 0px var(--nf-purple-l-100);
+
+	--nf-shadow-red-d-10: 0px 4px 0px var(--nf-red-d-10);
+	--nf-shadow-red-d-20: 0px 4px 0px var(--nf-red-d-20);
+	--nf-shadow-red-d-30: 0px 4px 0px var(--nf-red-d-30);
+	--nf-shadow-red-d-40: 0px 4px 0px var(--nf-red-d-40);
+	--nf-shadow-red-d-50: 0px 4px 0px var(--nf-red-d-50);
+	--nf-shadow-red-d-60: 0px 4px 0px var(--nf-red-d-60);
+	--nf-shadow-red-d-70: 0px 4px 0px var(--nf-red-d-70);
+	--nf-shadow-red-d-80: 0px 4px 0px var(--nf-red-d-80);
+	--nf-shadow-red-d-90: 0px 4px 0px var(--nf-red-d-90);
+	--nf-shadow-red-d-100: 0px 4px 0px var(--nf-red-d-100);
+
+	--nf-shadow-red-l-10: 0px 4px 0px var(--nf-red-l-10);
+	--nf-shadow-red-l-20: 0px 4px 0px var(--nf-red-l-20);
+	--nf-shadow-red-l-30: 0px 4px 0px var(--nf-red-l-30);
+	--nf-shadow-red-l-40: 0px 4px 0px var(--nf-red-l-40);
+	--nf-shadow-red-l-50: 0px 4px 0px var(--nf-red-l-50);
+	--nf-shadow-red-l-60: 0px 4px 0px var(--nf-red-l-60);
+	--nf-shadow-red-l-70: 0px 4px 0px var(--nf-red-l-70);
+	--nf-shadow-red-l-80: 0px 4px 0px var(--nf-red-l-80);
+	--nf-shadow-red-l-90: 0px 4px 0px var(--nf-red-l-90);
+	--nf-shadow-red-l-100: 0px 4px 0px var(--nf-red-l-100);
+
+	--nf-shadow-yellow-d-10: 0px 4px 0px var(--nf-yellow-d-10);
+	--nf-shadow-yellow-d-20: 0px 4px 0px var(--nf-yellow-d-20);
+	--nf-shadow-yellow-d-30: 0px 4px 0px var(--nf-yellow-d-30);
+	--nf-shadow-yellow-d-40: 0px 4px 0px var(--nf-yellow-d-40);
+	--nf-shadow-yellow-d-50: 0px 4px 0px var(--nf-yellow-d-50);
+	--nf-shadow-yellow-d-60: 0px 4px 0px var(--nf-yellow-d-60);
+	--nf-shadow-yellow-d-70: 0px 4px 0px var(--nf-yellow-d-70);
+	--nf-shadow-yellow-d-80: 0px 4px 0px var(--nf-yellow-d-80);
+	--nf-shadow-yellow-d-90: 0px 4px 0px var(--nf-yellow-d-90);
+	--nf-shadow-yellow-d-100: 0px 4px 0px var(--nf-yellow-d-100);
+
+	--nf-shadow-yellow-l-10: 0px 4px 0px var(--nf-yellow-l-10);
+	--nf-shadow-yellow-l-20: 0px 4px 0px var(--nf-yellow-l-20);
+	--nf-shadow-yellow-l-30: 0px 4px 0px var(--nf-yellow-l-30);
+	--nf-shadow-yellow-l-40: 0px 4px 0px var(--nf-yellow-l-40);
+	--nf-shadow-yellow-l-50: 0px 4px 0px var(--nf-yellow-l-50);
+	--nf-shadow-yellow-l-60: 0px 4px 0px var(--nf-yellow-l-60);
+	--nf-shadow-yellow-l-70: 0px 4px 0px var(--nf-yellow-l-70);
+	--nf-shadow-yellow-l-80: 0px 4px 0px var(--nf-yellow-l-80);
+	--nf-shadow-yellow-l-90: 0px 4px 0px var(--nf-yellow-l-90);
+	--nf-shadow-yellow-l-100: 0px 4px 0px var(--nf-yellow-l-100);
+}
