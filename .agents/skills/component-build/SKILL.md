@@ -43,6 +43,8 @@ const { color = 'purple', type = 'button', class: className, ...attrs } = Astro.
 ```
 
 - Extend `HTMLAttributes<'<element>'>` so every native attribute keeps working and stays type-checked.
+- Reuse a shared prop type when one exists: the palette hues are `ColorPalette` in [src/types/components.ts](../../../packages/ui/src/types/components.ts), and a type two components need belongs there rather than restated in each.
+- **Import internal modules by relative path — never through the `@/*` alias.** The alias is real (`packages/ui/tsconfig.json` maps it, and the docs site mirrors it), but it is for code that is *not* published. A consumer compiles this file without the library's `tsconfig.json`, so `@/types/components` resolves to nothing on their side: the build still passes, because `import type` is erased, and the prop quietly becomes `any` — a wrong `color` stops being an error in their editor and their `astro check`. Measured, not theoretical.
 - Enumerate your own props as string literal unions, never `string`. The union is the API: a wrong value must fail `astro check`. Note that `astro check` type-checks `.astro` files only — a wrong value inside an `.mdx` docs page is **not** reported, so verify a new union from a scratch `.astro` file.
 - Give every added prop a default, and destructure the native defaults you want to set (`type = 'button'`).
 - Pull `class` out as `className` and collect the rest in `...attrs`.
@@ -70,14 +72,14 @@ A prop that selects from a set of values is rendered as `data-ui-<prop>={value}`
 
 ```css
 .nf-button {
-	background-color: var(--nf-btn-color);
-	border: var(--nf-btn-border-width) solid var(--nf-btn-accent-color);
-	color: var(--nf-btn-accent-color);
+	background-color: var(--nf-button-color);
+	border: var(--nf-button-border-width) solid var(--nf-button-accent-color);
+	color: var(--nf-button-accent-color);
 }
 
 .nf-button[data-ui-color='green'] {
-	--nf-btn-color: light-dark(var(--nf-green-l-40), var(--nf-green-d-50));
-	--nf-btn-accent-color: light-dark(var(--nf-green-l-80), var(--nf-green-d-90));
+	--nf-button-color: light-dark(var(--nf-green-l-40), var(--nf-green-d-50));
+	--nf-button-accent-color: light-dark(var(--nf-green-l-80), var(--nf-green-d-90));
 }
 ```
 
@@ -85,14 +87,27 @@ Why this and not `.nf-button--green`: eight hues × five colored declarations ×
 
 Rules for those properties:
 
-- Name them `--nf-<short component name>-<role>`: `--nf-btn-color`, `--nf-btn-accent-color`. Pick one short name per component and use it for every property that component declares.
+- Name them `--nf-<component name>-<role>`, with the component's **full** name, lowercased: `--nf-button-color`, `--nf-callout-surface-color`. Never abbreviate it — `--nf-btn-*` and `--nf-cal-*` are wrong. The name a consumer overrides should be guessable from the component they are using.
 - Declare them inside the component's own rules only. They are component-local; do **not** add them to `tokens.css`.
 - Never introduce semantic tokens. `--nf-color-primary`, `--nf-color-text` and anything else matching `--nf-color-*` is banned outright.
 - Keep the attribute value and the prop value identical — no mapping table in the frontmatter.
 - Where the value selects a palette hue, use the same step pairing as `Button` so components agree: `light-dark(var(--nf-<hue>-l-40), var(--nf-<hue>-d-50))` for the fill, `light-dark(var(--nf-<hue>-l-80), var(--nf-<hue>-d-90))` for the accent that carries text, border and shadow.
 - These properties are a **public theming hook**: document them with `component-doc` and treat a rename as a breaking change. The rule that sets them is `.nf-x[data-ui-y='…']` — specificity (0,2,0) — so a consumer overriding them *on the element itself* through a class (0,1,0) loses. That is why the documented way to re-theme a single instance is to set them on an ancestor and let them inherit.
 
-Reach for a modifier class only when the variation changes the component's *structure or role* rather than selecting a value.
+Reach for a second class only when the variation changes the component's *structure or role* rather than selecting a value — and name it like any other part (below), never as a BEM modifier.
+
+### 4a. Class names: `nf-<component>-<part>`, no BEM
+
+The root class is `nf-<component name>`, lowercased: `.nf-button`, `.nf-callout`. Every other element the component renders gets `nf-<component name>-<part>`, with plain hyphens:
+
+```astro
+<aside class:list={['nf-callout', className]}>
+	<p class="nf-callout-title">…</p>
+	<div class="nf-callout-body">…</div>
+</aside>
+```
+
+**No BEM.** `__element` and `--modifier` separators are not used anywhere in this project. Astro already scopes every one of these selectors to this component's markup, so the double-underscore exists only to buy a global uniqueness the styles do not need — the hyphen says the same thing and reads better. A part name may itself contain hyphens (`.nf-callout-icon-badge`); the pattern is a prefix, not a two-level grammar.
 
 ### 5. Every design value comes from a token
 
@@ -110,7 +125,25 @@ border-radius: var(--nf-radius-md);
 - Colors come **only** from the palette in [colors.css](../../../packages/ui/src/styles/colors.css), named `--nf-<hue>-<d|l>-<step>`. No hex, no `rgb()`, no `oklch()` literal, no new palette entries.
 - `-l-` is the light scale, `-d-` the dark scale. Pair them with `light-dark()` in a single declaration rather than writing a `prefers-color-scheme` block; `reset.css` sets `color-scheme: light dark` so both branches resolve, and a consumer can pin or flip the scheme per subtree.
 - A value with no token that describes *this component* (border width, shadow depth, travel distance, duration) becomes a component-scoped custom property on the root class. Do not add it to `tokens.css` — that is a published API addition and needs its own proposal.
-- Hoist a raw value when the component's own states change it, or when two declarations must stay equal (`Button`'s focus outline reuses `--nf-btn-border-width`). A number that appears exactly once and never changes — `opacity: 0.5` on `:disabled` — can stay inline.
+- Hoist a raw value when the component's own states change it, or when two declarations must stay equal (`Button`'s focus outline reuses `--nf-button-border-width`). A number that appears exactly once and never changes — `opacity: 0.5` on `:disabled` — can stay inline.
+- **Declare a property, do not rely on a `var()` fallback.** `box-shadow: 0px var(--nf-button-depth, 4px) 0px …` hides the default inside a use site: a reader cannot see what the component's resting depth is without finding every reference, and two references can disagree (the focus outline once read `var(--nf-button-outline-width, 2px)` with `calc(-1 * var(--nf-button-outline-width, 1px))` beside it, so the inset silently did not match the width). Declare it once with its real value and use it bare.
+
+### 5a. Custom properties go at the top of their selector
+
+Inside any rule, every `--nf-*` declaration comes **first**, as a block, before the first ordinary property:
+
+```css
+.nf-callout {
+	--nf-callout-icon-size: var(--nf-font-size-xl);
+	--nf-callout-shadow: var(--nf-shadow-depth) var(--nf-callout-shadow-color);
+
+	border: none;
+	border-radius: var(--nf-radius-md);
+	color: var(--nf-callout-accent-color);
+}
+```
+
+This holds for every selector — the root class, each `[data-ui-*]` block, each state, each part. A rule that sets only custom properties (a hue block, a `:hover`) is already in that shape. The payoff is that a component's whole API is readable from the first few lines of each rule, instead of being scattered between the declarations that consume it.
 
 ### 6. Animate state through the properties
 
@@ -118,8 +151,8 @@ Put the state values in the properties and let the base declarations follow:
 
 ```css
 .nf-button:hover:not(:disabled) {
-	--nf-btn-depth: 2px;
-	--nf-btn-lift: 2px;
+	--nf-button-depth: 2px;
+	--nf-button-lift: 2px;
 }
 ```
 
@@ -132,7 +165,7 @@ Put the state values in the properties and let the base declarations follow:
 ```css
 @media (prefers-reduced-motion: reduce) {
 	.nf-button {
-		--nf-btn-transition-duration: 0s;
+		--nf-button-transition-duration: 0s;
 	}
 }
 ```
@@ -170,9 +203,12 @@ Grep your own file:
 ```bash
 grep -nE "oklch\(|lab\(|hsl\(|rgb\(|color-mix\(|#[0-9a-fA-F]{3}|:global|transition: *all|--nf-color-|!important" packages/ui/src/components/<Name>.astro
 grep -nE "^\s+--(?!nf-)" packages/ui/src/components/<Name>.astro   # custom properties missing the --nf- prefix
+grep -nE "class=\"[^\"]*(__|--)" packages/ui/src/components/<Name>.astro   # BEM separators in class names
+grep -nE "var\(--nf-[a-z-]+, " packages/ui/src/components/<Name>.astro      # defaults hidden in a var() fallback
+grep -nE "from \"@/|from '@/" packages/ui/src/components/<Name>.astro        # alias import that a consumer cannot resolve
 ```
 
-Any hit is a bug, not a judgement call. Check the indentation is tabs while you are in there.
+Any hit is a bug, not a judgement call. Check the indentation is tabs while you are in there, that every class matches `nf-<component>-<part>`, and that each rule declares its `--nf-*` properties before its first ordinary property.
 
 Then look at it in a browser with `pnpm dev`:
 

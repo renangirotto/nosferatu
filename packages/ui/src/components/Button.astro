@@ -1,9 +1,9 @@
 ---
 import type { HTMLAttributes } from "astro/types";
+import type { ColorPalette } from "../types/components";
 
 interface Props extends HTMLAttributes<"button"> {
-  color?:
-    "blue" | "cyan" | "green" | "orange" | "pink" | "purple" | "red" | "yellow";
+  color?: ColorPalette;
 }
 
 const {
@@ -26,6 +26,11 @@ const {
 
 <style>
   .nf-button {
+    --nf-button-depth: 4px;
+    --nf-button-lift: 0px;
+    --nf-button-border-width: 2px;
+    --nf-button-transition-duration: 0.15s;
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -34,76 +39,76 @@ const {
     padding-inline: var(--nf-space-4);
     border: none;
     border-radius: var(--nf-radius-md);
-    color: var(--nf-btn-accent-color);
+    color: var(--nf-button-accent-color);
     font-family: var(--nf-font-body);
     font-size: var(--nf-font-size-md);
     font-weight: 600;
     line-height: var(--nf-line-height-heading);
-    background-color: var(--nf-btn-color);
-    box-shadow: 0px var(--nf-btn-depth, 4px) 0px var(--nf-btn-accent-color);
-    translate: 0 var(--nf-btn-lift, 0px);
+    background-color: var(--nf-button-color);
+    box-shadow: 0px var(--nf-button-depth) 0px var(--nf-button-accent-color);
+    translate: 0 var(--nf-button-lift);
     cursor: pointer;
     transition-property:
       translate, box-shadow, background-color, color, border-color;
-    transition-duration: var(--nf-btn-transition-duration, 0.15s);
+    transition-duration: var(--nf-button-transition-duration);
     transition-timing-function: ease-in-out;
 
     &[data-ui-color="blue"] {
-      --nf-btn-color: light-dark(var(--nf-blue-l-40), var(--nf-blue-d-50));
-      --nf-btn-accent-color: light-dark(
+      --nf-button-color: light-dark(var(--nf-blue-l-40), var(--nf-blue-d-50));
+      --nf-button-accent-color: light-dark(
         var(--nf-blue-l-80),
         var(--nf-blue-d-90)
       );
     }
 
     &[data-ui-color="cyan"] {
-      --nf-btn-color: light-dark(var(--nf-cyan-l-40), var(--nf-cyan-d-50));
-      --nf-btn-accent-color: light-dark(
+      --nf-button-color: light-dark(var(--nf-cyan-l-40), var(--nf-cyan-d-50));
+      --nf-button-accent-color: light-dark(
         var(--nf-cyan-l-80),
         var(--nf-cyan-d-90)
       );
     }
 
     &[data-ui-color="green"] {
-      --nf-btn-color: light-dark(var(--nf-green-l-40), var(--nf-green-d-50));
-      --nf-btn-accent-color: light-dark(
+      --nf-button-color: light-dark(var(--nf-green-l-40), var(--nf-green-d-50));
+      --nf-button-accent-color: light-dark(
         var(--nf-green-l-80),
         var(--nf-green-d-90)
       );
     }
 
     &[data-ui-color="orange"] {
-      --nf-btn-color: light-dark(var(--nf-orange-l-40), var(--nf-orange-d-50));
-      --nf-btn-accent-color: light-dark(
+      --nf-button-color: light-dark(var(--nf-orange-l-40), var(--nf-orange-d-50));
+      --nf-button-accent-color: light-dark(
         var(--nf-orange-l-80),
         var(--nf-orange-d-90)
       );
     }
 
     &[data-ui-color="pink"] {
-      --nf-btn-color: light-dark(var(--nf-pink-l-40), var(--nf-pink-d-50));
-      --nf-btn-accent-color: light-dark(
+      --nf-button-color: light-dark(var(--nf-pink-l-40), var(--nf-pink-d-50));
+      --nf-button-accent-color: light-dark(
         var(--nf-pink-l-80),
         var(--nf-pink-d-90)
       );
     }
 
     &[data-ui-color="purple"] {
-      --nf-btn-color: light-dark(var(--nf-purple-l-40), var(--nf-purple-d-50));
-      --nf-btn-accent-color: light-dark(
+      --nf-button-color: light-dark(var(--nf-purple-l-40), var(--nf-purple-d-50));
+      --nf-button-accent-color: light-dark(
         var(--nf-purple-l-80),
         var(--nf-purple-d-90)
       );
     }
 
     &[data-ui-color="red"] {
-      --nf-btn-color: light-dark(var(--nf-red-l-40), var(--nf-red-d-50));
-      --nf-btn-accent-color: light-dark(var(--nf-red-l-80), var(--nf-red-d-90));
+      --nf-button-color: light-dark(var(--nf-red-l-40), var(--nf-red-d-50));
+      --nf-button-accent-color: light-dark(var(--nf-red-l-80), var(--nf-red-d-90));
     }
 
     &[data-ui-color="yellow"] {
-      --nf-btn-color: light-dark(var(--nf-yellow-l-40), var(--nf-yellow-d-50));
-      --nf-btn-accent-color: light-dark(
+      --nf-button-color: light-dark(var(--nf-yellow-l-40), var(--nf-yellow-d-50));
+      --nf-button-accent-color: light-dark(
         var(--nf-yellow-l-80),
         var(--nf-yellow-d-90)
       );
@@ -111,19 +116,19 @@ const {
 
     &:hover:not(:disabled),
     &:focus-within:not(:disabled) {
-      --nf-btn-depth: 2px;
-      --nf-btn-lift: 2px;
+      --nf-button-depth: 2px;
+      --nf-button-lift: 2px;
     }
 
     &:active:not(:disabled) {
-      --nf-btn-depth: 0px;
-      --nf-btn-lift: 4px;
+      --nf-button-depth: 0px;
+      --nf-button-lift: 4px;
     }
 
     /* The button has no border, so the focus ring is drawn inside its edge as one */
     &:focus-visible {
-      outline: var(--nf-btn-outline-width, 2px) solid var(--nf-btn-accent-color);
-      outline-offset: calc(-1 * var(--nf-btn-outline-width, 1px));
+      outline: var(--nf-button-border-width) solid var(--nf-button-accent-color);
+      outline-offset: calc(-1 * var(--nf-button-border-width));
     }
 
     &:disabled {
@@ -135,7 +140,7 @@ const {
   /* Keep the states and their feedback, drop the animation between them */
   @media (prefers-reduced-motion: reduce) {
     .nf-button {
-      --nf-btn-transition-duration: 0s;
+      --nf-button-transition-duration: 0s;
     }
   }
 </style>

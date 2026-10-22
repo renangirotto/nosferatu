@@ -47,13 +47,14 @@ These are spec requirements, not preferences. Breaking one is a bug:
 4. **Each stylesheet is independently importable**, and `index.css` includes all of them.
 5. **Components are self-styled through tokens**: scoped `<style>` only, design values exclusively via `var(--nf-*)`, and never a selector that reaches outside the component's own markup.
 6. **Public import paths only**: `astro-nosferatu/components/<Name>.astro` and `astro-nosferatu/styles/<name>.css`. Docs must import through the package name, never by relative path into `packages/ui/src`.
-7. **The library ships sources**, has no runtime dependencies, and declares `astro` `^7.0.0` as its only peer dependency. The published tarball contains only `src/components`, `src/styles`, `package.json`, `README.md`, `LICENSE`.
+7. **The library ships sources**, has no runtime dependencies, and declares `astro` `^7.0.0` as its only peer dependency. The published tarball contains only `src/components`, `src/types`, `src/styles`, `package.json`, `README.md`, `LICENSE`.
 8. **`docs` stays private** and never becomes a dependency of the library.
 
 ## Conventions
 
 - Indentation is **tabs** in `.astro` and `.css` sources; keep the existing style of any file you touch.
-- Component root classes are `nf-` prefixed: `.nf-button`. A prop that selects from a set of values renders as `data-ui-<prop>` and is matched in CSS to set component-scoped `--nf-*` custom properties, rather than as a modifier class — see the `component-build` skill.
+- Component classes are `nf-` prefixed and **not BEM**: the root is `.nf-<component>` and every other part is `.nf-<component>-<part>` (`.nf-callout-title`), with plain hyphens. Component-scoped custom properties spell the component's full name: `--nf-button-color`, `--nf-callout-surface-color`, never `--nf-btn-*`. Inside every rule, `--nf-*` declarations come before the ordinary properties. A prop that selects from a set of values renders as `data-ui-<prop>` and is matched in CSS to set those properties, rather than as a modifier class — see the `component-build` skill.
+- Prop types shared by more than one component live in `packages/ui/src/types/` (`ColorPalette` for the palette hues) and are imported **relatively** from component source. The `@/*` alias is configured for `packages/ui` and `docs` but must never appear in published source: a consumer compiles it without the library's tsconfig, and an aliased type import degrades the prop to `any`.
 - Components accept and forward native attributes (`interface Props extends HTMLAttributes<'button'>`), merge a consumer `class` through `class:list`, and spread the rest.
 - Commit messages are Conventional Commits, scoped where useful: `feat(ui)!:`, `docs(openspec):`, `chore:`.
 

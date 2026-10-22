@@ -1,0 +1,279 @@
+---
+title: Callout
+description: A tinted panel with a title, an optional icon component and an optional body, driven by --nf-callout-* custom properties.
+---
+
+import Callout from 'astro-nosferatu/components/Callout.astro';
+import HelpCircle from 'iconoir/icons/help-circle.svg';
+import Droplet from 'iconoir/icons/droplet.svg';
+import SnowFlake from 'iconoir/icons/snow-flake.svg';
+import Leaf from 'iconoir/icons/leaf.svg';
+import FireFlame from 'iconoir/icons/fire-flame.svg';
+import Heart from 'iconoir/icons/heart.svg';
+import Sparks from 'iconoir/icons/sparks.svg';
+import WarningTriangle from 'iconoir/icons/warning-triangle.svg';
+import LightBulb from 'iconoir/icons/light-bulb.svg';
+import ChatBubble from 'iconoir/icons/chat-bubble.svg';
+import Bell from 'iconoir/icons/bell.svg';
+import Rocket from 'iconoir/icons/rocket.svg';
+import SunLight from 'iconoir/icons/sun-light.svg';
+import HalfMoon from 'iconoir/icons/half-moon.svg';
+import Palette from 'iconoir/icons/palette.svg';
+import ColorFilter from 'iconoir/icons/color-filter.svg';
+
+export const em = (Icon) => (props) => <Icon width="1em" height="1em" {...props} />;
+export const Bat = () => <span>🦇</span>;
+
+```astro
+---
+import Callout from 'astro-nosferatu/components/Callout.astro';
+---
+```
+
+<div class="not-content demo demo--stack">
+	<Callout title="What are harnesses in agentic development?" icon={em(HelpCircle)}>
+		Harness is the infrastructure layer surrounding our AI model/agent. It's the combination of context, usable tools, how to produce expected outputs of code and what to do if something goes out of the plan within the scope of execution.
+	</Callout>
+</div>
+
+```astro
+<Callout title="What are harnesses in agentic development?" icon={em(HelpCircle)}>
+	Harness is the infrastructure layer surrounding our AI model/agent. It's the combination of
+	context, usable tools, how to produce expected outputs of code and what to do if something
+	goes out of the plan within the scope of execution.
+</Callout>
+```
+
+`title` is the only prop you have to pass. The body is a slot and the icon is a component you hand over, so the library never decides what an icon is — see [Icons](#icons). Title and body both render at `1rem` and weight `500`, and the panel sits 4px above its own shadow, over a surface tinted at 25% opacity.
+
+## Colors
+
+`color` accepts any hue in the palette and defaults to `purple`. It is rendered on the element as `data-ui-color`.
+
+<div class="not-content demo demo--grid">
+	<Callout color="blue" title="blue" icon={em(Droplet)}>A tinted panel.</Callout>
+	<Callout color="cyan" title="cyan" icon={em(SnowFlake)}>A tinted panel.</Callout>
+	<Callout color="green" title="green" icon={em(Leaf)}>A tinted panel.</Callout>
+	<Callout color="orange" title="orange" icon={em(FireFlame)}>A tinted panel.</Callout>
+	<Callout color="pink" title="pink" icon={em(Heart)}>A tinted panel.</Callout>
+	<Callout color="purple" title="purple" icon={em(Sparks)}>A tinted panel.</Callout>
+	<Callout color="red" title="red" icon={em(WarningTriangle)}>A tinted panel.</Callout>
+	<Callout color="yellow" title="yellow" icon={em(LightBulb)}>A tinted panel.</Callout>
+</div>
+
+```astro
+<Callout color="blue" title="blue">A tinted panel.</Callout>
+<Callout color="cyan" title="cyan">A tinted panel.</Callout>
+<Callout color="green" title="green">A tinted panel.</Callout>
+<Callout color="orange" title="orange">A tinted panel.</Callout>
+<Callout color="pink" title="pink">A tinted panel.</Callout>
+<Callout color="purple" title="purple">A tinted panel.</Callout>
+<Callout color="red" title="red">A tinted panel.</Callout>
+<Callout color="yellow" title="yellow">A tinted panel.</Callout>
+```
+
+Any other value is a type error: in an `.astro` file, `astro check` rejects `<Callout color="teal">` outright. These documentation pages are `.mdx`, which `astro check` does not type-check, so a typo on this page would only show up as an uncolored panel.
+
+## Content
+
+The body is the default slot and it is optional. Supply children and the callout draws a hairline rule under the title and sets the body below it; leave them out and the panel is exactly its padding plus the title line — no rule, no empty box, no trailing space.
+
+<div class="not-content demo demo--stack">
+	<Callout color="green" title="This callout has a body" icon={em(ChatBubble)}>
+		Everything after the rule is the default slot. It takes whatever markup you give it.
+	</Callout>
+	<Callout color="green" title="This callout has no body" icon={em(ChatBubble)} />
+</div>
+
+```astro
+<Callout color="green" title="This callout has a body">
+	Everything after the rule is the default slot. It takes whatever markup you give it.
+</Callout>
+<Callout color="green" title="This callout has no body" />
+```
+
+The decision is made on whether the slot was *supplied*, not on whether it renders anything visible — so children that collapse to whitespace still produce the rule.
+
+The body is a `<p>` and the title is a `<p>` too, not a heading: a component cannot know where it sits in your document outline, so it stays out of it. It is also not forwarded to the element as the native `title` attribute, so it produces no browser tooltip.
+
+## Icons
+
+There is no icon library behind this component. `icon` takes **a component**, and the callout renders it in the title line without knowing or caring what it draws — an imported `.svg`, an icon component from any library, your own `.astro` wrapper around an `<img>` or a character:
+
+<div class="not-content demo demo--stack">
+	<Callout color="orange" title="An inline SVG" icon={em(Bell)}>
+		Body copy.
+	</Callout>
+	<Callout color="orange" title="An emoji" icon={Bat}>
+		Body copy.
+	</Callout>
+	<Callout color="orange" title="No icon at all">Body copy.</Callout>
+</div>
+
+```astro
+---
+// Astro imports an .svg as a component — this page uses iconoir's plain SVG files
+import Bell from 'iconoir/icons/bell.svg';
+import Bat from '../components/Bat.astro';
+---
+
+<Callout color="orange" title="An inline SVG" icon={Bell}>Body copy.</Callout>
+<Callout color="orange" title="An emoji" icon={Bat}>Body copy.</Callout>
+<Callout color="orange" title="No icon at all">Body copy.</Callout>
+```
+
+Pass a component, not an element: `icon={Bell}`, never `icon={<Bell />}` and never a string. Anything else is a type error — `astro check` rejects `icon="bell"` outright.
+
+Without `icon`, the title starts at the panel's inner edge and no space is reserved.
+
+The icon sits in a box one title line tall, centred on the first line of the title, with `font-size: var(--nf-callout-icon-size)` — `1.5rem`, or 24px at the default root size. A component drawn in `em` units therefore lands at 24px with nothing said; one with a fixed size keeps it. The callout passes no props to your component, so size it where you define it:
+
+```astro
+---
+import Bell from 'iconoir/icons/bell.svg';
+
+// iconoir's SVGs ship at a fixed 24 — wrap once to make them follow the box
+const BellIcon = (props) => <Bell width="1em" height="1em" {...props} />;
+---
+
+<Callout title="Follows --nf-callout-icon-size" icon={BellIcon}>Body copy.</Callout>
+```
+
+Override the property to resize the icon without touching the title:
+
+<div class="not-content demo demo--stack" style="--nf-callout-icon-size: 2.5rem;">
+	<Callout color="cyan" title="A larger icon" icon={em(Rocket)}>
+		The title is still 1rem.
+	</Callout>
+</div>
+
+```astro
+<div style="--nf-callout-icon-size: 2.5rem;">
+	<Callout color="cyan" title="A larger icon" icon={em(Rocket)}>
+		The title is still 1rem.
+	</Callout>
+</div>
+```
+
+The icon inherits the title's color, so an SVG drawn in `currentColor` needs nothing else. A decorative icon should carry its own `aria-hidden` — the callout does not add it to a component it did not write.
+
+## Light and dark
+
+Each hue is declared once with `light-dark()`. The surface is the palette's 25% tier — `--nf-<hue>-l-40-25` in light, `--nf-<hue>-d-50-25` in dark — so the page shows through the panel in both schemes.
+
+The rule and the drop shadow use that same 25% tier. The rule follows the accent (`--nf-<hue>-l-80-25` in light, `--nf-<hue>-d-30-25` in dark), while the shadow pairs with the **surface's** own step — `l-40` surface, `l-80` shadow in light; `d-50` surface, `d-90` shadow in dark — so it always reads as a darker edge of the panel rather than a second copy of the text color.
+
+That is why the accent pairing differs from `Button`'s. A button sits on an opaque fill that is light in both schemes, so it can use a dark accent in both (`l-80` / `d-90`). A callout's surface is translucent: in dark mode the panel reads dark, so the accent flips to a **light** step — `--nf-<hue>-l-80` in light, `--nf-<hue>-d-30` in dark.
+
+`reset.css` sets `color-scheme: light dark` on `:root`, so callouts follow the reader's preferred scheme — flip this site's theme toggle and watch them change. You can pin a scheme per subtree:
+
+<div class="not-content demo demo--stack">
+	<div class="demo-canvas" style="color-scheme: only light"><Callout color="pink" title="Light" icon={em(SunLight)}>Pinned with color-scheme: only light.</Callout></div>
+	<div class="demo-canvas" style="color-scheme: only dark"><Callout color="pink" title="Dark" icon={em(HalfMoon)}>Pinned with color-scheme: only dark.</Callout></div>
+</div>
+
+```astro
+<div style="color-scheme: only light"><Callout color="pink" title="Light">Pinned with color-scheme: only light.</Callout></div>
+<div style="color-scheme: only dark"><Callout color="pink" title="Dark">Pinned with color-scheme: only dark.</Callout></div>
+```
+
+Each half above sits on its own canvas, and that is not decoration: the surface is translucent, so a callout takes the color of whatever is behind it. Pin a light scheme over a dark page and the panel stays dark while its accent turns dark too — give a pinned subtree a matching background, as the demo does with `background-color: Canvas`.
+
+## Props
+
+| Prop | Type | Default | Notes |
+|---|---|---|---|
+| `title` | `string` | — | **Required.** Rendered as the panel's title line. Not forwarded as the HTML `title` attribute and not a heading element. |
+| `icon` | component | — | Any component — an imported `.svg`, an icon component, your own `.astro`. Rendered before the title with no props, in a box sized by `--nf-callout-icon-size`. |
+| `color` | `'blue' \| 'cyan' \| 'green' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | `'purple'` | Rendered as `data-ui-color` on the element. |
+
+The callout renders a `<div>`. Every other `<div>` attribute (`id`, `role`, `aria-*`, `class`, `data-*`...) is passed through to it — add `role`/`aria-label` yourself if a given callout is a landmark.
+
+## Slots
+
+| Slot | Notes |
+|---|---|
+| default | The body, below the separator rule. Omit it and neither the rule nor the body box is rendered. |
+
+## Theming
+
+A callout reads its colors from five custom properties: `--nf-callout-surface-color` for the background, `--nf-callout-accent-color` for the title, the icon and the body text, `--nf-callout-rule-color` for the separator, `--nf-callout-shadow-color` for the drop shadow's color, and `--nf-callout-shadow` for the whole drop-shadow value. A sixth, `--nf-callout-icon-size`, sets the icon box. Set them on an ancestor to theme one callout without touching any other:
+
+<div class="not-content demo demo--stack" style="--nf-callout-surface-color: var(--nf-green-l-20); --nf-callout-accent-color: var(--nf-blue-l-90); --nf-callout-rule-color: var(--nf-blue-l-90-25); --nf-callout-shadow-color: var(--nf-blue-l-100-25);">
+	<Callout title="Themed" icon={em(Palette)}>Every color property overridden on the wrapper.</Callout>
+</div>
+
+```astro
+<div style="
+	--nf-callout-surface-color: var(--nf-green-l-20);
+	--nf-callout-accent-color: var(--nf-blue-l-90);
+	--nf-callout-rule-color: var(--nf-blue-l-90-25);
+	--nf-callout-shadow-color: var(--nf-blue-l-100-25);
+">
+	<Callout title="Themed">Every color property overridden on the wrapper.</Callout>
+</div>
+```
+
+Set them on an **ancestor**, not on the callout itself through a class: the rule that assigns them is `[data-ui-color="…"]`, so a plain class on the element would lose to it. Inheriting from above sidesteps the comparison entirely.
+
+Overriding a palette token instead re-themes every callout using that hue. A callout resolves seven tokens per hue — surface, accent, rule tint and shadow tint in each scheme, with light's rule and shadow sharing `l-80-25` — so override the ones you need:
+
+<div class="not-content demo demo--stack" style="--nf-red-l-40-25: var(--nf-yellow-l-40-25); --nf-red-l-80: var(--nf-yellow-l-80); --nf-red-l-80-25: var(--nf-yellow-l-80-25); --nf-red-d-50-25: var(--nf-yellow-d-50-25); --nf-red-d-30: var(--nf-yellow-d-30); --nf-red-d-30-25: var(--nf-yellow-d-30-25); --nf-red-d-90-25: var(--nf-yellow-d-90-25);">
+	<Callout color="red" title='Still color="red"' icon={em(ColorFilter)}>Only the palette tokens moved.</Callout>
+</div>
+
+```astro
+<div style="--nf-red-l-40-25: var(--nf-yellow-l-40-25); --nf-red-l-80: var(--nf-yellow-l-80); --nf-red-l-80-25: var(--nf-yellow-l-80-25); --nf-red-d-50-25: var(--nf-yellow-d-50-25); --nf-red-d-30: var(--nf-yellow-d-30); --nf-red-d-30-25: var(--nf-yellow-d-30-25); --nf-red-d-90-25: var(--nf-yellow-d-90-25);">
+	<Callout color="red" title='Still color="red"'>Only the palette tokens moved.</Callout>
+</div>
+```
+
+The drop shadow's depth comes from [`shadows.css`](/styles/#shadows): `--nf-callout-shadow` is composed once as `var(--nf-shadow-depth) var(--nf-callout-shadow-color)`, so the offsets are the library's shared `0px 4px 0px` and the color is a 25% tint one step below the surface — translucent, like the surface, rather than a hard opaque bar. Load the library through `index.css` and the depth is there; load `tokens.css` and `colors.css` on their own, without `shadows.css`, and the panel keeps its surface, accent and rule but draws no shadow.
+
+A callout has no interactive states — it is static content, so hovering, clicking or tabbing through it changes nothing, and nothing about it animates.
+
+## Scoped styles
+
+The callout's styles only apply to the callout itself. A plain `<div>` next to it is left alone — even one carrying the same `data-ui-color` attribute:
+
+<div class="not-content demo demo--stack">
+	<Callout title="Component" />
+	<div>Plain div</div>
+	<div data-ui-color="green">Plain div with data-ui-color</div>
+</div>
+
+```astro
+<Callout title="Component" />
+<div>Plain div</div>
+<div data-ui-color="green">Plain div with data-ui-color</div>
+```
+
+<style>{`
+	.demo {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 1.5rem;
+		margin-block: 1rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 0.5rem;
+	}
+
+	.demo-canvas {
+		background-color: Canvas;
+		padding: 1rem;
+		border-radius: 0.5rem;
+	}
+
+	.demo--stack {
+		display: grid;
+		gap: 1.25rem;
+	}
+
+	.demo--grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+		gap: 1.25rem;
+	}
+`}</style>

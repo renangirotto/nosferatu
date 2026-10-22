@@ -11,7 +11,8 @@
   "dependencies": {
     "@astrojs/starlight": "^0.42.6",
     "astro": "^7.4.1",
-    "astro-nosferatu": "workspace:*"
+    "astro-nosferatu": "workspace:*",
+    "iconoir": "^7.12.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.11",
