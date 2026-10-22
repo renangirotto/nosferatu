@@ -42,7 +42,9 @@ context: |
     8. docs stays private and never becomes a dependency of the library.
 
   Conventions: tabs in .astro and .css sources; component classes are `nf-` prefixed
-  and BEM-ish (.nf-button, .nf-button--primary); components extend native element
+  and never BEM (.nf-callout, .nf-callout-title); component-scoped custom properties
+  spell the component's full name (--nf-callout-surface-color) and are declared at the
+  top of each rule, before ordinary properties; components extend native element
   attribute types, merge a consumer `class` via class:list, and spread the rest;
   Conventional Commits, scoped (feat(ui)!:, docs(openspec):, chore:).
 
