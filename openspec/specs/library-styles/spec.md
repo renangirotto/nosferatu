@@ -7,15 +7,15 @@ Defines the global stylesheets the library exports, how their tokens are named, 
 ## Requirements
 
 ### Requirement: Exported stylesheets
-The library SHALL export the stylesheets `tokens.css`, `colors.css`, `shadows.css`, `reset.css`, `typography.css` and `index.css`. Each SHALL be importable on its own, and `index.css` SHALL include all of the others.
+The library SHALL export the stylesheets `tokens.css`, `colors.css`, `shadows.css`, `reset.css` and `index.css`. Each SHALL be importable on its own, and `index.css` SHALL include all of the others. The library SHALL NOT publish a typography stylesheet: it styles no headings, paragraphs, lists, links or code, and leaves a consuming page's text to the consumer's own CSS.
 
 #### Scenario: Import everything
 - **WHEN** a consumer imports `astro-nosferatu/styles/index.css`
-- **THEN** the tokens, colors, shadows, reset and typography styles are all applied
+- **THEN** the tokens, colors, shadows and reset styles are all applied
 
 #### Scenario: Import tokens only
 - **WHEN** a consumer imports only `astro-nosferatu/styles/tokens.css`
-- **THEN** the non-color `--nf-*` custom properties (spacing, fonts, radius) are defined, no color custom properties are defined, no shadow custom properties are defined, and no element selectors from reset or typography are applied
+- **THEN** the non-color `--nf-*` custom properties (spacing, fonts, radius) are defined, no color custom properties are defined, no shadow custom properties are defined, and no element selectors from the reset are applied
 
 #### Scenario: Import colors only
 - **WHEN** a consumer imports only `astro-nosferatu/styles/colors.css`
@@ -29,6 +29,11 @@ The library SHALL export the stylesheets `tokens.css`, `colors.css`, `shadows.cs
 - **WHEN** the published package is inspected, or a consumer imports `astro-nosferatu/styles/base.css`
 - **THEN** no such file exists and the import fails, and nothing in the library sets a `body` color or font, a global focus outline, or a `::selection` treatment
 
+#### Scenario: No typography stylesheet is published
+- **WHEN** the published package is inspected, or a consumer imports `astro-nosferatu/styles/typography.css`
+- **THEN** no such file exists and the import fails
+- **AND** after importing `index.css`, headings, paragraphs, lists, links and code render at the browser's own sizes, weights, margins and colors, except where the reset changes them
+
 ### Requirement: Token naming
 Every CSS custom property defined by the library SHALL use the `--nf-` prefix.
 
@@ -37,15 +42,15 @@ Every CSS custom property defined by the library SHALL use the `--nf-` prefix.
 - **THEN** every declared custom property name starts with `--nf-`
 
 ### Requirement: Cascade layer order without a base layer
-When loaded through `index.css`, the tokens, colors, shadows, reset and typography styles SHALL be placed in the cascade layers `nosferatu.tokens`, `nosferatu.colors`, `nosferatu.shadows`, `nosferatu.reset` and `nosferatu.typography`, declared in that order, so later layers win over earlier ones and any unlayered consumer CSS wins over all of them.
+When loaded through `index.css`, the tokens, colors, shadows and reset styles SHALL be placed in the cascade layers `nosferatu.tokens`, `nosferatu.colors`, `nosferatu.shadows` and `nosferatu.reset`, declared in that order, so later layers win over earlier ones and any unlayered consumer CSS wins over all of them.
 
-#### Scenario: Typography overrides the reset
-- **WHEN** both `nosferatu.reset` and `nosferatu.typography` style the same element property
-- **THEN** the `nosferatu.typography` value applies
+#### Scenario: The reset is the last library layer
+- **WHEN** a rule in `nosferatu.reset` and a rule in any earlier library layer style the same element property
+- **THEN** the `nosferatu.reset` value applies
 
 #### Scenario: Consumer CSS wins without extra specificity
 - **WHEN** a consumer writes an unlayered rule `h1 { color: red; }` after importing `index.css`
-- **THEN** `h1` elements are red, regardless of the library's typography rules
+- **THEN** `h1` elements are red, regardless of any library rule
 
 #### Scenario: Consumer token override wins regardless of order
 - **WHEN** a consumer sets `--nf-red-l-80` on `:root` in unlayered CSS loaded before `index.css`
@@ -57,7 +62,7 @@ When loaded through `index.css`, the tokens, colors, shadows, reset and typograp
 
 #### Scenario: No base layer is declared
 - **WHEN** the `@layer` statement in `index.css` is read
-- **THEN** it names exactly `nosferatu.tokens, nosferatu.colors, nosferatu.shadows, nosferatu.reset, nosferatu.typography`, with no `nosferatu.base`
+- **THEN** it names exactly `nosferatu.tokens, nosferatu.colors, nosferatu.shadows, nosferatu.reset`, with no `nosferatu.base` and no `nosferatu.typography`
 
 ### Requirement: Components are self-styled through tokens
 Each component SHALL carry its own scoped styles, and those styles SHALL reference design values only through `--nf-*` custom properties. Components SHALL NOT style elements outside their own markup.
@@ -266,7 +271,7 @@ The library SHALL export a component `Callout` at `astro-nosferatu/components/Ca
 - **THEN** that content stays visible through the shadow, because the shadow color carries 25% alpha
 
 ### Requirement: Callout appearance
-`Callout` SHALL render as a panel with no border, a `0.5rem` corner radius, `1.5rem` of padding on all sides, and the `0px 4px 0px` drop shadow supplied by `--nf-callout-shadow`, giving it the same raised look as `Button`. Every piece of text it renders — title and body alike — SHALL use `font-size: 1rem` and `font-weight: 500`, and both SHALL be rendered as paragraphs: the title SHALL NOT be a heading element, so it does not enter the document outline, and the body SHALL carry no margin of its own beyond the spacing described below, whatever the typography stylesheet gives a `<p>`. When a body is present, it SHALL be separated from the title by a `1px` rule in `--nf-callout-rule-color` spanning the panel's content width, with `1rem` of space between the title and the rule and between the rule and the body. The title row SHALL lay its icon and text out on one line with the icon vertically centred against the first line of the title and `0.5rem` between them. The icon's box SHALL set `font-size` to the component-scoped `--nf-callout-icon-size`, `1.5rem` by default, so content sized in `em` renders at 24px against the `1rem` title; a consumer MAY override that property. `Callout` SHALL define no hover, focus, active or disabled behaviour and SHALL NOT animate.
+`Callout` SHALL render as a panel with no border, a `0.5rem` corner radius, `1.5rem` of padding on all sides, and the `0px 4px 0px` drop shadow supplied by `--nf-callout-shadow`, giving it the same raised look as `Button`. Every piece of text it renders — title and body alike — SHALL use `font-size: 1rem` and `font-weight: 500`, and both SHALL be rendered as paragraphs: the title SHALL NOT be a heading element, so it does not enter the document outline, and the body SHALL carry no margin of its own beyond the spacing described below, whatever margin a `<p>` inherits from the page. When a body is present, it SHALL be separated from the title by a `1px` rule in `--nf-callout-rule-color` spanning the panel's content width, with `1rem` of space between the title and the rule and between the rule and the body. The title row SHALL lay its icon and text out on one line with the icon vertically centred against the first line of the title and `0.5rem` between them. The icon's box SHALL set `font-size` to the component-scoped `--nf-callout-icon-size`, `1.5rem` by default, so content sized in `em` renders at 24px against the `1rem` title; a consumer MAY override that property. `Callout` SHALL define no hover, focus, active or disabled behaviour and SHALL NOT animate.
 
 #### Scenario: Resting appearance
 - **WHEN** a reader looks at a `Callout`

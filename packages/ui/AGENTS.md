@@ -7,7 +7,7 @@ The published package. Everything here ends up in consumers' projects as **sourc
 ```
 src/components/   .astro components, one file per component, PascalCase
 src/layouts/      .astro page layouts, one file per layout, PascalCase
-src/styles/       tokens.css colors.css shadows.css reset.css typography.css index.css
+src/styles/       tokens.css colors.css shadows.css reset.css index.css
 src/types/        shared prop types (ColorPalette), published but not exported
 ```
 

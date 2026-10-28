@@ -43,7 +43,7 @@ These are spec requirements, not preferences. Breaking one is a bug:
 
 1. **Every CSS custom property is `--nf-` prefixed.** No exceptions, in stylesheets and in component styles.
 2. **No semantic color tokens.** Never define or reference `--nf-color-*`; colors come only from the palette in [colors.css](packages/ui/src/styles/colors.css) (`--nf-<hue>-<d|l>-<step>`, 8 hues × dark/light × steps 10–100 = 160 tokens, alphabetical by hue, dark before light, ascending step, OKLCH values unchanged).
-3. **Layer order is fixed**: `nosferatu.tokens, nosferatu.colors, nosferatu.reset, nosferatu.typography`, declared in [index.css](packages/ui/src/styles/index.css). Unlayered consumer CSS must keep winning over all library CSS — so never raise specificity to "fix" an override.
+3. **Layer order is fixed**: `nosferatu.tokens, nosferatu.colors, nosferatu.shadows, nosferatu.reset`, declared in [index.css](packages/ui/src/styles/index.css). Unlayered consumer CSS must keep winning over all library CSS — so never raise specificity to "fix" an override.
 4. **Each stylesheet is independently importable**, and `index.css` includes all of them.
 5. **Components are self-styled through tokens**: scoped `<style>` only, design values exclusively via `var(--nf-*)`, and never a selector that reaches outside the component's own markup.
 6. **Public import paths only**: `astro-nosferatu/components/<Name>.astro`, `astro-nosferatu/layouts/<Name>.astro` and `astro-nosferatu/styles/<name>.css`. Docs must import through the package name, never by relative path into `packages/ui/src`.
