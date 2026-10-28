@@ -27,6 +27,7 @@ import Button from 'astro-nosferatu/components/Button.astro';
 	<figure><Button color="blue">Button</Button><figcaption><code>blue</code></figcaption></figure>
 	<figure><Button color="cyan">Button</Button><figcaption><code>cyan</code></figcaption></figure>
 	<figure><Button color="green">Button</Button><figcaption><code>green</code></figcaption></figure>
+	<figure><Button color="grey">Button</Button><figcaption><code>grey</code></figcaption></figure>
 	<figure><Button color="orange">Button</Button><figcaption><code>orange</code></figcaption></figure>
 	<figure><Button color="pink">Button</Button><figcaption><code>pink</code></figcaption></figure>
 	<figure><Button color="purple">Button</Button><figcaption><code>purple</code></figcaption></figure>
@@ -38,6 +39,7 @@ import Button from 'astro-nosferatu/components/Button.astro';
 <Button color="blue">Button</Button>
 <Button color="cyan">Button</Button>
 <Button color="green">Button</Button>
+<Button color="grey">Button</Button>
 <Button color="orange">Button</Button>
 <Button color="pink">Button</Button>
 <Button color="purple">Button</Button>
@@ -97,7 +99,7 @@ It works per subtree too, which is how the pair below renders both branches side
 
 | Prop | Type | Default | Notes |
 |---|---|---|---|
-| `color` | `'blue' \| 'cyan' \| 'green' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | `'purple'` | Rendered as `data-ui-color` on the element. |
+| `color` | `'blue' \| 'cyan' \| 'green' \| 'grey' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | `'purple'` | Rendered as `data-ui-color` on the element. |
 | `type` | `'button' \| 'submit' \| 'reset'` | `'button'` | Set `type="submit"` inside forms. |
 
 Every other `<button>` attribute (`disabled`, `name`, `aria-*`, `class`, event attributes...) is passed through to the element.

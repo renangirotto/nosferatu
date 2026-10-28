@@ -1,0 +1,199 @@
+:root {
+	--nf-blue-d-10: oklch(0.98 0.01 270.1);
+	--nf-blue-d-20: oklch(0.94 0.03 270.1);
+	--nf-blue-d-30: oklch(0.89 0.06 270.1);
+	--nf-blue-d-40: oklch(0.84 0.09 270.1);
+	--nf-blue-d-50: oklch(0.79 0.12 270.1);
+	--nf-blue-d-60: oklch(0.73 0.15 270.1);
+	--nf-blue-d-70: oklch(0.67 0.15 270.1);
+	--nf-blue-d-80: oklch(0.6 0.13 270.1);
+	--nf-blue-d-90: oklch(0.52 0.12 270.1);
+	--nf-blue-d-100: oklch(0.43 0.1 270.1);
+
+	--nf-blue-d-10-25: oklch(0.98 0.01 270.1 / 25%);
+	--nf-blue-d-20-25: oklch(0.94 0.03 270.1 / 25%);
+	--nf-blue-d-30-25: oklch(0.89 0.06 270.1 / 25%);
+	--nf-blue-d-40-25: oklch(0.84 0.09 270.1 / 25%);
+	--nf-blue-d-50-25: oklch(0.79 0.12 270.1 / 25%);
+	--nf-blue-d-60-25: oklch(0.73 0.15 270.1 / 25%);
+	--nf-blue-d-70-25: oklch(0.67 0.15 270.1 / 25%);
+	--nf-blue-d-80-25: oklch(0.6 0.13 270.1 / 25%);
+	--nf-blue-d-90-25: oklch(0.52 0.12 270.1 / 25%);
+	--nf-blue-d-100-25: oklch(0.43 0.1 270.1 / 25%);
+
+	--nf-cyan-d-10: oklch(0.98 0.01 212.8);
+	--nf-cyan-d-20: oklch(0.93 0.03 212.8);
+	--nf-cyan-d-30: oklch(0.88 0.06 212.8);
+	--nf-cyan-d-40: oklch(0.83 0.09 212.8);
+	--nf-cyan-d-50: oklch(0.77 0.12 212.8);
+	--nf-cyan-d-60: oklch(0.71 0.15 212.8);
+	--nf-cyan-d-70: oklch(0.64 0.15 212.8);
+	--nf-cyan-d-80: oklch(0.58 0.13 212.8);
+	--nf-cyan-d-90: oklch(0.5 0.12 212.8);
+	--nf-cyan-d-100: oklch(0.42 0.1 212.8);
+
+	--nf-cyan-d-10-25: oklch(0.98 0.01 212.8 / 25%);
+	--nf-cyan-d-20-25: oklch(0.93 0.03 212.8 / 25%);
+	--nf-cyan-d-30-25: oklch(0.88 0.06 212.8 / 25%);
+	--nf-cyan-d-40-25: oklch(0.83 0.09 212.8 / 25%);
+	--nf-cyan-d-50-25: oklch(0.77 0.12 212.8 / 25%);
+	--nf-cyan-d-60-25: oklch(0.71 0.15 212.8 / 25%);
+	--nf-cyan-d-70-25: oklch(0.64 0.15 212.8 / 25%);
+	--nf-cyan-d-80-25: oklch(0.58 0.13 212.8 / 25%);
+	--nf-cyan-d-90-25: oklch(0.5 0.12 212.8 / 25%);
+	--nf-cyan-d-100-25: oklch(0.42 0.1 212.8 / 25%);
+
+	--nf-green-d-10: oklch(0.98 0.01 148);
+	--nf-green-d-20: oklch(0.93 0.03 148);
+	--nf-green-d-30: oklch(0.88 0.06 148);
+	--nf-green-d-40: oklch(0.83 0.09 148);
+	--nf-green-d-50: oklch(0.77 0.12 148);
+	--nf-green-d-60: oklch(0.71 0.15 148);
+	--nf-green-d-70: oklch(0.65 0.15 148);
+	--nf-green-d-80: oklch(0.58 0.13 148);
+	--nf-green-d-90: oklch(0.5 0.12 148);
+	--nf-green-d-100: oklch(0.42 0.1 148);
+
+	--nf-green-d-10-25: oklch(0.98 0.01 148 / 25%);
+	--nf-green-d-20-25: oklch(0.93 0.03 148 / 25%);
+	--nf-green-d-30-25: oklch(0.88 0.06 148 / 25%);
+	--nf-green-d-40-25: oklch(0.83 0.09 148 / 25%);
+	--nf-green-d-50-25: oklch(0.77 0.12 148 / 25%);
+	--nf-green-d-60-25: oklch(0.71 0.15 148 / 25%);
+	--nf-green-d-70-25: oklch(0.65 0.15 148 / 25%);
+	--nf-green-d-80-25: oklch(0.58 0.13 148 / 25%);
+	--nf-green-d-90-25: oklch(0.5 0.12 148 / 25%);
+	--nf-green-d-100-25: oklch(0.42 0.1 148 / 25%);
+
+	--nf-grey-d-10: oklch(0.98 0 277.5);
+	--nf-grey-d-20: oklch(0.93 0.002 277.5);
+	--nf-grey-d-30: oklch(0.88 0.004 277.5);
+	--nf-grey-d-40: oklch(0.83 0.007 277.5);
+	--nf-grey-d-50: oklch(0.78 0.009 277.5);
+	--nf-grey-d-60: oklch(0.7 0.011 277.5);
+	--nf-grey-d-70: oklch(0.61 0.013 277.5);
+	--nf-grey-d-80: oklch(0.51 0.016 277.5);
+	--nf-grey-d-90: oklch(0.4 0.018 277.5);
+	--nf-grey-d-100: oklch(0.29 0.02 277.5);
+
+	--nf-grey-d-10-25: oklch(0.98 0 277.5 / 25%);
+	--nf-grey-d-20-25: oklch(0.93 0.002 277.5 / 25%);
+	--nf-grey-d-30-25: oklch(0.88 0.004 277.5 / 25%);
+	--nf-grey-d-40-25: oklch(0.83 0.007 277.5 / 25%);
+	--nf-grey-d-50-25: oklch(0.78 0.009 277.5 / 25%);
+	--nf-grey-d-60-25: oklch(0.7 0.011 277.5 / 25%);
+	--nf-grey-d-70-25: oklch(0.61 0.013 277.5 / 25%);
+	--nf-grey-d-80-25: oklch(0.51 0.016 277.5 / 25%);
+	--nf-grey-d-90-25: oklch(0.4 0.018 277.5 / 25%);
+	--nf-grey-d-100-25: oklch(0.29 0.02 277.5 / 25%);
+
+	--nf-orange-d-10: oklch(0.98 0.01 66.6);
+	--nf-orange-d-20: oklch(0.94 0.03 66.6);
+	--nf-orange-d-30: oklch(0.89 0.06 66.6);
+	--nf-orange-d-40: oklch(0.84 0.09 66.6);
+	--nf-orange-d-50: oklch(0.79 0.12 66.6);
+	--nf-orange-d-60: oklch(0.73 0.15 66.6);
+	--nf-orange-d-70: oklch(0.67 0.15 66.6);
+	--nf-orange-d-80: oklch(0.6 0.13 66.6);
+	--nf-orange-d-90: oklch(0.52 0.12 66.6);
+	--nf-orange-d-100: oklch(0.43 0.1 66.6);
+
+	--nf-orange-d-10-25: oklch(0.98 0.01 66.6 / 25%);
+	--nf-orange-d-20-25: oklch(0.94 0.03 66.6 / 25%);
+	--nf-orange-d-30-25: oklch(0.89 0.06 66.6 / 25%);
+	--nf-orange-d-40-25: oklch(0.84 0.09 66.6 / 25%);
+	--nf-orange-d-50-25: oklch(0.79 0.12 66.6 / 25%);
+	--nf-orange-d-60-25: oklch(0.73 0.15 66.6 / 25%);
+	--nf-orange-d-70-25: oklch(0.67 0.15 66.6 / 25%);
+	--nf-orange-d-80-25: oklch(0.6 0.13 66.6 / 25%);
+	--nf-orange-d-90-25: oklch(0.52 0.12 66.6 / 25%);
+	--nf-orange-d-100-25: oklch(0.43 0.1 66.6 / 25%);
+
+	--nf-pink-d-10: oklch(0.98 0.01 346.8);
+	--nf-pink-d-20: oklch(0.94 0.03 346.8);
+	--nf-pink-d-30: oklch(0.89 0.06 346.8);
+	--nf-pink-d-40: oklch(0.85 0.09 346.8);
+	--nf-pink-d-50: oklch(0.8 0.12 346.8);
+	--nf-pink-d-60: oklch(0.74 0.15 346.8);
+	--nf-pink-d-70: oklch(0.68 0.15 346.8);
+	--nf-pink-d-80: oklch(0.61 0.13 346.8);
+	--nf-pink-d-90: oklch(0.53 0.12 346.8);
+	--nf-pink-d-100: oklch(0.44 0.1 346.8);
+
+	--nf-pink-d-10-25: oklch(0.98 0.01 346.8 / 25%);
+	--nf-pink-d-20-25: oklch(0.94 0.03 346.8 / 25%);
+	--nf-pink-d-30-25: oklch(0.89 0.06 346.8 / 25%);
+	--nf-pink-d-40-25: oklch(0.85 0.09 346.8 / 25%);
+	--nf-pink-d-50-25: oklch(0.8 0.12 346.8 / 25%);
+	--nf-pink-d-60-25: oklch(0.74 0.15 346.8 / 25%);
+	--nf-pink-d-70-25: oklch(0.68 0.15 346.8 / 25%);
+	--nf-pink-d-80-25: oklch(0.61 0.13 346.8 / 25%);
+	--nf-pink-d-90-25: oklch(0.53 0.12 346.8 / 25%);
+	--nf-pink-d-100-25: oklch(0.44 0.1 346.8 / 25%);
+
+	--nf-purple-d-10: oklch(0.98 0.01 301.9);
+	--nf-purple-d-20: oklch(0.94 0.03 301.9);
+	--nf-purple-d-30: oklch(0.89 0.06 301.9);
+	--nf-purple-d-40: oklch(0.84 0.09 301.9);
+	--nf-purple-d-50: oklch(0.79 0.12 301.9);
+	--nf-purple-d-60: oklch(0.74 0.15 301.9);
+	--nf-purple-d-70: oklch(0.68 0.15 301.9);
+	--nf-purple-d-80: oklch(0.61 0.13 301.9);
+	--nf-purple-d-90: oklch(0.53 0.12 301.9);
+	--nf-purple-d-100: oklch(0.44 0.1 301.9);
+
+	--nf-purple-d-10-25: oklch(0.98 0.01 301.9 / 25%);
+	--nf-purple-d-20-25: oklch(0.94 0.03 301.9 / 25%);
+	--nf-purple-d-30-25: oklch(0.89 0.06 301.9 / 25%);
+	--nf-purple-d-40-25: oklch(0.84 0.09 301.9 / 25%);
+	--nf-purple-d-50-25: oklch(0.79 0.12 301.9 / 25%);
+	--nf-purple-d-60-25: oklch(0.74 0.15 301.9 / 25%);
+	--nf-purple-d-70-25: oklch(0.68 0.15 301.9 / 25%);
+	--nf-purple-d-80-25: oklch(0.61 0.13 301.9 / 25%);
+	--nf-purple-d-90-25: oklch(0.53 0.12 301.9 / 25%);
+	--nf-purple-d-100-25: oklch(0.44 0.1 301.9 / 25%);
+
+	--nf-red-d-10: oklch(0.98 0.01 24.4);
+	--nf-red-d-20: oklch(0.94 0.03 24.4);
+	--nf-red-d-30: oklch(0.89 0.06 24.4);
+	--nf-red-d-40: oklch(0.85 0.09 24.4);
+	--nf-red-d-50: oklch(0.79 0.12 24.4);
+	--nf-red-d-60: oklch(0.74 0.15 24.4);
+	--nf-red-d-70: oklch(0.68 0.15 24.4);
+	--nf-red-d-80: oklch(0.61 0.13 24.4);
+	--nf-red-d-90: oklch(0.53 0.12 24.4);
+	--nf-red-d-100: oklch(0.44 0.1 24.4);
+
+	--nf-red-d-10-25: oklch(0.98 0.01 24.4 / 25%);
+	--nf-red-d-20-25: oklch(0.94 0.03 24.4 / 25%);
+	--nf-red-d-30-25: oklch(0.89 0.06 24.4 / 25%);
+	--nf-red-d-40-25: oklch(0.85 0.09 24.4 / 25%);
+	--nf-red-d-50-25: oklch(0.79 0.12 24.4 / 25%);
+	--nf-red-d-60-25: oklch(0.74 0.15 24.4 / 25%);
+	--nf-red-d-70-25: oklch(0.68 0.15 24.4 / 25%);
+	--nf-red-d-80-25: oklch(0.61 0.13 24.4 / 25%);
+	--nf-red-d-90-25: oklch(0.53 0.12 24.4 / 25%);
+	--nf-red-d-100-25: oklch(0.44 0.1 24.4 / 25%);
+
+	--nf-yellow-d-10: oklch(0.98 0.01 112.8);
+	--nf-yellow-d-20: oklch(0.93 0.03 112.8);
+	--nf-yellow-d-30: oklch(0.88 0.06 112.8);
+	--nf-yellow-d-40: oklch(0.83 0.09 112.8);
+	--nf-yellow-d-50: oklch(0.78 0.12 112.8);
+	--nf-yellow-d-60: oklch(0.72 0.15 112.8);
+	--nf-yellow-d-70: oklch(0.66 0.15 112.8);
+	--nf-yellow-d-80: oklch(0.59 0.13 112.8);
+	--nf-yellow-d-90: oklch(0.51 0.12 112.8);
+	--nf-yellow-d-100: oklch(0.42 0.1 112.8);
+
+	--nf-yellow-d-10-25: oklch(0.98 0.01 112.8 / 25%);
+	--nf-yellow-d-20-25: oklch(0.93 0.03 112.8 / 25%);
+	--nf-yellow-d-30-25: oklch(0.88 0.06 112.8 / 25%);
+	--nf-yellow-d-40-25: oklch(0.83 0.09 112.8 / 25%);
+	--nf-yellow-d-50-25: oklch(0.78 0.12 112.8 / 25%);
+	--nf-yellow-d-60-25: oklch(0.72 0.15 112.8 / 25%);
+	--nf-yellow-d-70-25: oklch(0.66 0.15 112.8 / 25%);
+	--nf-yellow-d-80-25: oklch(0.59 0.13 112.8 / 25%);
+	--nf-yellow-d-90-25: oklch(0.51 0.12 112.8 / 25%);
+	--nf-yellow-d-100-25: oklch(0.42 0.1 112.8 / 25%);
+}

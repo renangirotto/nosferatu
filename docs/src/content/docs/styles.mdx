@@ -18,7 +18,9 @@ It includes, in order:
 | File | What it contains |
 |---|---|
 | `tokens.css` | `--nf-*` custom properties on `:root` (spacing, fonts, radius) |
-| `colors.css` | `--nf-*` color palette on `:root` (light and dark scales, opaque and 25% opacity) |
+| `colors/index.css` | The color palette, which is a folder: it imports the two files below and declares nothing itself |
+| `colors/colors-dark.css` | Every `-d-` token on `:root` — the dark-mode scale, opaque and 25% opacity |
+| `colors/colors-light.css` | Every `-l-` token on `:root` — the light-mode scale, opaque and 25% opacity |
 | `shadows.css` | `--nf-shadow-*` box-shadow values on `:root`, one per palette color, plus `--nf-shadow-depth` |
 | `reset.css` | box-sizing, margin reset, `color-scheme`, `100dvh` body container, media and form-control defaults, text wrapping |
 
@@ -54,13 +56,33 @@ Each file can be imported on its own, for example to keep your own reset:
 ```astro
 ---
 import 'astro-nosferatu/styles/tokens.css';
-import 'astro-nosferatu/styles/colors.css';
+import 'astro-nosferatu/styles/colors/index.css';
 import 'astro-nosferatu/styles/shadows.css';
 ---
 ```
 
+The palette is split by scale, so you can take one and leave the other — useful if your project pins a single `color-scheme`:
+
+```astro
+---
+import 'astro-nosferatu/styles/colors/colors-light.css';
+---
+```
+
+`colors/index.css` is exactly those two imports and nothing else, so loading it is the same as loading both.
+
 :::caution
 Files imported on their own are **not** layered. Only `index.css` adds the `nosferatu.*` layers.
+:::
+
+:::note[Moved in this release]
+The palette used to be a single file at `astro-nosferatu/styles/colors.css`. That path no longer resolves — replace it with:
+
+```astro
+import 'astro-nosferatu/styles/colors/index.css';
+```
+
+No token was renamed or revalued, so nothing else in your CSS changes. If you load `astro-nosferatu/styles/index.css`, there is nothing to do.
 :::
 
 ## Tokens
@@ -78,11 +100,11 @@ Every value the library uses is a custom property prefixed with `--nf-`:
 
 ## Colors
 
-`colors.css` holds the color palette. There are no semantic color tokens: styles and components use palette steps directly.
+`colors/` holds the color palette, split into `colors-dark.css` and `colors-light.css`. There are no semantic color tokens: styles and components use palette steps directly.
 
 Each token is named `--nf-<hue>-<scale>-<step>`:
 
-- **hue**: `blue`, `cyan`, `green`, `orange`, `pink`, `purple`, `red`, `yellow`
+- **hue**: `blue`, `cyan`, `green`, `grey`, `orange`, `pink`, `purple`, `red`, `yellow`
 - **scale**: `d` for dark mode, `l` for light mode
 - **step**: `10` to `100`, in tens
 
@@ -107,6 +129,57 @@ The library styles currently use the light (`-l-`) scale:
 | Links | `--nf-red-l-80` (hover `--nf-red-l-90`) |
 | Components | their own `--nf-<component>-*` properties, resolved from the palette |
 
+### Grey
+
+`grey` is the palette's neutral. It is a hue like the other eight — same `--nf-grey-<scale>-<step>` naming, same 25% tier, same shadow tokens — not a semantic "surface" or "muted" alias. There is no `--nf-neutral-*` or `--nf-surface-*`; if you want a neutral, you pick a grey step the same way you pick a blue one.
+
+Both scales are bounded by the same two anchors: `#f9f9f9` at the light end and `#282A36` at the dark end. They traverse that range differently. `grey-d` is the dark-mode scale, so it spends its first half near white, where a dark-mode surface lives, then falls away faster. `grey-l` is evenly spaced across the whole range, because a light-mode neutral is used for text and rules more often than for surfaces.
+
+<div class="not-content ramp">
+	<figure><div style="background: var(--nf-grey-d-10)"></div><figcaption><code>d-10</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-d-20)"></div><figcaption><code>d-20</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-d-30)"></div><figcaption><code>d-30</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-d-40)"></div><figcaption><code>d-40</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-d-50)"></div><figcaption><code>d-50</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-d-60)"></div><figcaption><code>d-60</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-d-70)"></div><figcaption><code>d-70</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-d-80)"></div><figcaption><code>d-80</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-d-90)"></div><figcaption><code>d-90</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-d-100)"></div><figcaption><code>d-100</code></figcaption></figure>
+</div>
+
+<div class="not-content ramp">
+	<figure><div style="background: var(--nf-grey-l-10)"></div><figcaption><code>l-10</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-l-20)"></div><figcaption><code>l-20</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-l-30)"></div><figcaption><code>l-30</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-l-40)"></div><figcaption><code>l-40</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-l-50)"></div><figcaption><code>l-50</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-l-60)"></div><figcaption><code>l-60</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-l-70)"></div><figcaption><code>l-70</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-l-80)"></div><figcaption><code>l-80</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-l-90)"></div><figcaption><code>l-90</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-l-100)"></div><figcaption><code>l-100</code></figcaption></figure>
+</div>
+
+| Step | `grey-d` lightness | `grey-l` lightness | Chroma |
+|---|---|---|---|
+| 10 | `0.98` — `#f9f9f9` | `0.92` | `0` |
+| 20 | `0.93` | `0.85` | `0.002` |
+| 30 | `0.88` | `0.78` | `0.004` |
+| 40 | `0.83` | `0.71` | `0.007` |
+| 50 | `0.78` | `0.64` | `0.009` |
+| 60 | `0.7` | `0.57` | `0.011` |
+| 70 | `0.61` | `0.5` | `0.013` |
+| 80 | `0.51` | `0.43` | `0.016` |
+| 90 | `0.4` | `0.36` | `0.018` |
+| 100 | `0.29` — `#282A36` | `0.29` — `#282A36` | `0.02` |
+
+The hue angle is `277.5` on every step — the cast measured off `#282A36`. Chroma climbs from `0` to `0.02` with the step, so the pale greys are exactly neutral and only the dark end carries a trace of blue.
+
+:::note[`grey-d-100` and `grey-l-100` are the same color]
+Both scales end on `#282A36`, so those two tokens resolve identically. Every other hue has a distinct `d-100` and `l-100`. That falls out of the greyscale being bounded by two fixed anchors rather than being an oversight — but it does mean `light-dark(var(--nf-grey-l-100), var(--nf-grey-d-100))` will not change between schemes.
+:::
+
 ## Shadows
 
 `shadows.css` turns the library's one house shadow — a solid `0px 4px 0px` offset, the raised look `Button` and `Callout` share — into a token per palette color:
@@ -130,7 +203,7 @@ Each token is named `--nf-shadow-<hue>-<scale>-<step>` and holds the **complete*
 	<div class="demo-card" style="box-shadow: var(--nf-shadow-green-l-80); background-color: var(--nf-green-l-40-25);">box-shadow: var(--nf-shadow-green-l-80)</div>
 </div>
 
-A shadow token resolves the palette token it names, so overriding `--nf-purple-l-80` moves both the color and its shadow. The tokens exist only for the opaque palette — there is no `-25` shadow — and `shadows.css` needs `colors.css` loaded to resolve.
+A shadow token resolves the palette token it names, so overriding `--nf-purple-l-80` moves both the color and its shadow. The tokens exist only for the opaque palette — there is no `-25` shadow — and `shadows.css` needs the palette loaded to resolve.
 
 One more token holds the offsets on their own:
 
@@ -182,5 +255,30 @@ You can also scope an override to part of a page:
 		padding: 1rem;
 		border-radius: 0.5rem;
 		font-size: 0.875rem;
+	}
+
+	.ramp {
+		display: grid;
+		grid-template-columns: repeat(10, 1fr);
+		gap: 0.25rem;
+		margin-block: 0.75rem;
+	}
+
+	.ramp figure {
+		display: flex;
+		flex-direction: column;
+		gap: 0.375rem;
+		margin: 0;
+	}
+
+	.ramp figure > div {
+		height: 3.5rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 0.25rem;
+	}
+
+	.ramp figcaption {
+		font-size: 0.75rem;
+		text-align: center;
 	}
 `}</style>

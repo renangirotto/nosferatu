@@ -8,6 +8,7 @@ import HelpCircle from 'iconoir/icons/help-circle.svg';
 import Droplet from 'iconoir/icons/droplet.svg';
 import SnowFlake from 'iconoir/icons/snow-flake.svg';
 import Leaf from 'iconoir/icons/leaf.svg';
+import Cloud from 'iconoir/icons/cloud.svg';
 import FireFlame from 'iconoir/icons/fire-flame.svg';
 import Heart from 'iconoir/icons/heart.svg';
 import Sparks from 'iconoir/icons/sparks.svg';
@@ -54,6 +55,7 @@ import Callout from 'astro-nosferatu/components/Callout.astro';
 	<Callout color="blue" title="blue" icon={em(Droplet)}>A tinted panel.</Callout>
 	<Callout color="cyan" title="cyan" icon={em(SnowFlake)}>A tinted panel.</Callout>
 	<Callout color="green" title="green" icon={em(Leaf)}>A tinted panel.</Callout>
+	<Callout color="grey" title="grey" icon={em(Cloud)}>A tinted panel.</Callout>
 	<Callout color="orange" title="orange" icon={em(FireFlame)}>A tinted panel.</Callout>
 	<Callout color="pink" title="pink" icon={em(Heart)}>A tinted panel.</Callout>
 	<Callout color="purple" title="purple" icon={em(Sparks)}>A tinted panel.</Callout>
@@ -65,6 +67,7 @@ import Callout from 'astro-nosferatu/components/Callout.astro';
 <Callout color="blue" title="blue">A tinted panel.</Callout>
 <Callout color="cyan" title="cyan">A tinted panel.</Callout>
 <Callout color="green" title="green">A tinted panel.</Callout>
+<Callout color="grey" title="grey">A tinted panel.</Callout>
 <Callout color="orange" title="orange">A tinted panel.</Callout>
 <Callout color="pink" title="pink">A tinted panel.</Callout>
 <Callout color="purple" title="purple">A tinted panel.</Callout>
@@ -185,7 +188,7 @@ Each half above sits on its own canvas, and that is not decoration: the surface 
 |---|---|---|---|
 | `title` | `string` | — | **Required.** Rendered as the panel's title line. Not forwarded as the HTML `title` attribute and not a heading element. |
 | `icon` | component | — | Any component — an imported `.svg`, an icon component, your own `.astro`. Rendered before the title with no props, in a box sized by `--nf-callout-icon-size`. |
-| `color` | `'blue' \| 'cyan' \| 'green' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | `'purple'` | Rendered as `data-ui-color` on the element. |
+| `color` | `'blue' \| 'cyan' \| 'green' \| 'grey' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | `'purple'` | Rendered as `data-ui-color` on the element. |
 
 The callout renders a `<div>`. Every other `<div>` attribute (`id`, `role`, `aria-*`, `class`, `data-*`...) is passed through to it — add `role`/`aria-label` yourself if a given callout is a landmark.
 
@@ -228,7 +231,7 @@ Overriding a palette token instead re-themes every callout using that hue. A cal
 </div>
 ```
 
-The drop shadow's depth comes from [`shadows.css`](/styles/#shadows): `--nf-callout-shadow` is composed once as `var(--nf-shadow-depth) var(--nf-callout-shadow-color)`, so the offsets are the library's shared `0px 4px 0px` and the color is a 25% tint one step below the surface — translucent, like the surface, rather than a hard opaque bar. Load the library through `index.css` and the depth is there; load `tokens.css` and `colors.css` on their own, without `shadows.css`, and the panel keeps its surface, accent and rule but draws no shadow.
+The drop shadow's depth comes from [`shadows.css`](/styles/#shadows): `--nf-callout-shadow` is composed once as `var(--nf-shadow-depth) var(--nf-callout-shadow-color)`, so the offsets are the library's shared `0px 4px 0px` and the color is a 25% tint one step below the surface — translucent, like the surface, rather than a hard opaque bar. Load the library through `index.css` and the depth is there; load `tokens.css` and `colors/index.css` on their own, without `shadows.css`, and the panel keeps its surface, accent and rule but draws no shadow.
 
 A callout has no interactive states — it is static content, so hovering, clicking or tabbing through it changes nothing, and nothing about it animates.
 
