@@ -1,6 +1,6 @@
 @layer nosferatu.tokens, nosferatu.colors, nosferatu.shadows, nosferatu.reset;
 
 @import './tokens.css' layer(nosferatu.tokens);
-@import './colors.css' layer(nosferatu.colors);
+@import './colors/index.css' layer(nosferatu.colors);
 @import './shadows.css' layer(nosferatu.shadows);
 @import './reset.css' layer(nosferatu.reset);

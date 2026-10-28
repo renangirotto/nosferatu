@@ -12,6 +12,7 @@ export type ColorPalette =
 	| "blue"
 	| "cyan"
 	| "green"
+	| "grey"
 	| "orange"
 	| "pink"
 	| "purple"

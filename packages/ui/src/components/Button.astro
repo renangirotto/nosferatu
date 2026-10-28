@@ -77,6 +77,14 @@ const {
       );
     }
 
+    &[data-ui-color="grey"] {
+      --nf-button-color: light-dark(var(--nf-grey-l-40), var(--nf-grey-d-50));
+      --nf-button-accent-color: light-dark(
+        var(--nf-grey-l-80),
+        var(--nf-grey-d-90)
+      );
+    }
+
     &[data-ui-color="orange"] {
       --nf-button-color: light-dark(var(--nf-orange-l-40), var(--nf-orange-d-50));
       --nf-button-accent-color: light-dark(

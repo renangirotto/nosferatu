@@ -133,6 +133,25 @@ const hasBody = Astro.slots.has("default");
 			);
 		}
 
+		&[data-ui-color="grey"] {
+			--nf-callout-surface-color: light-dark(
+				var(--nf-grey-l-40-25),
+				var(--nf-grey-d-50-25)
+			);
+			--nf-callout-accent-color: light-dark(
+				var(--nf-grey-l-80),
+				var(--nf-grey-d-30)
+			);
+			--nf-callout-rule-color: light-dark(
+				var(--nf-grey-l-80-25),
+				var(--nf-grey-d-30-25)
+			);
+			--nf-callout-shadow-color: light-dark(
+				var(--nf-grey-l-70-25),
+				var(--nf-grey-d-90-25)
+			);
+		}
+
 		&[data-ui-color="orange"] {
 			--nf-callout-surface-color: light-dark(
 				var(--nf-orange-l-40-25),
