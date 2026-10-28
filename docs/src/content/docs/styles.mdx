@@ -23,19 +23,20 @@ It includes, in order:
 | `colors/colors-light.css` | Every `-l-` token on `:root` — the light-mode scale, opaque and 25% opacity |
 | `shadows.css` | `--nf-shadow-*` box-shadow values on `:root`, one per palette color, plus `--nf-shadow-depth` |
 | `reset.css` | box-sizing, margin reset, `color-scheme`, `100dvh` body container, media and form-control defaults, text wrapping |
+| `typography.css` | `--nf-typography-*` custom properties on `:root`, and a fluid `font-size` on `h1`, `h2`, `h3` and `p` |
 
-The library styles no headings, paragraphs, lists, links or code: text on your page keeps the browser's own sizes, weights and margins, except where the reset changes them.
+`typography.css` is the only file besides the reset that touches your own elements: loading `index.css` sizes your `h1`, `h2`, `h3` and `p`. It sizes nothing else — `a`, `h4`–`h6`, lists, blockquotes and code keep the browser's own sizes — and it sets no font family, weight, color, line-height or margin on anything. See [Typography](#typography) for the full property list and how to opt out.
 
 ## Cascade layers
 
 `index.css` puts every file in its own cascade layer:
 
 ```css
-@layer nosferatu.tokens, nosferatu.colors, nosferatu.shadows, nosferatu.reset;
+@layer nosferatu.tokens, nosferatu.colors, nosferatu.shadows, nosferatu.reset, nosferatu.typography;
 ```
 
 ```
-nosferatu.tokens < nosferatu.colors < nosferatu.shadows < nosferatu.reset < your unlayered CSS
+nosferatu.tokens < nosferatu.colors < nosferatu.shadows < nosferatu.reset < nosferatu.typography < your unlayered CSS
 ```
 
 Any CSS you write outside a layer wins over the library, whatever its specificity. No `!important` needed:
@@ -217,6 +218,101 @@ Use `--nf-shadow-depth` when the shadow's color is decided somewhere else — in
 
 :::note
 These are plain custom properties, not a function: the color is baked into the name. When CSS custom functions are available everywhere, this file collapses into one function without changing a single call site.
+:::
+
+## Typography
+
+`typography.css` sizes `h1`, `h2`, `h3` and `p` with a type scale that interpolates with the viewport, so text grows as the window widens instead of stepping at breakpoints:
+
+```astro
+---
+import 'astro-nosferatu/styles/typography.css';
+---
+```
+
+It is the one library stylesheet besides the reset that styles your own markup, and it sets `font-size` only — no family, weight, color, line-height or margin. `a` is deliberately left out, so a link inside a heading renders at the heading's size instead of shrinking to body size. `h4`, `h5` and `h6` are left alone too.
+
+[**See it live →**](/examples/typography/) — a standalone page that loads the library's styles and nothing else, reporting the viewport width and each element's computed size as you resize.
+
+### Properties
+
+Every input is a custom property on `:root`, so you retune the scale by overriding one:
+
+| Property | Default |
+|---|---|
+| `--nf-typography-viewport-min` | `560px` |
+| `--nf-typography-viewport-max` | `1088px` |
+| `--nf-typography-viewport-progress` | `progress(100svw, …-min, …-max)` |
+| `--nf-typography-font-size-h1-min` | `3rem` |
+| `--nf-typography-font-size-h1-max` | `3.5rem` |
+| `--nf-typography-font-size-h1` | interpolated between the two above |
+| `--nf-typography-font-size-h2-min` | `2.5rem` |
+| `--nf-typography-font-size-h2-max` | `3rem` |
+| `--nf-typography-font-size-h2` | interpolated between the two above |
+| `--nf-typography-font-size-h3-min` | `2rem` |
+| `--nf-typography-font-size-h3-max` | `2.5rem` |
+| `--nf-typography-font-size-h3` | interpolated between the two above |
+| `--nf-typography-font-size-p-min` | `1rem` |
+| `--nf-typography-font-size-p-max` | `1.125rem` |
+| `--nf-typography-font-size-p` | interpolated between the two above |
+
+```css
+/* your stylesheet, unlayered */
+:root {
+	--nf-typography-font-size-h1-max: 5rem;
+	--nf-typography-viewport-max: 1440px;
+}
+```
+
+An unlayered rule beats the library's layer whatever its specificity, so you never need `!important` — you can also just size an element yourself:
+
+```css
+h1 {
+	font-size: 2rem;
+}
+```
+
+### The bounds are real limits
+
+Each element reaches its minimum at `--nf-typography-viewport-min` and its maximum at `--nf-typography-viewport-max`, and **holds** there outside that range — `progress()` clamps its own result to `0`–`1`, so the library wraps it in nothing:
+
+| Viewport | `h1` | `p` |
+|---|---|---|
+| `320px` | 48px (`3rem`) | 16px (`1rem`) |
+| `560px` | 48px (`3rem`) | 16px (`1rem`) |
+| `800px` | 51.64px | 16.91px |
+| `1088px` | 56px (`3.5rem`) | 18px (`1.125rem`) |
+| `2560px` | 56px (`3.5rem`) | 18px (`1.125rem`) |
+
+To opt one element out of the scale entirely, set its resolved property to a constant. It then renders at that size at every width, inside the range as well as outside:
+
+```css
+:root {
+	--nf-typography-font-size-p: 1.125rem;
+}
+```
+
+### Opting out completely
+
+`typography.css` only arrives with `index.css`. Import the other four files individually to get everything else and keep your own text styling:
+
+```astro
+---
+import 'astro-nosferatu/styles/tokens.css';
+import 'astro-nosferatu/styles/colors/index.css';
+import 'astro-nosferatu/styles/shadows.css';
+import 'astro-nosferatu/styles/reset.css';
+---
+```
+
+Remember that files imported on their own are **not** layered, so your own CSS no longer automatically wins over the reset.
+
+:::caution[The scale is progressive enhancement]
+It relies on the CSS [`progress()`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/progress) function. The element rules sit behind an `@supports` check, so a browser without `progress()` keeps its own heading and paragraph sizes with the hierarchy intact — rather than collapsing every heading to body size, which is what would happen unguarded. Do not depend on an exact rendered size.
+:::
+
+:::note[Why the headings on this page are not fluid]
+These docs are a Starlight site, and Starlight declares its own cascade layers *after* importing the library. Later-declared layers win, so Starlight's heading rules outrank `nosferatu.typography` here — only the paragraphs on this page are sized by the scale. That is ordinary layer precedence rather than a defect, and it is why the demo lives on [its own page](/examples/typography/). The same happens in your project if you declare layers after loading `index.css`.
 :::
 
 ## Theming
