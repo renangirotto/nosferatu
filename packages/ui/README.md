@@ -19,12 +19,12 @@ import 'astro-nosferatu/styles/index.css';
 `index.css` puts every stylesheet in its own cascade layer, in this order:
 
 ```
-nosferatu.tokens < nosferatu.colors < nosferatu.reset < nosferatu.typography < your unlayered CSS
+nosferatu.tokens < nosferatu.colors < nosferatu.shadows < nosferatu.reset < your unlayered CSS
 ```
 
 Any CSS you write outside a layer wins, with no `!important` or extra specificity needed.
 
-You can also import single files: `tokens.css`, `colors.css`, `reset.css`, `typography.css`. Files imported on their own are **not** layered; only `index.css` adds the layers.
+You can also import single files: `tokens.css`, `colors.css`, `shadows.css`, `reset.css`. Files imported on their own are **not** layered; only `index.css` adds the layers.
 
 ### Theming
 

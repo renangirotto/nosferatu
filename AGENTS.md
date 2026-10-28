@@ -3,7 +3,7 @@
 pnpm workspace holding `astro-nosferatu` — an Astro component library that ships **source** `.astro` components and `.css` stylesheets — plus its Starlight documentation site.
 
 ```
-packages/ui/   astro-nosferatu, the published npm package (src/components, src/styles)
+packages/ui/   astro-nosferatu, the published npm package (src/components, src/layouts, src/styles)
 docs/          Starlight documentation site (private, never published)
 openspec/      specs (source of truth for behaviour) and change proposals
 ```
@@ -43,11 +43,11 @@ These are spec requirements, not preferences. Breaking one is a bug:
 
 1. **Every CSS custom property is `--nf-` prefixed.** No exceptions, in stylesheets and in component styles.
 2. **No semantic color tokens.** Never define or reference `--nf-color-*`; colors come only from the palette in [colors.css](packages/ui/src/styles/colors.css) (`--nf-<hue>-<d|l>-<step>`, 8 hues × dark/light × steps 10–100 = 160 tokens, alphabetical by hue, dark before light, ascending step, OKLCH values unchanged).
-3. **Layer order is fixed**: `nosferatu.tokens, nosferatu.colors, nosferatu.reset, nosferatu.typography`, declared in [index.css](packages/ui/src/styles/index.css). Unlayered consumer CSS must keep winning over all library CSS — so never raise specificity to "fix" an override.
+3. **Layer order is fixed**: `nosferatu.tokens, nosferatu.colors, nosferatu.shadows, nosferatu.reset`, declared in [index.css](packages/ui/src/styles/index.css). Unlayered consumer CSS must keep winning over all library CSS — so never raise specificity to "fix" an override.
 4. **Each stylesheet is independently importable**, and `index.css` includes all of them.
 5. **Components are self-styled through tokens**: scoped `<style>` only, design values exclusively via `var(--nf-*)`, and never a selector that reaches outside the component's own markup.
-6. **Public import paths only**: `astro-nosferatu/components/<Name>.astro` and `astro-nosferatu/styles/<name>.css`. Docs must import through the package name, never by relative path into `packages/ui/src`.
-7. **The library ships sources**, has no runtime dependencies, and declares `astro` `^7.0.0` as its only peer dependency. The published tarball contains only `src/components`, `src/types`, `src/styles`, `package.json`, `README.md`, `LICENSE`.
+6. **Public import paths only**: `astro-nosferatu/components/<Name>.astro`, `astro-nosferatu/layouts/<Name>.astro` and `astro-nosferatu/styles/<name>.css`. Docs must import through the package name, never by relative path into `packages/ui/src`.
+7. **The library ships sources**, has no runtime dependencies, and declares `astro` `^7.0.0` as its only peer dependency. The published tarball contains only `src/components`, `src/layouts`, `src/types`, `src/styles`, `package.json`, `README.md`, `LICENSE`.
 8. **`docs` stays private** and never becomes a dependency of the library.
 
 ## Conventions

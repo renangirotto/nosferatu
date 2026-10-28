@@ -1,0 +1,106 @@
+---
+title: BlogArticle
+description: A layout that renders a whole article document from a required title and description, with the body in its default slot.
+---
+
+`BlogArticle` is a layout, not a component: it renders the entire document — doctype, `<html>`, `<head>` and `<body>` — so a page file can be nothing but the layout and its content. That is also why there is no live demo on this page: a document cannot be nested inside this one.
+
+[See it rendered →](/examples/blog-article/)
+
+```astro
+---
+import BlogArticle from 'astro-nosferatu/layouts/BlogArticle.astro';
+---
+```
+
+## Usage
+
+```astro
+---
+import BlogArticle from 'astro-nosferatu/layouts/BlogArticle.astro';
+---
+
+<BlogArticle
+	title="Nosferatu, a sympathy for the night"
+	description="A worked example of the BlogArticle layout, rendered as its own document."
+>
+	<p>The article body goes here, as ordinary markup or library components.</p>
+</BlogArticle>
+```
+
+## Rendered markup
+
+```html
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Nosferatu, a sympathy for the night</title>
+		<meta name="description" content="A worked example of the BlogArticle layout, rendered as its own document." />
+	</head>
+	<body>
+		<main class="nf-layout-blog-article">
+			<article>
+				<h1>Nosferatu, a sympathy for the night</h1>
+				<p>A worked example of the BlogArticle layout, rendered as its own document.</p>
+				<!-- slot content -->
+			</article>
+		</main>
+	</body>
+</html>
+```
+
+`nf-layout-blog-article` on `main` is the only class the layout writes. The `h1` and the paragraph under it are deliberately unclassed — reach them as `.nf-layout-blog-article h1` and `.nf-layout-blog-article > article > p`.
+
+In a real build you will also see Astro's own scope on these elements (an `astro-<hash>` class or a `data-astro-cid-<hash>` attribute, depending on your `scopedStyleStrategy`). The layout declares a `<style>` block, so Astro scopes it; that marker is generated, is not part of the layout's contract, and is not something to write selectors against.
+
+## Props
+
+| Prop | Type | Required | Default | What it does |
+| --- | --- | --- | --- | --- |
+| `title` | `string` | Yes | — | Used twice: as the document's `<title>` and as the `h1` at the top of the article. |
+| `description` | `string` | Yes | — | Used twice: as the page's `<meta name="description">` and as the paragraph directly under the heading. |
+
+Both props are required, and `astro check` reports a missing one as a type error rather than rendering an empty heading or paragraph. The layout accepts nothing else: it does not forward native attributes and does not merge a `class`, because the markup above is its contract.
+
+## Slots
+
+| Slot | Required | What it renders |
+| --- | --- | --- |
+| default | No | The article body, rendered inside the `article` immediately after the description paragraph. Omit it and the article is just the heading and the description. |
+
+## Styling
+
+The layout ships **no styles of its own**. It defines no custom properties and writes no rules, so a page built with it shows plain browser defaults until you style it or import a library stylesheet yourself. `.nf-layout-blog-article` is the hook:
+
+```css
+.nf-layout-blog-article {
+	max-width: 68ch;
+	margin-inline: auto;
+	padding: 2rem 1rem;
+}
+
+.nf-layout-blog-article h1 {
+	text-wrap: balance;
+}
+```
+
+Write that rule unlayered and it wins over everything the library ships — no library rule competes with it, and none needs beating on specificity.
+
+To bring in the library's tokens, palette and reset, import a stylesheet in the page or in your site's entry:
+
+```astro
+---
+import BlogArticle from 'astro-nosferatu/layouts/BlogArticle.astro';
+import 'astro-nosferatu/styles/index.css';
+---
+```
+
+## What the head contains
+
+Only what the layout can know for every consumer: the charset, the viewport, the title and the description. There is no canonical URL, no Open Graph tag, no favicon and no stylesheet link — add those in your own page or wrapper.
+
+### Known limitation
+
+`lang` is fixed to `en`. The layout takes exactly the two props above, so a non-English site cannot change it yet; a metadata API covering `lang` and social tags is deferred to a later change.

@@ -21,18 +21,19 @@ It includes, in order:
 | `colors.css` | `--nf-*` color palette on `:root` (light and dark scales, opaque and 25% opacity) |
 | `shadows.css` | `--nf-shadow-*` box-shadow values on `:root`, one per palette color, plus `--nf-shadow-depth` |
 | `reset.css` | box-sizing, margin reset, `color-scheme`, `100dvh` body container, media and form-control defaults, text wrapping |
-| `typography.css` | headings, paragraphs, lists, links, code |
+
+The library styles no headings, paragraphs, lists, links or code: text on your page keeps the browser's own sizes, weights and margins, except where the reset changes them.
 
 ## Cascade layers
 
 `index.css` puts every file in its own cascade layer:
 
 ```css
-@layer nosferatu.tokens, nosferatu.colors, nosferatu.shadows, nosferatu.reset, nosferatu.typography;
+@layer nosferatu.tokens, nosferatu.colors, nosferatu.shadows, nosferatu.reset;
 ```
 
 ```
-nosferatu.tokens < nosferatu.colors < nosferatu.shadows < nosferatu.reset < nosferatu.typography < your unlayered CSS
+nosferatu.tokens < nosferatu.colors < nosferatu.shadows < nosferatu.reset < your unlayered CSS
 ```
 
 Any CSS you write outside a layer wins over the library, whatever its specificity. No `!important` needed:
@@ -55,7 +56,6 @@ Each file can be imported on its own, for example to keep your own reset:
 import 'astro-nosferatu/styles/tokens.css';
 import 'astro-nosferatu/styles/colors.css';
 import 'astro-nosferatu/styles/shadows.css';
-import 'astro-nosferatu/styles/typography.css';
 ---
 ```
 
