@@ -34,48 +34,68 @@ const { title, description, lang = "en", imageSocialMedia } = Astro.props;
 
 <style>
   .nf-layout-blog-article {
-    --nf-fluid-vmin: 560px;
-    --nf-fluid-vmax: 1088px;
+    --nf-layout-blog-article-viewport-min: 560px;
+    --nf-layout-blog-article-viewport-max: 1088px;
 
-    --nf-fluid-progress: progress(
+    --nf-layout-blog-article-viewport-progress: progress(
       100svw,
-      var(--nf-fluid-vmin),
-      var(--nf-fluid-vmax)
+      var(--nf-layout-blog-article-viewport-min),
+      var(--nf-layout-blog-article-viewport-max)
     );
 
-    --nf-fs-base: calc(1rem + var(--nf-fluid-progress) * 0.125rem);
-
-    --nf-fs-type-scale-small: 1.2;
-    --nf-fs-type-scale-large: 1.414;
-    --nf-fs-type-scale: calc(
-      var(--nf-fs-type-scale-small) + var(--nf-fluid-progress) *
-        (var(--nf-fs-type-scale-large) - var(--nf-fs-type-scale-small))
+    --nf-layout-blog-article-font-size-base: calc(
+      1rem + var(--nf-layout-blog-article-viewport-progress) * 0.125rem
     );
 
-    --nf-h1: calc(var(--nf-fs-base) * pow(var(--nf-fs-type-scale), 3));
-    --nf-h2: calc(var(--nf-fs-base) * pow(var(--nf-fs-type-scale), 2.5));
-    --nf-h3: calc(var(--nf-fs-base) * pow(var(--nf-fs-type-scale), 2));
-    --nf-h4: calc(var(--nf-fs-base) * pow(var(--nf-fs-type-scale), 1.5));
-    --nf-fs-p: var(--nf-fs-base);
+    --nf-layout-blog-article-type-scale-min: 1.2;
+    --nf-layout-blog-article-type-scale-max: 1.414;
+    --nf-layout-blog-article-type-scale: calc(
+      var(--nf-layout-blog-article-type-scale-min) +
+        var(--nf-layout-blog-article-viewport-progress) *
+        (
+          var(--nf-layout-blog-article-type-scale-max) -
+            var(--nf-layout-blog-article-type-scale-min)
+        )
+    );
+
+    --nf-layout-blog-article-font-size-h1: calc(
+      var(--nf-layout-blog-article-font-size-base) *
+        pow(var(--nf-layout-blog-article-type-scale), 3)
+    );
+    --nf-layout-blog-article-font-size-h2: calc(
+      var(--nf-layout-blog-article-font-size-base) *
+        pow(var(--nf-layout-blog-article-type-scale), 2.5)
+    );
+    --nf-layout-blog-article-font-size-h3: calc(
+      var(--nf-layout-blog-article-font-size-base) *
+        pow(var(--nf-layout-blog-article-type-scale), 2)
+    );
+    --nf-layout-blog-article-font-size-h4: calc(
+      var(--nf-layout-blog-article-font-size-base) *
+        pow(var(--nf-layout-blog-article-type-scale), 1.5)
+    );
+    --nf-layout-blog-article-font-size-p: var(
+      --nf-layout-blog-article-font-size-base
+    );
 
     h1 {
-      font-size: var(--nf-h1);
+      font-size: var(--nf-layout-blog-article-font-size-h1);
     }
 
     h2 {
-      font-size: var(--nf-h2);
+      font-size: var(--nf-layout-blog-article-font-size-h2);
     }
 
     h3 {
-      font-size: var(--nf-h3);
+      font-size: var(--nf-layout-blog-article-font-size-h3);
     }
 
     h4 {
-      font-size: var(--nf-h4);
+      font-size: var(--nf-layout-blog-article-font-size-h4);
     }
 
     p {
-      font-size: var(--nf-fs-p);
+      font-size: var(--nf-layout-blog-article-font-size-p);
     }
   }
 </style>

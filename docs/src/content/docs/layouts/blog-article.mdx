@@ -76,7 +76,9 @@ In a real build you will also see Astro's own scope on these elements (an `astro
 
 ## Styling
 
-The layout ships **no styles of its own**. It defines no custom properties and writes no rules, so a page built with it shows plain browser defaults until you style it or import a library stylesheet yourself. `.nf-layout-blog-article` is the hook:
+The layout styles exactly one thing: the **size** of the text it renders. `h1`–`h4` and the paragraph are sized from a type scale that interpolates with the viewport width — between `560px` and `1088px` the base size grows from `1rem` to `1.125rem` and the scale ratio from `1.2` to `1.414`, clamping at both ends. Outside font size it writes nothing: no spacing, no color, no measure, no font family. Those are yours.
+
+`.nf-layout-blog-article` is the hook for everything else:
 
 ```css
 .nf-layout-blog-article {
@@ -90,16 +92,36 @@ The layout ships **no styles of its own**. It defines no custom properties and w
 }
 ```
 
-Write that rule unlayered and it wins over everything the library ships — no library rule competes with it, and none needs beating on specificity.
+Everything the library's **stylesheets** ship sits in the `nosferatu` cascade layer, so your unlayered rules beat them outright. The layout's own sizing is a scoped `<style>` block rather than a layer: Astro compiles it to a single class plus an element (`.nf-layout-blog-article h1`), the lowest specificity that can do the job, so your rule matches it exactly and wins on order. If you would rather not depend on order at all, re-tune the custom properties below instead of overriding the rules.
 
-To bring in the library's tokens, palette and reset, import a stylesheet in the page or in your site's entry:
+### Re-tuning the type scale
 
-```astro
----
-import BlogArticle from 'astro-nosferatu/layouts/BlogArticle.astro';
-import 'astro-nosferatu/styles/index.css';
----
+Set these on `.nf-layout-blog-article` to re-tune the scale in one place, instead of overriding each heading rule:
+
+| Property | Default | What it controls |
+| --- | --- | --- |
+| `--nf-layout-blog-article-viewport-min` | `560px` | Viewport width at which the scale stops shrinking. |
+| `--nf-layout-blog-article-viewport-max` | `1088px` | Viewport width at which the scale stops growing. |
+| `--nf-layout-blog-article-viewport-progress` | `progress(100svw, min, max)` | The 0–1 position between those two bounds. Computed; override it to drive the scale from something other than viewport width. |
+| `--nf-layout-blog-article-font-size-base` | `calc(1rem + progress * 0.125rem)` | Paragraph size, and the root of every heading size. |
+| `--nf-layout-blog-article-type-scale-min` | `1.2` | Scale ratio at the lower bound. |
+| `--nf-layout-blog-article-type-scale-max` | `1.414` | Scale ratio at the upper bound. |
+| `--nf-layout-blog-article-type-scale` | interpolated between the two | The ratio actually in use. |
+| `--nf-layout-blog-article-font-size-h1` | `base * ratio³` | `h1` size. |
+| `--nf-layout-blog-article-font-size-h2` | `base * ratio^2.5` | `h2` size. |
+| `--nf-layout-blog-article-font-size-h3` | `base * ratio²` | `h3` size. |
+| `--nf-layout-blog-article-font-size-h4` | `base * ratio^1.5` | `h4` size. |
+| `--nf-layout-blog-article-font-size-p` | `base` | Paragraph size. |
+
+```css
+/* Bigger body text, gentler jump between heading levels */
+.nf-layout-blog-article {
+	--nf-layout-blog-article-font-size-base: 1.125rem;
+	--nf-layout-blog-article-type-scale-max: 1.25;
+}
 ```
+
+The sizing is built on the CSS [`progress()`](https://developer.mozilla.org/en-US/docs/Web/CSS/progress) function, which is new. In a browser that does not support it the `calc()` chain is invalid at computed-value time and the headings and paragraphs fall back to the browser's own default sizes — still ordered, still readable, just not fluid.
 
 ## What the head contains
 
