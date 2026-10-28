@@ -21,18 +21,22 @@ The library SHALL ship its components as `.astro` source files and its styles as
 - **THEN** the tarball contains the `.astro` and `.css` source files
 
 ### Requirement: Public import paths
-The library SHALL expose components at `astro-nosferatu/components/<Name>.astro` and stylesheets at `astro-nosferatu/styles/<name>.css`. Paths outside these two entry points SHALL NOT be importable through the package's exports, so the shared types under `src/types/` remain an internal implementation detail even though they are published.
+The library SHALL expose components at `astro-nosferatu/components/<Name>.astro`, layouts at `astro-nosferatu/layouts/<Name>.astro`, and stylesheets at `astro-nosferatu/styles/<name>.css`. Paths outside these three entry points SHALL NOT be importable through the package's exports, so the shared types under `src/types/` remain an internal implementation detail even though they are published.
 
 #### Scenario: Import a component
 - **WHEN** a consumer Astro project imports `astro-nosferatu/components/Button.astro`
 - **THEN** the import resolves and the component renders
+
+#### Scenario: Import a layout
+- **WHEN** a consumer Astro project imports `astro-nosferatu/layouts/BlogArticle.astro`
+- **THEN** the import resolves and the layout renders the page
 
 #### Scenario: Import a stylesheet
 - **WHEN** a consumer Astro project imports `astro-nosferatu/styles/index.css`
 - **THEN** the import resolves and the styles are applied
 
 #### Scenario: Private path is blocked
-- **WHEN** a consumer imports a file from the package that is not under `components/` or `styles/`, including `astro-nosferatu/types/components.ts`
+- **WHEN** a consumer imports a file from the package that is not under `components/`, `layouts/` or `styles/`, including `astro-nosferatu/types/components.ts`
 - **THEN** module resolution fails with a package-exports error
 
 ### Requirement: Shipped source resolves without consumer configuration
@@ -47,11 +51,11 @@ Every module specifier in published source SHALL resolve in a consuming project 
 - **THEN** it maps `@/*` to `./src/*` for local type-checking, and no file under `src/components/` uses that alias
 
 ### Requirement: Tarball contents limited to library sources
-The published tarball SHALL contain only the library's components, shared types, styles, package manifest, README and license. It SHALL NOT contain the documentation site, its dependencies, workspace configuration, tooling configuration such as `tsconfig.json`, or tests.
+The published tarball SHALL contain only the library's components, layouts, shared types, styles, package manifest, README and license. It SHALL NOT contain the documentation site, its dependencies, workspace configuration, tooling configuration such as `tsconfig.json`, or tests.
 
 #### Scenario: Dry-run pack lists only library files
 - **WHEN** a maintainer runs a dry-run pack of the library
-- **THEN** every listed file is either under `src/components/`, `src/types/` or `src/styles/`, or is `package.json`, `README.md` or `LICENSE`
+- **THEN** every listed file is either under `src/components/`, `src/layouts/`, `src/types/` or `src/styles/`, or is `package.json`, `README.md` or `LICENSE`
 
 #### Scenario: Tooling configuration stays out
 - **WHEN** the packed file list is inspected

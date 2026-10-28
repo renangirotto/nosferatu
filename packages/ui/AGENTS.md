@@ -6,11 +6,14 @@ The published package. Everything here ends up in consumers' projects as **sourc
 
 ```
 src/components/   .astro components, one file per component, PascalCase
+src/layouts/      .astro page layouts, one file per layout, PascalCase
 src/styles/       tokens.css colors.css shadows.css reset.css typography.css index.css
 src/types/        shared prop types (ColorPalette), published but not exported
 ```
 
 `index.css` only declares the layer order and `@import`s the other four into their layers — put real declarations in the specific stylesheet, never in `index.css`.
+
+A **component** renders a fragment; a **layout** renders the whole document — doctype, `<html>`, `<head>` and `<body>` — so a consumer's page file can be nothing but the layout and its content. A layout takes explicit props only: no `HTMLAttributes` extension, no `class:list` merge, no `{...attrs}` spread, because the markup it renders is its contract. Its root class is `nf-layout-<name>`, and it is documented under `docs/src/content/docs/layouts/` with a standalone rendered example page, since a document cannot be demoed inside a docs page.
 
 ## Adding or changing a component
 
@@ -33,7 +36,7 @@ The `component-build` skill in [.agents/skills/component-build](../../.agents/sk
 
 ## Exports
 
-`exports` in [package.json](package.json) deliberately exposes only `./components/*`, `./styles/*` and `./package.json`. Adding a file under those directories publishes it automatically; anything else stays unreachable by design. Do not widen `exports`, add `dependencies`, loosen the `astro` peer range, or extend `files` beyond `src` without an approved change.
+`exports` in [package.json](package.json) deliberately exposes only `./components/*`, `./layouts/*`, `./styles/*` and `./package.json`. Adding a file under those directories publishes it automatically; anything else stays unreachable by design. Do not widen `exports`, add `dependencies`, loosen the `astro` peer range, or extend `files` beyond `src` without an approved change.
 
 ## Checks
 

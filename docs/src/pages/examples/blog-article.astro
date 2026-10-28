@@ -1,0 +1,34 @@
+---
+/*
+ * A real page built with the layout, outside the Starlight content collection:
+ * the layout renders its own document, so it cannot be embedded in a docs page.
+ */
+import BlogArticle from 'astro-nosferatu/layouts/BlogArticle.astro';
+---
+
+<BlogArticle
+	title="Nosferatu, a sympathy for the night"
+	description="A worked example of the BlogArticle layout, rendered as its own document."
+>
+	<p>
+		This page is the whole document the layout produced. Everything above —
+		the heading and the paragraph under it — comes from the layout's
+		<code>title</code> and <code>description</code> props; everything from here
+		down is the default slot.
+	</p>
+	<p>
+		The layout ships no styles of its own, so what you see is the browser's
+		own defaults. Target <code>.nf-layout-blog-article</code> from your own
+		stylesheet to style it.
+	</p>
+	<h2>Slot content is ordinary markup</h2>
+	<p>
+		Headings, lists and components all render inside the <code>article</code>,
+		after the description paragraph, in the order they were written.
+	</p>
+	<ul>
+		<li>The document title is the <code>title</code> prop.</li>
+		<li>The page description metadata is the <code>description</code> prop.</li>
+		<li>Nothing else is added around them.</li>
+	</ul>
+</BlogArticle>
