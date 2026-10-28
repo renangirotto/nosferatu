@@ -20,6 +20,7 @@ export default defineConfig({
 				{ label: 'Styles', link: '/styles/' },
 				{ label: 'Components', items: [{ autogenerate: { directory: 'components' } }] },
 				{ label: 'Layouts', items: [{ autogenerate: { directory: 'layouts' } }] },
+				{ label: 'HTML', items: [{ autogenerate: { directory: 'html' } }] },
 			],
 		}),
 	],

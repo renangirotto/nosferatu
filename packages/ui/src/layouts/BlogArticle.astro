@@ -3,77 +3,99 @@
  * A layout renders the whole document, so it takes no native attributes and
  * merges no consumer class: the markup below is the contract.
  */
+import BaseHtml from "../html/BaseHtml.astro";
+import BaseHead from "../html/BaseHead.astro";
+
 interface Props {
   title: string;
   description: string;
+  lang?: string;
+  imageSocialMedia?: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, lang = "en", imageSocialMedia } = Astro.props;
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-  </head>
-  <body>
-    <main class="nf-layout-blog-article">
-      <article>
-        <h1>{title}</h1>
-        <p>{description}</p>
-        <slot />
-      </article>
-    </main>
-  </body>
-</html>
+<BaseHtml lang={lang}>
+  <BaseHead
+    slot="head"
+    title={title}
+    description={description}
+    imageSocialMedia={imageSocialMedia}
+  />
+  <main class="nf-layout-blog-article">
+    <article>
+      <h1>{title}</h1>
+      <p>{description}</p>
+      <slot />
+    </article>
+  </main>
+</BaseHtml>
 
 <style>
   .nf-layout-blog-article {
-    --nf-fluid-vmin: 560px;
-    --nf-fluid-vmax: 1088px;
+    --nf-layout-blog-article-viewport-min: 560px;
+    --nf-layout-blog-article-viewport-max: 1088px;
 
-    --nf-fluid-progress: progress(
+    --nf-layout-blog-article-viewport-progress: progress(
       100svw,
-      var(--nf-fluid-vmin),
-      var(--nf-fluid-vmax)
+      var(--nf-layout-blog-article-viewport-min),
+      var(--nf-layout-blog-article-viewport-max)
     );
 
-    --nf-fs-base: calc(1rem + var(--nf-fluid-progress) * 0.125rem);
-
-    --nf-fs-type-scale-small: 1.2;
-    --nf-fs-type-scale-large: 1.414;
-    --nf-fs-type-scale: calc(
-      var(--nf-fs-type-scale-small) + var(--nf-fluid-progress) *
-        (var(--nf-fs-type-scale-large) - var(--nf-fs-type-scale-small))
+    --nf-layout-blog-article-font-size-base: calc(
+      1rem + var(--nf-layout-blog-article-viewport-progress) * 0.125rem
     );
 
-    --nf-h1: calc(var(--nf-fs-base) * pow(var(--nf-fs-type-scale), 3));
-    --nf-h2: calc(var(--nf-fs-base) * pow(var(--nf-fs-type-scale), 2.5));
-    --nf-h3: calc(var(--nf-fs-base) * pow(var(--nf-fs-type-scale), 2));
-    --nf-h4: calc(var(--nf-fs-base) * pow(var(--nf-fs-type-scale), 1.5));
-    --nf-fs-p: var(--nf-fs-base);
+    --nf-layout-blog-article-type-scale-min: 1.2;
+    --nf-layout-blog-article-type-scale-max: 1.414;
+    --nf-layout-blog-article-type-scale: calc(
+      var(--nf-layout-blog-article-type-scale-min) +
+        var(--nf-layout-blog-article-viewport-progress) *
+        (
+          var(--nf-layout-blog-article-type-scale-max) -
+            var(--nf-layout-blog-article-type-scale-min)
+        )
+    );
+
+    --nf-layout-blog-article-font-size-h1: calc(
+      var(--nf-layout-blog-article-font-size-base) *
+        pow(var(--nf-layout-blog-article-type-scale), 3)
+    );
+    --nf-layout-blog-article-font-size-h2: calc(
+      var(--nf-layout-blog-article-font-size-base) *
+        pow(var(--nf-layout-blog-article-type-scale), 2.5)
+    );
+    --nf-layout-blog-article-font-size-h3: calc(
+      var(--nf-layout-blog-article-font-size-base) *
+        pow(var(--nf-layout-blog-article-type-scale), 2)
+    );
+    --nf-layout-blog-article-font-size-h4: calc(
+      var(--nf-layout-blog-article-font-size-base) *
+        pow(var(--nf-layout-blog-article-type-scale), 1.5)
+    );
+    --nf-layout-blog-article-font-size-p: var(
+      --nf-layout-blog-article-font-size-base
+    );
 
     h1 {
-      font-size: var(--nf-h1);
+      font-size: var(--nf-layout-blog-article-font-size-h1);
     }
 
     h2 {
-      font-size: var(--nf-h2);
+      font-size: var(--nf-layout-blog-article-font-size-h2);
     }
 
     h3 {
-      font-size: var(--nf-h3);
+      font-size: var(--nf-layout-blog-article-font-size-h3);
     }
 
     h4 {
-      font-size: var(--nf-h4);
+      font-size: var(--nf-layout-blog-article-font-size-h4);
     }
 
     p {
-      font-size: var(--nf-fs-p);
+      font-size: var(--nf-layout-blog-article-font-size-p);
     }
   }
 </style>

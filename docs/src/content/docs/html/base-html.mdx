@@ -1,0 +1,72 @@
+---
+title: BaseHtml
+description: The document skeleton — doctype, html, head and body — with a named head slot and a default body slot.
+---
+
+`BaseHtml` is not a component and not a layout: it is the document skeleton the library's layouts are built on. It renders the doctype, `<html>`, `<head>` and `<body>` and nothing else, so there is no live demo on this page — a document cannot be nested inside this one.
+
+Reach for it when you are assembling a document yourself. If you want a finished article page, use [BlogArticle](/layouts/blog-article/) instead, which is this file plus [BaseHead](/html/base-head/) plus the article markup.
+
+```astro
+---
+import BaseHtml from 'astro-nosferatu/html/BaseHtml.astro';
+---
+```
+
+## Usage
+
+Everything you pass to the `head` slot lands inside `<head>`; everything else lands inside `<body>`.
+
+```astro
+---
+import BaseHtml from 'astro-nosferatu/html/BaseHtml.astro';
+import BaseHead from 'astro-nosferatu/html/BaseHead.astro';
+---
+
+<BaseHtml lang="pt-BR">
+	<BaseHead
+		slot="head"
+		title="Nosferatu"
+		description="A sympathy for the night."
+	/>
+	<main>
+		<h1>Nosferatu</h1>
+		<p>The page body goes here.</p>
+	</main>
+</BaseHtml>
+```
+
+## Rendered markup
+
+```html
+<!doctype html>
+<html lang="pt-BR">
+	<head>
+		<!-- head slot -->
+	</head>
+	<body>
+		<!-- default slot -->
+	</body>
+</html>
+```
+
+The file writes no class, no attribute other than `lang`, and no element of its own inside either slot. What you put in a slot is exactly what the document contains.
+
+## Props
+
+| Prop | Type | Required | Default | What it does |
+| --- | --- | --- | --- | --- |
+| `lang` | `string` | No | `'en'` | The `lang` attribute of the `<html>` element. |
+
+`BaseHtml` accepts nothing else: it does not forward native attributes and does not merge a `class`, because the markup above is its contract. An arbitrary attribute landing on `<html>` would make the document skeleton unpredictable.
+
+## Slots
+
+| Slot | Required | What it renders |
+| --- | --- | --- |
+| `head` | No | Rendered inside `<head>`, in the order you wrote it. This is where `BaseHead` goes, and where you add anything it does not cover — a font link, an alternate favicon, an RSS link, an analytics snippet. |
+| default | No | Rendered inside `<body>`. Omit both slots and you get a valid, empty document. |
+
+## Styling
+
+`BaseHtml` declares no styles and defines no custom properties. It does not import a stylesheet either — `BaseHead` is the file that brings in `astro-nosferatu/styles/index.css`. Using `BaseHtml` on its own gives you a completely unstyled document.

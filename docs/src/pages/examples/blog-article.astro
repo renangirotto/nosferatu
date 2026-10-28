@@ -9,6 +9,8 @@ import BlogArticle from 'astro-nosferatu/layouts/BlogArticle.astro';
 <BlogArticle
 	title="Nosferatu, a sympathy for the night"
 	description="A worked example of the BlogArticle layout, rendered as its own document."
+	lang="en"
+	imageSocialMedia="/og/blog-article.png"
 >
 	<p>
 		This page is the whole document the layout produced. Everything above —
@@ -17,9 +19,12 @@ import BlogArticle from 'astro-nosferatu/layouts/BlogArticle.astro';
 		down is the default slot.
 	</p>
 	<p>
-		The layout ships no styles of its own, so what you see is the browser's
-		own defaults. Target <code>.nf-layout-blog-article</code> from your own
-		stylesheet to style it.
+		View the source of this page: its head is <code>BaseHead</code>, so it
+		carries the canonical URL, the favicon link and the Open Graph and
+		Twitter tags — including the image passed as
+		<code>imageSocialMedia</code>. Target
+		<code>.nf-layout-blog-article</code> from your own stylesheet to style
+		the body.
 	</p>
 	<h2>Slot content is ordinary markup</h2>
 	<p>
