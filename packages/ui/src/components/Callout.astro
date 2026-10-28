@@ -9,18 +9,18 @@ import type { ColorPalette } from "../types/components";
 type IconComponent = (props: Record<string, any>) => any;
 
 interface Props extends HTMLAttributes<"div"> {
-	title: string;
-	icon?: IconComponent;
-	color?: ColorPalette;
+  title: string;
+  icon?: IconComponent;
+  color?: ColorPalette;
 }
 
 const {
-	title,
-	icon: Icon,
-	color = "purple",
-	class: className,
-	"data-ui-color": _controlled,
-	...attrs
+  title,
+  icon: Icon,
+  color = "purple",
+  class: className,
+  "data-ui-color": _controlled,
+  ...attrs
 } = Astro.props;
 
 /* The body is rendered only when the slot was supplied */
@@ -28,257 +28,253 @@ const hasBody = Astro.slots.has("default");
 ---
 
 <div {...attrs} data-ui-color={color} class:list={["nf-callout", className]}>
-	<p class="nf-callout-title">
-		{
-			Icon && (
-				<span class="nf-callout-icon">
-					<Icon />
-				</span>
-			)
-		}
-		{title}
-	</p>
-	{
-		hasBody && (
-			<p class="nf-callout-body">
-				<slot />
-			</p>
-		)
-	}
+  <p class="nf-callout-title">
+    {
+      Icon && (
+        <span class="nf-callout-icon">
+          <Icon />
+        </span>
+      )
+    }
+    {title}
+  </p>
+  {
+    hasBody && (
+      <p class="nf-callout-body">
+        <slot />
+      </p>
+    )
+  }
 </div>
 
 <style>
-	.nf-callout {
-		/* 24px against the 1rem title, at the default root size */
-		--nf-callout-icon-size: var(--nf-font-size-xl);
-		/*
+  .nf-callout {
+    /* 24px against the 1rem title, at the default root size */
+    --nf-callout-icon-size: var(--nf-font-size-xl);
+    /*
 		 * Composed rather than taken whole from a --nf-shadow-<color> token:
 		 * light-dark() resolves colors, not complete box-shadow values, so the
 		 * depth comes from shadows.css and the color from the 25% tier, one
 		 * step below the surface in each scheme.
 		 */
-		--nf-callout-shadow: var(--nf-shadow-depth)
-			var(--nf-callout-shadow-color);
+    --nf-callout-shadow: var(--nf-shadow-depth) var(--nf-callout-shadow-color);
 
-		border: none;
-		border-radius: var(--nf-radius-md);
-		padding: var(--nf-space-6);
-		color: var(--nf-callout-accent-color);
-		font-family: var(--nf-font-body);
-		font-size: var(--nf-font-size-md);
-		font-weight: var(--nf-font-weight-medium);
-		line-height: var(--nf-line-height-body);
-		background-color: var(--nf-callout-surface-color);
-		box-shadow: var(--nf-callout-shadow);
+    border: none;
+    border-radius: var(--nf-radius-md);
+    padding: var(--nf-space-6);
+    color: var(--nf-callout-accent-color);
+    font-weight: 500;
+    background-color: var(--nf-callout-surface-color);
+    box-shadow: var(--nf-callout-shadow);
 
-		/*
+    /*
 		 * The surface is the palette's 25% tier, so the page shows through it:
 		 * in dark mode the panel reads dark and the accent has to be a light
 		 * step (-d-30), not the dark one Button pairs with an opaque fill.
 		 */
-		&[data-ui-color="blue"] {
-			--nf-callout-surface-color: light-dark(
-				var(--nf-blue-l-40-25),
-				var(--nf-blue-d-50-25)
-			);
-			--nf-callout-accent-color: light-dark(
-				var(--nf-blue-l-80),
-				var(--nf-blue-d-30)
-			);
-			--nf-callout-rule-color: light-dark(
-				var(--nf-blue-l-80-25),
-				var(--nf-blue-d-30-25)
-			);
-			--nf-callout-shadow-color: light-dark(
-				var(--nf-blue-l-70-25),
-				var(--nf-blue-d-90-25)
-			);
-		}
+    &[data-ui-color="blue"] {
+      --nf-callout-surface-color: light-dark(
+        var(--nf-blue-l-40-25),
+        var(--nf-blue-d-50-25)
+      );
+      --nf-callout-accent-color: light-dark(
+        var(--nf-blue-l-80),
+        var(--nf-blue-d-30)
+      );
+      --nf-callout-rule-color: light-dark(
+        var(--nf-blue-l-80-25),
+        var(--nf-blue-d-30-25)
+      );
+      --nf-callout-shadow-color: light-dark(
+        var(--nf-blue-l-70-25),
+        var(--nf-blue-d-90-25)
+      );
+    }
 
-		&[data-ui-color="cyan"] {
-			--nf-callout-surface-color: light-dark(
-				var(--nf-cyan-l-40-25),
-				var(--nf-cyan-d-50-25)
-			);
-			--nf-callout-accent-color: light-dark(
-				var(--nf-cyan-l-80),
-				var(--nf-cyan-d-30)
-			);
-			--nf-callout-rule-color: light-dark(
-				var(--nf-cyan-l-80-25),
-				var(--nf-cyan-d-30-25)
-			);
-			--nf-callout-shadow-color: light-dark(
-				var(--nf-cyan-l-70-25),
-				var(--nf-cyan-d-90-25)
-			);
-		}
+    &[data-ui-color="cyan"] {
+      --nf-callout-surface-color: light-dark(
+        var(--nf-cyan-l-40-25),
+        var(--nf-cyan-d-50-25)
+      );
+      --nf-callout-accent-color: light-dark(
+        var(--nf-cyan-l-80),
+        var(--nf-cyan-d-30)
+      );
+      --nf-callout-rule-color: light-dark(
+        var(--nf-cyan-l-80-25),
+        var(--nf-cyan-d-30-25)
+      );
+      --nf-callout-shadow-color: light-dark(
+        var(--nf-cyan-l-70-25),
+        var(--nf-cyan-d-90-25)
+      );
+    }
 
-		&[data-ui-color="green"] {
-			--nf-callout-surface-color: light-dark(
-				var(--nf-green-l-40-25),
-				var(--nf-green-d-50-25)
-			);
-			--nf-callout-accent-color: light-dark(
-				var(--nf-green-l-80),
-				var(--nf-green-d-30)
-			);
-			--nf-callout-rule-color: light-dark(
-				var(--nf-green-l-80-25),
-				var(--nf-green-d-30-25)
-			);
-			--nf-callout-shadow-color: light-dark(
-				var(--nf-green-l-70-25),
-				var(--nf-green-d-90-25)
-			);
-		}
+    &[data-ui-color="green"] {
+      --nf-callout-surface-color: light-dark(
+        var(--nf-green-l-40-25),
+        var(--nf-green-d-50-25)
+      );
+      --nf-callout-accent-color: light-dark(
+        var(--nf-green-l-80),
+        var(--nf-green-d-30)
+      );
+      --nf-callout-rule-color: light-dark(
+        var(--nf-green-l-80-25),
+        var(--nf-green-d-30-25)
+      );
+      --nf-callout-shadow-color: light-dark(
+        var(--nf-green-l-70-25),
+        var(--nf-green-d-90-25)
+      );
+    }
 
-		&[data-ui-color="grey"] {
-			--nf-callout-surface-color: light-dark(
-				var(--nf-grey-l-40-25),
-				var(--nf-grey-d-50-25)
-			);
-			--nf-callout-accent-color: light-dark(
-				var(--nf-grey-l-80),
-				var(--nf-grey-d-30)
-			);
-			--nf-callout-rule-color: light-dark(
-				var(--nf-grey-l-80-25),
-				var(--nf-grey-d-30-25)
-			);
-			--nf-callout-shadow-color: light-dark(
-				var(--nf-grey-l-70-25),
-				var(--nf-grey-d-90-25)
-			);
-		}
+    &[data-ui-color="grey"] {
+      --nf-callout-surface-color: light-dark(
+        var(--nf-grey-l-40-25),
+        var(--nf-grey-d-50-25)
+      );
+      --nf-callout-accent-color: light-dark(
+        var(--nf-grey-l-80),
+        var(--nf-grey-d-30)
+      );
+      --nf-callout-rule-color: light-dark(
+        var(--nf-grey-l-80-25),
+        var(--nf-grey-d-30-25)
+      );
+      --nf-callout-shadow-color: light-dark(
+        var(--nf-grey-l-70-25),
+        var(--nf-grey-d-90-25)
+      );
+    }
 
-		&[data-ui-color="orange"] {
-			--nf-callout-surface-color: light-dark(
-				var(--nf-orange-l-40-25),
-				var(--nf-orange-d-50-25)
-			);
-			--nf-callout-accent-color: light-dark(
-				var(--nf-orange-l-80),
-				var(--nf-orange-d-30)
-			);
-			--nf-callout-rule-color: light-dark(
-				var(--nf-orange-l-80-25),
-				var(--nf-orange-d-30-25)
-			);
-			--nf-callout-shadow-color: light-dark(
-				var(--nf-orange-l-70-25),
-				var(--nf-orange-d-90-25)
-			);
-		}
+    &[data-ui-color="orange"] {
+      --nf-callout-surface-color: light-dark(
+        var(--nf-orange-l-40-25),
+        var(--nf-orange-d-50-25)
+      );
+      --nf-callout-accent-color: light-dark(
+        var(--nf-orange-l-80),
+        var(--nf-orange-d-30)
+      );
+      --nf-callout-rule-color: light-dark(
+        var(--nf-orange-l-80-25),
+        var(--nf-orange-d-30-25)
+      );
+      --nf-callout-shadow-color: light-dark(
+        var(--nf-orange-l-70-25),
+        var(--nf-orange-d-90-25)
+      );
+    }
 
-		&[data-ui-color="pink"] {
-			--nf-callout-surface-color: light-dark(
-				var(--nf-pink-l-40-25),
-				var(--nf-pink-d-50-25)
-			);
-			--nf-callout-accent-color: light-dark(
-				var(--nf-pink-l-80),
-				var(--nf-pink-d-30)
-			);
-			--nf-callout-rule-color: light-dark(
-				var(--nf-pink-l-80-25),
-				var(--nf-pink-d-30-25)
-			);
-			--nf-callout-shadow-color: light-dark(
-				var(--nf-pink-l-70-25),
-				var(--nf-pink-d-90-25)
-			);
-		}
+    &[data-ui-color="pink"] {
+      --nf-callout-surface-color: light-dark(
+        var(--nf-pink-l-40-25),
+        var(--nf-pink-d-50-25)
+      );
+      --nf-callout-accent-color: light-dark(
+        var(--nf-pink-l-80),
+        var(--nf-pink-d-30)
+      );
+      --nf-callout-rule-color: light-dark(
+        var(--nf-pink-l-80-25),
+        var(--nf-pink-d-30-25)
+      );
+      --nf-callout-shadow-color: light-dark(
+        var(--nf-pink-l-70-25),
+        var(--nf-pink-d-90-25)
+      );
+    }
 
-		&[data-ui-color="purple"] {
-			--nf-callout-surface-color: light-dark(
-				var(--nf-purple-l-40-25),
-				var(--nf-purple-d-50-25)
-			);
-			--nf-callout-accent-color: light-dark(
-				var(--nf-purple-l-80),
-				var(--nf-purple-d-30)
-			);
-			--nf-callout-rule-color: light-dark(
-				var(--nf-purple-l-80-25),
-				var(--nf-purple-d-30-25)
-			);
-			--nf-callout-shadow-color: light-dark(
-				var(--nf-purple-l-70-25),
-				var(--nf-purple-d-90-25)
-			);
-		}
+    &[data-ui-color="purple"] {
+      --nf-callout-surface-color: light-dark(
+        var(--nf-purple-l-40-25),
+        var(--nf-purple-d-50-25)
+      );
+      --nf-callout-accent-color: light-dark(
+        var(--nf-purple-l-80),
+        var(--nf-purple-d-30)
+      );
+      --nf-callout-rule-color: light-dark(
+        var(--nf-purple-l-80-25),
+        var(--nf-purple-d-30-25)
+      );
+      --nf-callout-shadow-color: light-dark(
+        var(--nf-purple-l-70-25),
+        var(--nf-purple-d-90-25)
+      );
+    }
 
-		&[data-ui-color="red"] {
-			--nf-callout-surface-color: light-dark(
-				var(--nf-red-l-40-25),
-				var(--nf-red-d-50-25)
-			);
-			--nf-callout-accent-color: light-dark(
-				var(--nf-red-l-80),
-				var(--nf-red-d-30)
-			);
-			--nf-callout-rule-color: light-dark(
-				var(--nf-red-l-80-25),
-				var(--nf-red-d-30-25)
-			);
-			--nf-callout-shadow-color: light-dark(
-				var(--nf-red-l-70-25),
-				var(--nf-red-d-90-25)
-			);
-		}
+    &[data-ui-color="red"] {
+      --nf-callout-surface-color: light-dark(
+        var(--nf-red-l-40-25),
+        var(--nf-red-d-50-25)
+      );
+      --nf-callout-accent-color: light-dark(
+        var(--nf-red-l-80),
+        var(--nf-red-d-30)
+      );
+      --nf-callout-rule-color: light-dark(
+        var(--nf-red-l-80-25),
+        var(--nf-red-d-30-25)
+      );
+      --nf-callout-shadow-color: light-dark(
+        var(--nf-red-l-70-25),
+        var(--nf-red-d-90-25)
+      );
+    }
 
-		&[data-ui-color="yellow"] {
-			--nf-callout-surface-color: light-dark(
-				var(--nf-yellow-l-40-25),
-				var(--nf-yellow-d-50-25)
-			);
-			--nf-callout-accent-color: light-dark(
-				var(--nf-yellow-l-80),
-				var(--nf-yellow-d-30)
-			);
-			--nf-callout-rule-color: light-dark(
-				var(--nf-yellow-l-80-25),
-				var(--nf-yellow-d-30-25)
-			);
-			--nf-callout-shadow-color: light-dark(
-				var(--nf-yellow-l-70-25),
-				var(--nf-yellow-d-90-25)
-			);
-		}
-	}
+    &[data-ui-color="yellow"] {
+      --nf-callout-surface-color: light-dark(
+        var(--nf-yellow-l-40-25),
+        var(--nf-yellow-d-50-25)
+      );
+      --nf-callout-accent-color: light-dark(
+        var(--nf-yellow-l-80),
+        var(--nf-yellow-d-30)
+      );
+      --nf-callout-rule-color: light-dark(
+        var(--nf-yellow-l-80-25),
+        var(--nf-yellow-d-30-25)
+      );
+      --nf-callout-shadow-color: light-dark(
+        var(--nf-yellow-l-70-25),
+        var(--nf-yellow-d-90-25)
+      );
+    }
+  }
 
-	/* Not a heading element: a component cannot know its place in the outline */
-	.nf-callout-title {
-		display: flex;
-		align-items: flex-start;
-		gap: var(--nf-space-2);
-		margin: 0;
-		font-size: var(--nf-font-size-md);
-		font-weight: var(--nf-font-weight-medium);
-		line-height: var(--nf-line-height-heading);
-	}
+  /* Not a heading element: a component cannot know its place in the outline */
+  .nf-callout-title {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--nf-space-2);
+    margin: 0;
+    font-size: var(--nf-font-size-md);
+    font-weight: var(--nf-font-weight-medium);
+    line-height: var(--nf-line-height-heading);
+  }
 
-	/*
+  /*
 	 * Its own box, one line of the title tall, so whatever the icon prop
 	 * renders stays centred on the first line when the title wraps. Content
 	 * sized in em — an icon font, an SVG at 1em — follows this box.
 	 */
-	.nf-callout-icon {
-		display: flex;
-		flex: none;
-		align-items: center;
-		justify-content: center;
-		block-size: calc(var(--nf-font-size-md) * var(--nf-line-height-heading));
-		font-size: var(--nf-callout-icon-size);
-	}
+  .nf-callout-icon {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    block-size: calc(var(--nf-font-size-md) * var(--nf-line-height-heading));
+    font-size: var(--nf-callout-icon-size);
+  }
 
-	.nf-callout-body {
-		/* A <p>, so any paragraph margin the page gives it has to go */
-		margin-block: var(--nf-space-4) 0;
-		border-block-start: 1px solid var(--nf-callout-rule-color);
-		padding-block-start: var(--nf-space-4);
-		font-size: var(--nf-font-size-md);
-		font-weight: var(--nf-font-weight-medium);
-	}
+  .nf-callout-body {
+    /* A <p>, so any paragraph margin the page gives it has to go */
+    margin-block: var(--nf-space-4) 0;
+    border-block-start: 1px solid var(--nf-callout-rule-color);
+    padding-block-start: var(--nf-space-4);
+    font-size: var(--nf-font-size-md);
+    font-weight: var(--nf-font-weight-medium);
+  }
 </style>

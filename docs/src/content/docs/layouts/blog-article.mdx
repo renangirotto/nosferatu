@@ -94,6 +94,12 @@ The layout styles exactly one thing: the **size** of the text it renders. `h1`�
 
 Everything the library's **stylesheets** ship sits in the `nosferatu` cascade layer, so your unlayered rules beat them outright. The layout's own sizing is a scoped `<style>` block rather than a layer: Astro compiles it to a single class plus an element (`.nf-layout-blog-article h1`), the lowest specificity that can do the job, so your rule matches it exactly and wins on order. If you would rather not depend on order at all, re-tune the custom properties below instead of overriding the rules.
 
+:::note[This layout overrides the global type scale]
+`BaseHead` imports `index.css`, which includes [`typography.css`](/styles/#typography) and its own fluid scale for `h1`–`h3` and `p`. Because the layout's styles are scoped and therefore **unlayered**, they win over `nosferatu.typography` inside the article — no configuration needed.
+
+The two scales are not the same, so the same element renders at different sizes inside and outside the article: at a `1200px` viewport the layout's `h1` is `50.9px` while the global scale's is `56px`. Headings in your site header or sidebar, outside `.nf-layout-blog-article`, get the global scale; everything inside the article gets the properties below.
+:::
+
 ### Re-tuning the type scale
 
 Set these on `.nf-layout-blog-article` to re-tune the scale in one place, instead of overriding each heading rule:

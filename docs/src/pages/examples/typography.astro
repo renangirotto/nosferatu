@@ -1,0 +1,108 @@
+---
+/*
+ * A standalone document that loads the library's stylesheets and nothing else.
+ *
+ * It cannot be a page in the Starlight content collection: the docs site loads
+ * index.css through customCss, which emits it BEFORE Starlight's own CSS, so
+ * every starlight.* layer outranks every nosferatu.* layer and Starlight's
+ * heading rules win. Here the library's layers are the only ones present, so
+ * the type scale is what a plain consuming page actually sees.
+ */
+import 'astro-nosferatu/styles/index.css';
+
+const rows = [
+	{ selector: 'h1', min: '3rem', max: '3.5rem' },
+	{ selector: 'h2', min: '2.5rem', max: '3rem' },
+	{ selector: 'h3', min: '2rem', max: '2.5rem' },
+	{ selector: 'p', min: '1rem', max: '1.125rem' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Fluid type scale — astro-nosferatu</title>
+		<meta
+			name="description"
+			content="A live demo of the typography.css fluid type scale, rendered with only the library's stylesheets loaded."
+		/>
+	</head>
+	<body>
+		<main>
+			<h1>Fluid type <a href="#readout">scale</a></h1>
+			<p>
+				Resize the window and watch the readout below. This page loads
+				<code>astro-nosferatu/styles/index.css</code> and no documentation-site
+				CSS, so the <code>nosferatu.typography</code> layer is the only thing
+				sizing this text.
+			</p>
+
+			<h2>A second-level heading</h2>
+			<p>
+				The link in the <code>h1</code> above renders at the heading's size,
+				because <code>typography.css</code> sets no <code>font-size</code> on
+				<code>a</code> — links inherit from whatever contains them.
+			</p>
+
+			<h3>A third-level heading</h3>
+			<p>
+				Below <code>560px</code> and above <code>1088px</code> the sizes keep
+				following the same line rather than holding at a bound. The two
+				viewport bounds set the slope, not a limit.
+			</p>
+
+			<h4>h4 is not sized by the library</h4>
+			<h5>neither is h5</h5>
+			<h6>nor h6</h6>
+
+			<section id="readout">
+				<h2>Computed sizes</h2>
+				<table>
+					<thead>
+						<tr>
+							<th>Element</th>
+							<th>At 560px</th>
+							<th>At 1088px</th>
+							<th>Now</th>
+						</tr>
+					</thead>
+					<tbody>
+						{
+							rows.map((row) => (
+								<tr>
+									<td><code>{row.selector}</code></td>
+									<td>{row.min}</td>
+									<td>{row.max}</td>
+									<td data-computed={row.selector}>—</td>
+								</tr>
+							))
+						}
+					</tbody>
+				</table>
+				<p>
+					Viewport width: <strong data-viewport-width>—</strong>
+				</p>
+			</section>
+		</main>
+
+		<script is:inline>
+			const report = () => {
+				document.querySelectorAll('[data-computed]').forEach((cell) => {
+					const selector = cell.getAttribute('data-computed');
+					const sample = document.querySelector(`main > ${selector}`);
+					if (!sample) return;
+					const px = getComputedStyle(sample).fontSize;
+					const rem = parseFloat(px) / 16;
+					cell.textContent = `${px} (${rem.toFixed(3)}rem)`;
+				});
+				const width = document.querySelector('[data-viewport-width]');
+				if (width) width.textContent = `${window.innerWidth}px`;
+			};
+
+			report();
+			window.addEventListener('resize', report, { passive: true });
+		</script>
+	</body>
+</html>
