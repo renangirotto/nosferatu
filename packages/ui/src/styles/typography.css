@@ -1,0 +1,84 @@
+:root {
+  /* Viewport interpolation */
+  --nf-typography-viewport-min: 560px;
+  --nf-typography-viewport-max: 1088px;
+  --nf-typography-viewport-progress: progress(
+    100svw,
+    var(--nf-typography-viewport-min),
+    var(--nf-typography-viewport-max)
+  );
+
+  /* h1 */
+  --nf-typography-font-size-h1-min: 3rem;
+  --nf-typography-font-size-h1-max: 3.5rem;
+  --nf-typography-font-size-h1: calc(
+    var(--nf-typography-font-size-h1-min) +
+      var(--nf-typography-viewport-progress) *
+      (
+        var(--nf-typography-font-size-h1-max) -
+          var(--nf-typography-font-size-h1-min)
+      )
+  );
+
+  /* h2 */
+  --nf-typography-font-size-h2-min: 2.5rem;
+  --nf-typography-font-size-h2-max: 3rem;
+  --nf-typography-font-size-h2: calc(
+    var(--nf-typography-font-size-h2-min) +
+      var(--nf-typography-viewport-progress) *
+      (
+        var(--nf-typography-font-size-h2-max) -
+          var(--nf-typography-font-size-h2-min)
+      )
+  );
+
+  /* h3 */
+  --nf-typography-font-size-h3-min: 2rem;
+  --nf-typography-font-size-h3-max: 2.5rem;
+  --nf-typography-font-size-h3: calc(
+    var(--nf-typography-font-size-h3-min) +
+      var(--nf-typography-viewport-progress) *
+      (
+        var(--nf-typography-font-size-h3-max) -
+          var(--nf-typography-font-size-h3-min)
+      )
+  );
+
+  /* p */
+  --nf-typography-font-size-base-min: 1rem;
+  --nf-typography-font-size-base-max: 1.125rem;
+  --nf-typography-font-size-base: calc(
+    var(--nf-typography-font-size-base-min) +
+      var(--nf-typography-viewport-progress) *
+      (
+        var(--nf-typography-font-size-base-max) -
+          var(--nf-typography-font-size-base-min)
+      )
+  );
+}
+
+/*
+ * The scale is progressive enhancement. Without this guard, a browser with no
+ * progress() support still accepts the custom properties above — custom
+ * properties take arbitrary tokens — and fails later, on the calc() here. Since
+ * font-size inherits, every heading would then render at body size. Inside the
+ * guard such a browser simply keeps the sizes it already had.
+ */
+@supports (font-size: calc(1rem + progress(100svw, 0px, 1px) * 1rem)) {
+  h1 {
+    font-size: var(--nf-typography-font-size-h1);
+  }
+
+  h2 {
+    font-size: var(--nf-typography-font-size-h2);
+  }
+
+  h3 {
+    font-size: var(--nf-typography-font-size-h3);
+  }
+
+  button,
+  p {
+    font-size: var(--nf-typography-font-size-base);
+  }
+}
