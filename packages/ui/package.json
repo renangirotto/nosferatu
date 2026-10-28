@@ -21,6 +21,7 @@
   "exports": {
     "./components/*": "./src/components/*",
     "./layouts/*": "./src/layouts/*",
+    "./html/*": "./src/html/*",
     "./styles/*": "./src/styles/*",
     "./package.json": "./package.json"
   },

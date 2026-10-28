@@ -5,6 +5,8 @@ description: A layout that renders a whole article document from a required titl
 
 `BlogArticle` is a layout, not a component: it renders the entire document — doctype, `<html>`, `<head>` and `<body>` — so a page file can be nothing but the layout and its content. That is also why there is no live demo on this page: a document cannot be nested inside this one.
 
+The document and its head are not hand-written here. The layout renders [BaseHtml](/html/base-html/) with [BaseHead](/html/base-head/) in its `head` slot, and puts its own markup in the body — see those pages for the full metadata list and for how to add a tag the head does not cover.
+
 [See it rendered →](/examples/blog-article/)
 
 ```astro
@@ -34,8 +36,8 @@ import BlogArticle from 'astro-nosferatu/layouts/BlogArticle.astro';
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!-- everything BaseHead renders: charset, color-scheme, generator,
+		     viewport, favicon, canonical, og:* and twitter:* -->
 		<title>Nosferatu, a sympathy for the night</title>
 		<meta name="description" content="A worked example of the BlogArticle layout, rendered as its own document." />
 	</head>
@@ -61,8 +63,10 @@ In a real build you will also see Astro's own scope on these elements (an `astro
 | --- | --- | --- | --- | --- |
 | `title` | `string` | Yes | — | Used twice: as the document's `<title>` and as the `h1` at the top of the article. |
 | `description` | `string` | Yes | — | Used twice: as the page's `<meta name="description">` and as the paragraph directly under the heading. |
+| `lang` | `string` | No | `'en'` | The `lang` attribute of the `<html>` element, passed through to [BaseHtml](/html/base-html/). |
+| `imageSocialMedia` | `string` | No | — | The sharing image, passed through to [BaseHead](/html/base-head/) and rendered as `og:image` and `twitter:image`. Omit it and neither tag appears. |
 
-Both props are required, and `astro check` reports a missing one as a type error rather than rendering an empty heading or paragraph. The layout accepts nothing else: it does not forward native attributes and does not merge a `class`, because the markup above is its contract.
+`title` and `description` are required, and `astro check` reports a missing one as a type error rather than rendering an empty heading or paragraph. The layout accepts nothing else: it does not forward native attributes and does not merge a `class`, because the markup above is its contract.
 
 ## Slots
 
@@ -99,8 +103,8 @@ import 'astro-nosferatu/styles/index.css';
 
 ## What the head contains
 
-Only what the layout can know for every consumer: the charset, the viewport, the title and the description. There is no canonical URL, no Open Graph tag, no favicon and no stylesheet link — add those in your own page or wrapper.
+Everything [BaseHead](/html/base-head/) renders — the charset, `color-scheme`, the generator, the viewport, a `/favicon.svg` icon link, the canonical URL, the title and description, and the Open Graph and Twitter cards. The layout writes none of those tags itself; it passes `title`, `description` and `imageSocialMedia` through.
 
-### Known limitation
+Anything the head does not cover — another favicon, `og:type="article"`, an RSS link — is not reachable from this layout. Build the page from [BaseHtml](/html/base-html/) and `BaseHead` directly when you need it; that is exactly what this layout does.
 
-`lang` is fixed to `en`. The layout takes exactly the two props above, so a non-English site cannot change it yet; a metadata API covering `lang` and social tags is deferred to a later change.
+`BaseHead` also imports `astro-nosferatu/styles/index.css`, so a page built with `BlogArticle` already has the library's tokens, palette, shadows and reset.

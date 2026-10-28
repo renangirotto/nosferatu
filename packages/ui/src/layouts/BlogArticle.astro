@@ -3,32 +3,34 @@
  * A layout renders the whole document, so it takes no native attributes and
  * merges no consumer class: the markup below is the contract.
  */
+import BaseHtml from "../html/BaseHtml.astro";
+import BaseHead from "../html/BaseHead.astro";
+
 interface Props {
   title: string;
   description: string;
+  lang?: string;
+  imageSocialMedia?: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, lang = "en", imageSocialMedia } = Astro.props;
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-  </head>
-  <body>
-    <main class="nf-layout-blog-article">
-      <article>
-        <h1>{title}</h1>
-        <p>{description}</p>
-        <slot />
-      </article>
-    </main>
-  </body>
-</html>
+<BaseHtml lang={lang}>
+  <BaseHead
+    slot="head"
+    title={title}
+    description={description}
+    imageSocialMedia={imageSocialMedia}
+  />
+  <main class="nf-layout-blog-article">
+    <article>
+      <h1>{title}</h1>
+      <p>{description}</p>
+      <slot />
+    </article>
+  </main>
+</BaseHtml>
 
 <style>
   .nf-layout-blog-article {

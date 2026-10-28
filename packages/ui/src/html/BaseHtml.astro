@@ -1,0 +1,22 @@
+---
+/*
+ * The document skeleton. Like a layout, it takes explicit props only and
+ * forwards nothing: the tags below are the contract, so an arbitrary attribute
+ * must not be able to land on <html>.
+ */
+interface Props {
+	lang?: string;
+}
+
+const { lang = "en" } = Astro.props;
+---
+
+<!doctype html>
+<html lang={lang}>
+	<head>
+		<slot name="head" />
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>
