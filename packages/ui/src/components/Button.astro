@@ -41,9 +41,7 @@ const {
     border-radius: var(--nf-radius-md);
     color: var(--nf-button-accent-color);
     font-family: var(--nf-font-body);
-    font-size: var(--nf-font-size-md);
-    font-weight: 600;
-    line-height: var(--nf-line-height-heading);
+    font-weight: 700;
     background-color: var(--nf-button-color);
     box-shadow: 0px var(--nf-button-depth) 0px var(--nf-button-accent-color);
     translate: 0 var(--nf-button-lift);
@@ -86,7 +84,10 @@ const {
     }
 
     &[data-ui-color="orange"] {
-      --nf-button-color: light-dark(var(--nf-orange-l-40), var(--nf-orange-d-50));
+      --nf-button-color: light-dark(
+        var(--nf-orange-l-40),
+        var(--nf-orange-d-50)
+      );
       --nf-button-accent-color: light-dark(
         var(--nf-orange-l-80),
         var(--nf-orange-d-90)
@@ -102,7 +103,10 @@ const {
     }
 
     &[data-ui-color="purple"] {
-      --nf-button-color: light-dark(var(--nf-purple-l-40), var(--nf-purple-d-50));
+      --nf-button-color: light-dark(
+        var(--nf-purple-l-40),
+        var(--nf-purple-d-50)
+      );
       --nf-button-accent-color: light-dark(
         var(--nf-purple-l-80),
         var(--nf-purple-d-90)
@@ -111,11 +115,17 @@ const {
 
     &[data-ui-color="red"] {
       --nf-button-color: light-dark(var(--nf-red-l-40), var(--nf-red-d-50));
-      --nf-button-accent-color: light-dark(var(--nf-red-l-80), var(--nf-red-d-90));
+      --nf-button-accent-color: light-dark(
+        var(--nf-red-l-80),
+        var(--nf-red-d-90)
+      );
     }
 
     &[data-ui-color="yellow"] {
-      --nf-button-color: light-dark(var(--nf-yellow-l-40), var(--nf-yellow-d-50));
+      --nf-button-color: light-dark(
+        var(--nf-yellow-l-40),
+        var(--nf-yellow-d-50)
+      );
       --nf-button-accent-color: light-dark(
         var(--nf-yellow-l-80),
         var(--nf-yellow-d-90)
