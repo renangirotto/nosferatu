@@ -94,11 +94,11 @@ The documentation site SHALL document `Accordion` on its own page, rendering it 
 #### Scenario: Theming is documented with runnable code
 - **WHEN** a reader looks at the Accordion page's theming section
 - **THEN** it shows a live demo overriding `--nf-accordion-color` and `--nf-accordion-accent-color` on the component element itself, and one overriding a palette token, together with the exact code that produces each
-- **AND** it states that the two properties must be set on the element rather than on an ancestor, because the component's own `data-ui-color` rule declares them on the element and an inherited value cannot win against that
+- **AND** it states that an accordion with no `color` also takes the two properties from an ancestor, while one with a `color` needs them on the element, because its own `data-ui-color` rule declares them there and an inherited value cannot win against that
 
 #### Scenario: The slot is documented
 - **WHEN** a reader looks at the Accordion page's props and slots tables
-- **THEN** `summary` is listed as a required `string` that is not forwarded as an attribute, `color` as an optional palette hue defaulting to `purple`, the default slot is described as the disclosed content, and the page states that all other native `<details>` attributes pass through
+- **THEN** `summary` is listed as a required `string` that is not forwarded as an attribute, `color` as an optional palette hue whose default is grey with no `data-ui-color` attribute rendered, the default slot is described as the disclosed content, and the page states that all other native `<details>` attributes pass through
 
 ### Requirement: Layout pages document markup, props, slots and styling
 The documentation site SHALL document each layout the library publishes on its own page, reachable from the sidebar under a layouts group. Because a layout renders a whole document and therefore cannot be embedded inside a documentation page, the page SHALL instead show the layout's import line, a copyable usage example, the exact markup the layout produces, a props table giving each prop's type, whether it is required and its default, and a description of each slot. The page SHALL link to a standalone example page on the docs site that is built with the layout, so a reader can see it rendered for real. Where a layout delegates its document skeleton or its head metadata to a published html file, the page SHALL say so and link to that file's page instead of repeating its metadata list. The page SHALL state accurately what the layout styles and what it leaves to the consumer, and where the layout ships styles it SHALL list every custom property a consumer can override, with that property's default, together with runnable code for overriding them and for overriding the layout from unlayered CSS.
@@ -280,3 +280,14 @@ In both its light and dark themes, the documentation site SHALL set its body and
 #### Scenario: Font is self-hosted
 - **WHEN** a reader loads a documentation page with the browser's network panel open
 - **THEN** the Outfit font file is requested from the docs site's own origin, and no request goes to a font CDN
+
+### Requirement: Color-variant pages document the unset default
+On the page of every component that accepts a `color` prop, the documentation site SHALL state that omitting `color` renders the component in grey with no `data-ui-color` attribute, that `color="grey"` looks the same but carries the attribute, and SHALL list the prop's default in the props table as grey (unset) rather than as a hue the component writes into its markup.
+
+#### Scenario: Default stated in prose and table
+- **WHEN** a reader opens the Button, Callout or Accordion page
+- **THEN** the color section and the props table both say the default is grey with no `data-ui-color` attribute, and no page says the default is `purple`
+
+#### Scenario: Default shown live
+- **WHEN** a reader looks at the color section of one of those pages
+- **THEN** it includes a live instance rendered with no `color`, labelled as the default, beside the per-hue demos

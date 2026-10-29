@@ -21,9 +21,10 @@ import Button from 'astro-nosferatu/components/Button.astro';
 
 ## Colors
 
-`color` accepts any hue in the palette and defaults to `purple`. It is rendered on the element as `data-ui-color`.
+`color` is optional and accepts any hue in the palette. Leave it out and the button is grey and its element carries **no** `data-ui-color` attribute: the grey is a fallback in the component's own CSS, not a value written into your markup. `color="grey"` looks exactly the same but renders `data-ui-color="grey"`. Any other value is rendered on the element as `data-ui-color`.
 
 <div class="not-content demo demo--grid">
+	<figure><Button>Button</Button><figcaption>default</figcaption></figure>
 	<figure><Button color="blue">Button</Button><figcaption><code>blue</code></figcaption></figure>
 	<figure><Button color="cyan">Button</Button><figcaption><code>cyan</code></figcaption></figure>
 	<figure><Button color="green">Button</Button><figcaption><code>green</code></figcaption></figure>
@@ -36,6 +37,7 @@ import Button from 'astro-nosferatu/components/Button.astro';
 </div>
 
 ```astro
+<Button>Button</Button>
 <Button color="blue">Button</Button>
 <Button color="cyan">Button</Button>
 <Button color="green">Button</Button>
@@ -99,14 +101,14 @@ It works per subtree too, which is how the pair below renders both branches side
 
 | Prop | Type | Default | Notes |
 |---|---|---|---|
-| `color` | `'blue' \| 'cyan' \| 'green' \| 'grey' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | `'purple'` | Rendered as `data-ui-color` on the element. |
+| `color` | `'blue' \| 'cyan' \| 'green' \| 'grey' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | grey (unset) | Rendered as `data-ui-color` on the element when passed. Omitted, the element has no `data-ui-color` and renders grey. |
 | `type` | `'button' \| 'submit' \| 'reset'` | `'button'` | Set `type="submit"` inside forms. |
 
 Every other `<button>` attribute (`disabled`, `name`, `aria-*`, `class`, event attributes...) is passed through to the element.
 
 ## Theming
 
-The button reads its colors from exactly two custom properties — `--nf-button-color` for the background and `--nf-button-accent-color` for the text, the shadow and the focus outline. Set them on an ancestor to theme one button without touching any other:
+The button reads its colors from exactly two custom properties — `--nf-button-color` for the background and `--nf-button-accent-color` for the text, the shadow and the focus outline. On a button with no `color`, set them on an ancestor to theme it without touching any other:
 
 <div class="not-content demo" style="--nf-button-color: var(--nf-green-l-20); --nf-button-accent-color: var(--nf-blue-l-90);">
 	<Button>Themed</Button>
@@ -118,7 +120,20 @@ The button reads its colors from exactly two custom properties — `--nf-button-
 </div>
 ```
 
-Set them on an **ancestor**, not on the button itself through a class: the rule that assigns them is `[data-ui-color="…"]`, so a plain class on the button would lose to it. Inheriting from above sidesteps the comparison entirely.
+A button that has a `color` ignores those inherited values: its `[data-ui-color="…"]` rule declares both properties on the button itself, and a declaration on an element always beats a value inherited into it. A plain class on the button loses too, on specificity. Set them through the button's own `style` instead:
+
+<div class="not-content demo">
+	<Button color="red" style="--nf-button-color: var(--nf-green-l-20); --nf-button-accent-color: var(--nf-blue-l-90);">Themed</Button>
+</div>
+
+```astro
+<Button
+	color="red"
+	style="--nf-button-color: var(--nf-green-l-20); --nf-button-accent-color: var(--nf-blue-l-90);"
+>
+	Themed
+</Button>
+```
 
 Overriding a palette token instead re-themes every button using that hue:
 

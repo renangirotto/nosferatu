@@ -1,0 +1,48 @@
+# Spec Delta
+
+## MODIFIED Requirements
+
+### Requirement: Accordion page
+The documentation site SHALL document `Accordion` on its own page, rendering it live for every value of its `color` prop. The page SHALL state that `summary` is required and is not rendered as a native attribute, SHALL document the default slot, and SHALL show live examples of a closed accordion, one rendered with the native `open` attribute, and a group of accordions sharing a native `name` so that opening one closes the others — each with the code that produces it. The page SHALL describe the summary's resting, hover, active, focus and `[open]` appearances in prose beside a demo the reader can actually operate, SHALL list the `--nf-accordion-*` custom properties a consumer can override together with a live theming demo and its exact code, and SHALL end with a demo placing the component beside a plain `<details>` element to show the component's styles do not leak. Because the open and close animation is progressive enhancement, the page SHALL state what the animation depends on, what a browser without that support does instead, and that reduced motion turns it off.
+
+#### Scenario: Accordion page renders the component
+- **WHEN** a reader opens the Accordion page
+- **THEN** they see a rendered `Accordion` and the import line `import Accordion from 'astro-nosferatu/components/Accordion.astro'`
+
+#### Scenario: Every color is shown
+- **WHEN** a reader opens the Accordion page
+- **THEN** they see a live `Accordion` for each of `blue`, `cyan`, `green`, `grey`, `orange`, `pink`, `purple`, `red` and `yellow`, each labelled with the value that produces it
+
+#### Scenario: The animation is demonstrable
+- **WHEN** a reader clicks the summary of a demo on the page
+- **THEN** the panel visibly grows open and shrinks closed, and the page explains in prose that the animation is CSS-only, that it depends on `::details-content` and CSS size interpolation, and that a browser without them opens the panel instantly instead
+
+#### Scenario: Native attributes are demonstrated
+- **WHEN** a reader looks at the page's section on disclosure state
+- **THEN** they see a live accordion rendered with `open`, and a live group of accordions sharing the same `name` where opening one closes the previously open one, with the code for each and a note that both come from the native `<details>` element rather than from props
+
+#### Scenario: Interaction states are documented
+- **WHEN** a reader hovers, presses, tabs to and opens an `Accordion` in a demo
+- **THEN** the summary visibly sinks, flattens, shows its inset focus outline and stays pressed while open, and the page describes each of those states in prose
+
+#### Scenario: Theming is documented with runnable code
+- **WHEN** a reader looks at the Accordion page's theming section
+- **THEN** it shows a live demo overriding `--nf-accordion-color` and `--nf-accordion-accent-color` on the component element itself, and one overriding a palette token, together with the exact code that produces each
+- **AND** it states that an accordion with no `color` also takes the two properties from an ancestor, while one with a `color` needs them on the element, because its own `data-ui-color` rule declares them there and an inherited value cannot win against that
+
+#### Scenario: The slot is documented
+- **WHEN** a reader looks at the Accordion page's props and slots tables
+- **THEN** `summary` is listed as a required `string` that is not forwarded as an attribute, `color` as an optional palette hue whose default is grey with no `data-ui-color` attribute rendered, the default slot is described as the disclosed content, and the page states that all other native `<details>` attributes pass through
+
+## ADDED Requirements
+
+### Requirement: Color-variant pages document the unset default
+On the page of every component that accepts a `color` prop, the documentation site SHALL state that omitting `color` renders the component in grey with no `data-ui-color` attribute, that `color="grey"` looks the same but carries the attribute, and SHALL list the prop's default in the props table as grey (unset) rather than as a hue the component writes into its markup.
+
+#### Scenario: Default stated in prose and table
+- **WHEN** a reader opens the Button, Callout or Accordion page
+- **THEN** the color section and the props table both say the default is grey with no `data-ui-color` attribute, and no page says the default is `purple`
+
+#### Scenario: Default shown live
+- **WHEN** a reader looks at the color section of one of those pages
+- **THEN** it includes a live instance rendered with no `color`, labelled as the default, beside the per-hue demos

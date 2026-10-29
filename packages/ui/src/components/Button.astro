@@ -7,7 +7,7 @@ interface Props extends HTMLAttributes<"button"> {
 }
 
 const {
-  color = "purple",
+  color,
   type = "button",
   class: className,
   "data-ui-color": _controlled,
@@ -39,11 +39,12 @@ const {
     padding-inline: var(--nf-space-4);
     border: none;
     border-radius: var(--nf-radius-md);
-    color: var(--nf-button-accent-color);
+    color: var(--nf-button-accent-color, light-dark(var(--nf-grey-l-80), var(--nf-grey-d-90)));
     font-family: var(--nf-font-body);
     font-weight: 700;
-    background-color: var(--nf-button-color);
-    box-shadow: 0px var(--nf-button-depth) 0px var(--nf-button-accent-color);
+    background-color: var(--nf-button-color, light-dark(var(--nf-grey-l-40), var(--nf-grey-d-50)));
+    box-shadow: 0px var(--nf-button-depth) 0px
+      var(--nf-button-accent-color, light-dark(var(--nf-grey-l-80), var(--nf-grey-d-90)));
     translate: 0 var(--nf-button-lift);
     cursor: pointer;
     transition-property:
@@ -145,7 +146,8 @@ const {
 
     /* The button has no border, so the focus ring is drawn inside its edge as one */
     &:focus-visible {
-      outline: var(--nf-button-border-width) solid var(--nf-button-accent-color);
+      outline: var(--nf-button-border-width) solid
+        var(--nf-button-accent-color, light-dark(var(--nf-grey-l-80), var(--nf-grey-d-90)));
       outline-offset: calc(-1 * var(--nf-button-border-width));
     }
 
