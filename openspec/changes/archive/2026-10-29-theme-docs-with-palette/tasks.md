@@ -1,0 +1,18 @@
+# Tasks
+
+## 1. Docs theme stylesheet
+
+- [x] 1.1 Create `docs/src/styles/theme.css` (tabs) with a `:root[data-theme='dark']` block setting `--sl-color-bg: var(--nf-grey-d-100)`, `--sl-color-text: var(--nf-grey-d-10)`, `--sl-color-text-accent: var(--nf-purple-d-50)` and `--sl-color-text-invert: var(--nf-grey-d-100)`; verify the file references only `var(--nf-*)` palette tokens and defines no `--nf-*` property.
+- [x] 1.2 In the same file, add dark-theme rules for `starlight-toc a:hover` → `color: var(--sl-color-text-accent)` and `.sl-markdown-content :not(pre) > code` → `color: var(--nf-green-d-50)`; verify no rule uses `!important` or an ID selector.
+- [x] 1.3 Add `'./src/styles/theme.css'` to `customCss` in `docs/astro.config.mjs`, after `'astro-nosferatu/styles/index.css'`; verify `pnpm --filter docs check` passes.
+- [x] 1.4 In the dark-theme block also set `--sl-color-bg-nav` and `--sl-color-bg-sidebar` to `var(--nf-grey-d-100)` and `--sl-color-hairline-shade` to `transparent` (top bar, sidebar edge and mobile TOC summary/dropdown-top borders); add one dark-theme rule setting `border-color: transparent` on `.right-sidebar`, `mobile-starlight-toc nav` and `mobile-starlight-toc .dropdown`; verify `pnpm --filter docs check` passes.
+- [x] 1.5 In the dark-theme block set `--sl-color-bg-inline-code: var(--nf-grey-d-120)`, `--ec-brdRad: 8px` and `--ec-brdCol: var(--nf-grey-d-80-25)`; add `font-weight: 600` to the inline-code rule; add rules giving `mobile-starlight-toc .toggle` and `.dropdown` a `--nf-grey-d-110` background and the toggle a `--nf-grey-d-80-25` border, and, at `min-width: 50rem`, `site-search button[data-open-modal]` a `--nf-grey-d-110` background and `--nf-grey-d-80-25` border; verify `pnpm --filter docs check` and `pnpm build` pass.
+- [x] 1.6 In `docs/astro.config.mjs` set Starlight's `expressiveCode.themes` to `['dracula', 'starlight-light']`; verify `pnpm build` passes and the built Expressive Code CSS carries Dracula's colors.
+- [x] 1.7 Add `@fontsource-variable/outfit` to the docs package, list it first in `customCss`, and in `theme.css` set, on `:root` for both themes, `--sl-font: 'Outfit Variable'` and `--ec-uiFontFml: var(--sl-font-system)` so code-block frames keep their previous font; verify `pnpm build` passes and the build emits the Outfit font file.
+
+## 2. Verification
+
+- [x] 2.1 Run `pnpm build`; passes with no errors.
+- [x] 2.2 Run `pnpm pack:check`; the file list is identical to `main` (no `packages/ui` change).
+- [x] 2.3 With `pnpm dev`, in the dark theme check in devtools on the Button and Styles pages: body/TOC, left sidebar, top bar and (narrow viewport) mobile TOC bar backgrounds compute to `--nf-grey-d-100` with no visible border between them and the content; a paragraph's color to `--nf-grey-d-10`; hovered and current TOC links to `--nf-purple-d-50`; the current sidebar link's background to `--nf-purple-d-50` with a legible label; fenced code blocks use Dracula colors in dark mode; inline code to `--nf-green-d-50` on `--nf-grey-d-120` at weight 600 while fenced code blocks keep their highlighting; code block frames have an 8px radius and a `--nf-grey-d-80-25` border; the mobile TOC toggle and its list have a `--nf-grey-d-110` background and the toggle a `--nf-grey-d-80-25` border; the desktop search button has a `--nf-grey-d-110` background and `--nf-grey-d-80-25` border; body, headings, sidebar and TOC render in Outfit while inline code, code-block code and code-block titles do not; the Outfit file loads from the docs origin; live component demos still read correctly.
+- [x] 2.4 Switch to the light theme and confirm background, borders, text, links, code-block theme and inline code show Starlight's light defaults, and that text still renders in Outfit.
