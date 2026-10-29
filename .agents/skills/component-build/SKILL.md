@@ -33,12 +33,13 @@ Indent with **tabs**, in both the frontmatter and the `<style>` block.
 ```astro
 ---
 import type { HTMLAttributes } from 'astro/types';
+import type { ColorPalette } from '../types/components';
 
 interface Props extends HTMLAttributes<'button'> {
-	color?: 'blue' | 'cyan' | 'green' | 'orange' | 'pink' | 'purple' | 'red' | 'yellow';
+	color?: ColorPalette;
 }
 
-const { color = 'purple', type = 'button', class: className, ...attrs } = Astro.props;
+const { color, type = 'button', class: className, ...attrs } = Astro.props;
 ---
 ```
 
@@ -46,7 +47,7 @@ const { color = 'purple', type = 'button', class: className, ...attrs } = Astro.
 - Reuse a shared prop type when one exists: the palette hues are `ColorPalette` in [src/types/components.ts](../../../packages/ui/src/types/components.ts), and a type two components need belongs there rather than restated in each.
 - **Import internal modules by relative path — never through the `@/*` alias.** The alias is real (`packages/ui/tsconfig.json` maps it, and the docs site mirrors it), but it is for code that is *not* published. A consumer compiles this file without the library's `tsconfig.json`, so `@/types/components` resolves to nothing on their side: the build still passes, because `import type` is erased, and the prop quietly becomes `any` — a wrong `color` stops being an error in their editor and their `astro check`. Measured, not theoretical.
 - Enumerate your own props as string literal unions, never `string`. The union is the API: a wrong value must fail `astro check`. Note that `astro check` type-checks `.astro` files only — a wrong value inside an `.mdx` docs page is **not** reported, so verify a new union from a scratch `.astro` file.
-- Give every added prop a default, and destructure the native defaults you want to set (`type = 'button'`).
+- Give every added prop a default, and destructure the native defaults you want to set (`type = 'button'`). **`color` is the exception: it has no default in the frontmatter.** Leave it `undefined` and the component renders grey through a CSS fallback (step 4b), with no `data-ui-color` attribute — Astro omits an attribute whose value is `undefined`, so `data-ui-color={color}` needs no conditional.
 - Pull `class` out as `className` and collect the rest in `...attrs`.
 
 ### 3. Forward everything in the markup
@@ -58,10 +59,10 @@ const { color = 'purple', type = 'button', class: className, ...attrs } = Astro.
 ```
 
 - Spread `{...attrs}` so `disabled`, `aria-*`, `name`, `data-*` and event attributes pass through.
-- **Take the attributes you control out of `attrs`, and spread first.** Astro emits every attribute it is given, so a consumer writing `<Button data-ui-color="teal">` would produce `data-ui-color` twice — and an HTML parser keeps the *first* one, whichever order you render them in. The component would then carry a value no rule matches and render uncolored. Destructure the controlled attribute away so it can never reach the element, and still put your own derived attributes after the spread:
+- **Take the attributes you control out of `attrs`, and spread first.** Astro emits every attribute it is given, so a consumer writing `<Button data-ui-color="teal">` would produce `data-ui-color` twice — and an HTML parser keeps the *first* one, whichever order you render them in. The component would then carry a value no rule matches, and — worse — with no `color` passed it would carry an attribute it should not have at all. Destructure the controlled attribute away so it can never reach the element, and still put your own derived attributes after the spread:
 
 ```astro
-const { color = 'purple', type = 'button', class: className, 'data-ui-color': _controlled, ...attrs } = Astro.props;
+const { color, type = 'button', class: className, 'data-ui-color': _controlled, ...attrs } = Astro.props;
 ```
 - `class:list` merges the consumer's `class` with the component's own. Never interpolate `class` into a template string, and never drop it.
 - Render children through `<slot />`.
@@ -72,9 +73,9 @@ A prop that selects from a set of values is rendered as `data-ui-<prop>={value}`
 
 ```css
 .nf-button {
-	background-color: var(--nf-button-color);
-	border: var(--nf-button-border-width) solid var(--nf-button-accent-color);
-	color: var(--nf-button-accent-color);
+	background-color: var(--nf-button-color, light-dark(var(--nf-grey-l-40), var(--nf-grey-d-50)));
+	border: var(--nf-button-border-width) solid var(--nf-button-accent-color, light-dark(var(--nf-grey-l-80), var(--nf-grey-d-90)));
+	color: var(--nf-button-accent-color, light-dark(var(--nf-grey-l-80), var(--nf-grey-d-90)));
 }
 
 .nf-button[data-ui-color='green'] {
@@ -92,7 +93,23 @@ Rules for those properties:
 - Never introduce semantic tokens. `--nf-color-primary`, `--nf-color-text` and anything else matching `--nf-color-*` is banned outright.
 - Keep the attribute value and the prop value identical — no mapping table in the frontmatter.
 - Where the value selects a palette hue, use the same step pairing as `Button` so components agree: `light-dark(var(--nf-<hue>-l-40), var(--nf-<hue>-d-50))` for the fill, `light-dark(var(--nf-<hue>-l-80), var(--nf-<hue>-d-90))` for the accent that carries text, border and shadow.
-- These properties are a **public theming hook**: document them with `component-doc` and treat a rename as a breaking change. The rule that sets them is `.nf-x[data-ui-y='…']` — specificity (0,2,0) — so a consumer overriding them *on the element itself* through a class (0,1,0) loses. That is why the documented way to re-theme a single instance is to set them on an ancestor and let them inherit.
+- These properties are a **public theming hook**: document them with `component-doc` and treat a rename as a breaking change. When the attribute is present, the rule that sets them is `.nf-x[data-ui-y='…']`, which declares them *on the element* — so an ancestor's value cannot reach it (a declaration on the element always beats an inherited one), and a consumer class on the element (0,1,0) loses on specificity (0,2,0). Such an instance is re-themed through its own `style`. An instance with no `color` declares nothing, so it takes the properties from an ancestor too.
+
+### 4b. The default color is grey, and lives in a `var()` fallback
+
+A component with a `color` prop has no default hue in its markup. Every **use** of a color property falls back to the same grey `light-dark()` pairing that the component's own `[data-ui-color='grey']` rule sets:
+
+```css
+.nf-button {
+	background-color: var(--nf-button-color, light-dark(var(--nf-grey-l-40), var(--nf-grey-d-50)));
+	color: var(--nf-button-accent-color, light-dark(var(--nf-grey-l-80), var(--nf-grey-d-90)));
+}
+```
+
+- Put the fallback on **every** use site of every color property — background, text, shadow, outline, border — and inside a composed property such as `Callout`'s `--nf-callout-shadow`.
+- The fallback must equal the component's grey rule exactly, so `<X>` and `<X color="grey">` render identically; keep the grey rule too, so explicit grey behaves like every other hue.
+- Do **not** declare the grey values on the root class instead. That declares them on the element, and an ancestor could no longer theme an uncolored instance.
+- Consequence to document: an uncolored instance nested inside a colored instance of the same component inherits the outer hue.
 
 Reach for a second class only when the variation changes the component's *structure or role* rather than selecting a value — and name it like any other part (below), never as a BEM modifier.
 
@@ -126,7 +143,7 @@ border-radius: var(--nf-radius-md);
 - `-l-` is the light scale, `-d-` the dark scale. Pair them with `light-dark()` in a single declaration rather than writing a `prefers-color-scheme` block; `reset.css` sets `color-scheme: light dark` so both branches resolve, and a consumer can pin or flip the scheme per subtree.
 - A value with no token that describes *this component* (border width, shadow depth, travel distance, duration) becomes a component-scoped custom property on the root class. Do not add it to `tokens.css` — that is a published API addition and needs its own proposal.
 - Hoist a raw value when the component's own states change it, or when two declarations must stay equal (`Button`'s focus outline reuses `--nf-button-border-width`). A number that appears exactly once and never changes — `opacity: 0.5` on `:disabled` — can stay inline.
-- **Declare a property, do not rely on a `var()` fallback.** `box-shadow: 0px var(--nf-button-depth, 4px) 0px …` hides the default inside a use site: a reader cannot see what the component's resting depth is without finding every reference, and two references can disagree (the focus outline once read `var(--nf-button-outline-width, 2px)` with `calc(-1 * var(--nf-button-outline-width, 1px))` beside it, so the inset silently did not match the width). Declare it once with its real value and use it bare.
+- **Declare a property, do not rely on a `var()` fallback.** `box-shadow: 0px var(--nf-button-depth, 4px) 0px …` hides the default inside a use site: a reader cannot see what the component's resting depth is without finding every reference, and two references can disagree (the focus outline once read `var(--nf-button-outline-width, 2px)` with `calc(-1 * var(--nf-button-outline-width, 1px))` beside it, so the inset silently did not match the width). Declare it once with its real value and use it bare. **The one exception is the default color** (step 4b): there the fallback is the point, because declaring the value would put it on the element and block ancestor theming.
 
 ### 5a. Custom properties go at the top of their selector
 
@@ -204,7 +221,7 @@ Grep your own file:
 grep -nE "oklch\(|lab\(|hsl\(|rgb\(|color-mix\(|#[0-9a-fA-F]{3}|:global|transition: *all|--nf-color-|!important" packages/ui/src/components/<Name>.astro
 grep -nE "^\s+--(?!nf-)" packages/ui/src/components/<Name>.astro   # custom properties missing the --nf- prefix
 grep -nE "class=\"[^\"]*(__|--)" packages/ui/src/components/<Name>.astro   # BEM separators in class names
-grep -nE "var\(--nf-[a-z-]+, " packages/ui/src/components/<Name>.astro      # defaults hidden in a var() fallback
+grep -nE "var\(--nf-[a-z-]+, " packages/ui/src/components/<Name>.astro | grep -v "light-dark(var(--nf-grey-"   # defaults hidden in a var() fallback (the grey color default is allowed)
 grep -nE "from \"@/|from '@/" packages/ui/src/components/<Name>.astro        # alias import that a consumer cannot resolve
 ```
 

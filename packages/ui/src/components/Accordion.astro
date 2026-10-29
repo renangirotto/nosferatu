@@ -9,7 +9,7 @@ interface Props extends HTMLAttributes<"details"> {
 
 const {
   summary,
-  color = "purple",
+  color,
   class: className,
   "data-ui-color": _controlled,
   ...attrs
@@ -138,11 +138,11 @@ const {
     padding-inline: var(--nf-space-4);
     border: none;
     border-radius: var(--nf-radius-md);
-    color: var(--nf-accordion-accent-color);
+    color: var(--nf-accordion-accent-color, light-dark(var(--nf-grey-l-80), var(--nf-grey-d-90)));
     font-weight: var(--nf-font-weight-bold);
-    background-color: var(--nf-accordion-color);
+    background-color: var(--nf-accordion-color, light-dark(var(--nf-grey-l-40), var(--nf-grey-d-50)));
     box-shadow: 0px var(--nf-accordion-depth) 0px
-      var(--nf-accordion-accent-color);
+      var(--nf-accordion-accent-color, light-dark(var(--nf-grey-l-80), var(--nf-grey-d-90)));
     translate: 0 var(--nf-accordion-lift);
     cursor: pointer;
     transition-property: translate, box-shadow, background-color, color;
@@ -163,7 +163,7 @@ const {
     /* The summary has no border, so the focus ring is drawn inside its edge as one */
     &:focus-visible {
       outline: var(--nf-accordion-border-width) solid
-        var(--nf-accordion-accent-color);
+        var(--nf-accordion-accent-color, light-dark(var(--nf-grey-l-80), var(--nf-grey-d-90)));
       outline-offset: calc(-1 * var(--nf-accordion-border-width));
     }
   }
@@ -184,8 +184,8 @@ const {
     border-end-start-radius: var(--nf-radius-md);
     padding-block: var(--nf-space-2);
     padding-inline: var(--nf-space-4);
-    color: var(--nf-accordion-accent-color);
-    background-color: var(--nf-accordion-color);
+    color: var(--nf-accordion-accent-color, light-dark(var(--nf-grey-l-80), var(--nf-grey-d-90)));
+    background-color: var(--nf-accordion-color, light-dark(var(--nf-grey-l-40), var(--nf-grey-d-50)));
   }
 
   /*

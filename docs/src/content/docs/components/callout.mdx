@@ -49,9 +49,10 @@ import Callout from 'astro-nosferatu/components/Callout.astro';
 
 ## Colors
 
-`color` accepts any hue in the palette and defaults to `purple`. It is rendered on the element as `data-ui-color`.
+`color` is optional and accepts any hue in the palette. Leave it out and the callout is grey and its element carries **no** `data-ui-color` attribute: the grey is a fallback in the component's own CSS, not a value written into your markup. `color="grey"` looks exactly the same but renders `data-ui-color="grey"`. Any other value is rendered on the element as `data-ui-color`.
 
 <div class="not-content demo demo--grid">
+	<Callout title="default" icon={em(Bell)}>A tinted panel.</Callout>
 	<Callout color="blue" title="blue" icon={em(Droplet)}>A tinted panel.</Callout>
 	<Callout color="cyan" title="cyan" icon={em(SnowFlake)}>A tinted panel.</Callout>
 	<Callout color="green" title="green" icon={em(Leaf)}>A tinted panel.</Callout>
@@ -64,6 +65,7 @@ import Callout from 'astro-nosferatu/components/Callout.astro';
 </div>
 
 ```astro
+<Callout title="default">A tinted panel.</Callout>
 <Callout color="blue" title="blue">A tinted panel.</Callout>
 <Callout color="cyan" title="cyan">A tinted panel.</Callout>
 <Callout color="green" title="green">A tinted panel.</Callout>
@@ -188,7 +190,7 @@ Each half above sits on its own canvas, and that is not decoration: the surface 
 |---|---|---|---|
 | `title` | `string` | — | **Required.** Rendered as the panel's title line. Not forwarded as the HTML `title` attribute and not a heading element. |
 | `icon` | component | — | Any component — an imported `.svg`, an icon component, your own `.astro`. Rendered before the title with no props, in a box sized by `--nf-callout-icon-size`. |
-| `color` | `'blue' \| 'cyan' \| 'green' \| 'grey' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | `'purple'` | Rendered as `data-ui-color` on the element. |
+| `color` | `'blue' \| 'cyan' \| 'green' \| 'grey' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | grey (unset) | Rendered as `data-ui-color` on the element when passed. Omitted, the element has no `data-ui-color` and renders grey. |
 
 The callout renders a `<div>`. Every other `<div>` attribute (`id`, `role`, `aria-*`, `class`, `data-*`...) is passed through to it — add `role`/`aria-label` yourself if a given callout is a landmark.
 
@@ -200,7 +202,7 @@ The callout renders a `<div>`. Every other `<div>` attribute (`id`, `role`, `ari
 
 ## Theming
 
-A callout reads its colors from five custom properties: `--nf-callout-surface-color` for the background, `--nf-callout-accent-color` for the title, the icon and the body text, `--nf-callout-rule-color` for the separator, `--nf-callout-shadow-color` for the drop shadow's color, and `--nf-callout-shadow` for the whole drop-shadow value. A sixth, `--nf-callout-icon-size`, sets the icon box. Set them on an ancestor to theme one callout without touching any other:
+A callout reads its colors from five custom properties: `--nf-callout-surface-color` for the background, `--nf-callout-accent-color` for the title, the icon and the body text, `--nf-callout-rule-color` for the separator, `--nf-callout-shadow-color` for the drop shadow's color, and `--nf-callout-shadow` for the whole drop-shadow value. A sixth, `--nf-callout-icon-size`, sets the icon box. On a callout with no `color`, set them on an ancestor to theme it without touching any other:
 
 <div class="not-content demo demo--stack" style="--nf-callout-surface-color: var(--nf-green-l-20); --nf-callout-accent-color: var(--nf-blue-l-90); --nf-callout-rule-color: var(--nf-blue-l-90-25); --nf-callout-shadow-color: var(--nf-blue-l-100-25);">
 	<Callout title="Themed" icon={em(Palette)}>Every color property overridden on the wrapper.</Callout>
@@ -217,7 +219,23 @@ A callout reads its colors from five custom properties: `--nf-callout-surface-co
 </div>
 ```
 
-Set them on an **ancestor**, not on the callout itself through a class: the rule that assigns them is `[data-ui-color="…"]`, so a plain class on the element would lose to it. Inheriting from above sidesteps the comparison entirely.
+A callout that has a `color` ignores those inherited values: its `[data-ui-color="…"]` rule declares the color properties on the callout itself, and a declaration on an element always beats a value inherited into it. A plain class on the element loses too, on specificity. Set them through the callout's own `style` instead:
+
+<div class="not-content demo demo--stack">
+	<Callout color="red" title="Themed" icon={em(Palette)} style="--nf-callout-surface-color: var(--nf-green-l-20); --nf-callout-accent-color: var(--nf-blue-l-90);">Overridden on the element.</Callout>
+</div>
+
+```astro
+<Callout
+	color="red"
+	title="Themed"
+	style="--nf-callout-surface-color: var(--nf-green-l-20); --nf-callout-accent-color: var(--nf-blue-l-90);"
+>
+	Overridden on the element.
+</Callout>
+```
+
+The same inheritance reaches a callout with no `color` nested inside a colored one: it takes the outer callout's hue. Pass `color="grey"` to keep it grey.
 
 Overriding a palette token instead re-themes every callout using that hue. A callout resolves seven tokens per hue — surface, accent, rule tint and shadow tint in each scheme, with light's rule and shadow sharing `l-80-25` — so override the ones you need:
 

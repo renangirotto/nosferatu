@@ -27,9 +27,10 @@ The component renders a native `<details>`: the summary line is a `<summary>`, a
 
 ## Colors
 
-`color` accepts any hue in the palette and defaults to `purple`. It is rendered on the element as `data-ui-color`, and it drives the summary, the panel and the shadow together.
+`color` is optional and accepts any hue in the palette. Leave it out and the accordion is grey and its element carries **no** `data-ui-color` attribute: the grey is a fallback in the component's own CSS, not a value written into your markup. `color="grey"` looks exactly the same but renders `data-ui-color="grey"`. Any other value is rendered on the element as `data-ui-color`, and it drives the summary, the panel and the shadow together.
 
 <div class="not-content demo demo--grid">
+	<figure><Accordion summary="default">Panel body.</Accordion><figcaption>default</figcaption></figure>
 	<figure><Accordion color="blue" summary="blue">Panel body.</Accordion><figcaption><code>blue</code></figcaption></figure>
 	<figure><Accordion color="cyan" summary="cyan">Panel body.</Accordion><figcaption><code>cyan</code></figcaption></figure>
 	<figure><Accordion color="green" summary="green">Panel body.</Accordion><figcaption><code>green</code></figcaption></figure>
@@ -42,6 +43,7 @@ The component renders a native `<details>`: the summary line is a `<summary>`, a
 </div>
 
 ```astro
+<Accordion summary="default">Panel body.</Accordion>
 <Accordion color="blue" summary="blue">Panel body.</Accordion>
 <Accordion color="cyan" summary="cyan">Panel body.</Accordion>
 <Accordion color="green" summary="green">Panel body.</Accordion>
@@ -170,7 +172,7 @@ The animation does not depend on `reset.css` at all: the component writes `calc-
 | Prop | Type | Default | Notes |
 |---|---|---|---|
 | `summary` | `string` | — | **Required.** The summary line's text. It is not forwarded to the element, so it produces no tooltip. |
-| `color` | `'blue' \| 'cyan' \| 'green' \| 'grey' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | `'purple'` | Rendered as `data-ui-color` on the element. |
+| `color` | `'blue' \| 'cyan' \| 'green' \| 'grey' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | grey (unset) | Rendered as `data-ui-color` on the element when passed. Omitted, the element has no `data-ui-color` and renders grey. |
 
 | Slot | Optional | Notes |
 |---|---|---|
@@ -197,7 +199,23 @@ The accordion reads its colors from exactly two custom properties — `--nf-acco
 </Accordion>
 ```
 
-Set them on the **element**, not on an ancestor. The rule that assigns them is `[data-ui-color="…"]`, which declares both properties on the accordion itself — and a declaration on an element always beats a value inherited into it, whatever selector supplied it. The summary and the panel are descendants, so they inherit whatever the element ends up with.
+That works whether or not the accordion has a `color`. An ancestor works only for an accordion with **no** `color`:
+
+<div class="not-content demo demo--stack" style="--nf-accordion-color: var(--nf-green-l-20); --nf-accordion-accent-color: var(--nf-blue-l-90);">
+	<Accordion summary="No color: themed from the wrapper">Inherited from the ancestor.</Accordion>
+	<Accordion color="red" summary='color="red": keeps its hue'>Its own rule wins.</Accordion>
+</div>
+
+```astro
+<div style="--nf-accordion-color: var(--nf-green-l-20); --nf-accordion-accent-color: var(--nf-blue-l-90);">
+	<Accordion summary="No color: themed from the wrapper">Inherited from the ancestor.</Accordion>
+	<Accordion color="red" summary='color="red": keeps its hue'>Its own rule wins.</Accordion>
+</div>
+```
+
+With a `color`, the rule that assigns the properties is `[data-ui-color="…"]`, which declares both on the accordion itself — and a declaration on an element always beats a value inherited into it, whatever selector supplied it. Without one nothing is declared on the element, so an inherited value reaches it; when neither exists, the component falls back to grey. The summary and the panel are descendants, so they inherit whatever the element ends up with.
+
+The same inheritance reaches an accordion with no `color` nested inside a colored one: it takes the outer accordion's hue. Pass `color="grey"` to keep it grey.
 
 Overriding a palette token instead re-themes every accordion using that hue:
 

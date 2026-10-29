@@ -17,7 +17,7 @@ interface Props extends HTMLAttributes<"div"> {
 const {
   title,
   icon: Icon,
-  color = "purple",
+  color,
   class: className,
   "data-ui-color": _controlled,
   ...attrs
@@ -57,14 +57,24 @@ const hasBody = Astro.slots.has("default");
 		 * depth comes from shadows.css and the color from the 25% tier, one
 		 * step below the surface in each scheme.
 		 */
-    --nf-callout-shadow: var(--nf-shadow-depth) var(--nf-callout-shadow-color);
+    --nf-callout-shadow: var(--nf-shadow-depth)
+      var(
+        --nf-callout-shadow-color,
+        light-dark(var(--nf-grey-l-70-25), var(--nf-grey-d-90-25))
+      );
 
     border: none;
     border-radius: var(--nf-radius-md);
     padding: var(--nf-space-6);
-    color: var(--nf-callout-accent-color);
+    color: var(
+      --nf-callout-accent-color,
+      light-dark(var(--nf-grey-l-80), var(--nf-grey-d-30))
+    );
     font-weight: 500;
-    background-color: var(--nf-callout-surface-color);
+    background-color: var(
+      --nf-callout-surface-color,
+      light-dark(var(--nf-grey-l-40-25), var(--nf-grey-d-50-25))
+    );
     box-shadow: var(--nf-callout-shadow);
 
     /*
@@ -272,7 +282,11 @@ const hasBody = Astro.slots.has("default");
   .nf-callout-body {
     /* A <p>, so any paragraph margin the page gives it has to go */
     margin-block: var(--nf-space-4) 0;
-    border-block-start: 1px solid var(--nf-callout-rule-color);
+    border-block-start: 1px solid
+      var(
+        --nf-callout-rule-color,
+        light-dark(var(--nf-grey-l-80-25), var(--nf-grey-d-30-25))
+      );
     padding-block-start: var(--nf-space-4);
     font-size: var(--nf-font-size-md);
     font-weight: var(--nf-font-weight-medium);
