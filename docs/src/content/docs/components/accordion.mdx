@@ -1,0 +1,275 @@
+---
+title: Accordion
+description: A native details/summary disclosure whose summary is a raised button and whose panel opens and closes in pure CSS, driven by --nf-accordion-* custom properties.
+---
+
+import Accordion from 'astro-nosferatu/components/Accordion.astro';
+
+```astro
+---
+import Accordion from 'astro-nosferatu/components/Accordion.astro';
+---
+```
+
+<div class="not-content demo demo--stack">
+	<Accordion summary="What is a harness?">
+		A harness is the layer between a model and the world it acts on.
+	</Accordion>
+</div>
+
+```astro
+<Accordion summary="What is a harness?">
+	A harness is the layer between a model and the world it acts on.
+</Accordion>
+```
+
+The component renders a native `<details>`: the summary line is a `<summary>`, and everything you pass as children goes into a `<div>` inside it. The disclosure itself is the browser's, so it works with JavaScript disabled — the library ships no script.
+
+## Colors
+
+`color` accepts any hue in the palette and defaults to `purple`. It is rendered on the element as `data-ui-color`, and it drives the summary, the panel and the shadow together.
+
+<div class="not-content demo demo--grid">
+	<figure><Accordion color="blue" summary="blue">Panel body.</Accordion><figcaption><code>blue</code></figcaption></figure>
+	<figure><Accordion color="cyan" summary="cyan">Panel body.</Accordion><figcaption><code>cyan</code></figcaption></figure>
+	<figure><Accordion color="green" summary="green">Panel body.</Accordion><figcaption><code>green</code></figcaption></figure>
+	<figure><Accordion color="grey" summary="grey">Panel body.</Accordion><figcaption><code>grey</code></figcaption></figure>
+	<figure><Accordion color="orange" summary="orange">Panel body.</Accordion><figcaption><code>orange</code></figcaption></figure>
+	<figure><Accordion color="pink" summary="pink">Panel body.</Accordion><figcaption><code>pink</code></figcaption></figure>
+	<figure><Accordion color="purple" summary="purple">Panel body.</Accordion><figcaption><code>purple</code></figcaption></figure>
+	<figure><Accordion color="red" summary="red">Panel body.</Accordion><figcaption><code>red</code></figcaption></figure>
+	<figure><Accordion color="yellow" summary="yellow">Panel body.</Accordion><figcaption><code>yellow</code></figcaption></figure>
+</div>
+
+```astro
+<Accordion color="blue" summary="blue">Panel body.</Accordion>
+<Accordion color="cyan" summary="cyan">Panel body.</Accordion>
+<Accordion color="green" summary="green">Panel body.</Accordion>
+<Accordion color="grey" summary="grey">Panel body.</Accordion>
+<Accordion color="orange" summary="orange">Panel body.</Accordion>
+<Accordion color="pink" summary="pink">Panel body.</Accordion>
+<Accordion color="purple" summary="purple">Panel body.</Accordion>
+<Accordion color="red" summary="red">Panel body.</Accordion>
+<Accordion color="yellow" summary="yellow">Panel body.</Accordion>
+```
+
+Any other value is a type error: in an `.astro` file, `astro check` rejects `<Accordion summary="x" color="teal">` outright. These documentation pages are `.mdx`, which `astro check` does not type-check, so a typo on this page would only show up as an uncolored accordion.
+
+## Disclosure state
+
+The component declares no props for opening, closing or grouping. All of that is the `<details>` element's, and every native attribute passes through — so `open` renders a panel that starts disclosed:
+
+<div class="not-content demo demo--stack">
+	<Accordion summary="Open from the start" color="green" open>
+		Rendered with the native `open` attribute, so the panel is visible on first paint.
+	</Accordion>
+</div>
+
+```astro
+<Accordion summary="Open from the start" color="green" open>
+	Rendered with the native `open` attribute, so the panel is visible on first paint.
+</Accordion>
+```
+
+…and a shared `name` makes a group exclusive: opening one closes whichever was open, with the closing panel animating shut exactly like a user-closed one. No wrapper component and no script are involved.
+
+<div class="not-content demo demo--stack">
+	<Accordion summary="Does it need JavaScript?" name="faq">
+		No. The toggle, the keyboard support and the exclusivity are all the browser's.
+	</Accordion>
+	<Accordion summary="How do I group them?" name="faq">
+		Give every accordion in the group the same `name`, the way you would with radio buttons.
+	</Accordion>
+	<Accordion summary="Can one group span a page?" name="faq">
+		Yes — the browser matches on the name, not on the markup nesting.
+	</Accordion>
+</div>
+
+```astro
+<Accordion summary="Does it need JavaScript?" name="faq">…</Accordion>
+<Accordion summary="How do I group them?" name="faq">…</Accordion>
+<Accordion summary="Can one group span a page?" name="faq">…</Accordion>
+```
+
+## States
+
+The summary is a `Button` in every respect but the element. It has no border: it sits 4px above its own solid shadow, in the same accent color as its text. Hover moves it 2px down and shortens the shadow to 2px; holding it down moves it 4px down and removes the shadow, so it presses flat against the spot the shadow occupied. The travel and the shadow always add up to 4px, so the summary's bottom edge never moves. The cursor is a pointer.
+
+While the accordion is **open**, the summary holds that pressed appearance — down 4px, no shadow — whatever the pointer is doing, so an open panel reads as a button somebody is still holding down, sunk into the panel it opened. Moving the pointer over an open summary does not lift it back to the hover depth, and closing the accordion returns it to the raised resting state.
+
+Focus does both: the summary sinks the way it does on hover, and keyboard focus adds a 2px outline in the accent color, inset by its own width so it reads as a border rather than a ring. Because the outline is inset, it changes neither the summary's size nor its position. Clicking sinks the summary without drawing the outline — the outline is bound to `:focus-visible`.
+
+Everything that changes between those states animates over `0.15s ease-in-out`.
+
+<div class="not-content demo demo--stack">
+	<Accordion summary="Hover me, hold me, tab to me" color="orange">
+		Open me too, and watch the summary stay pressed.
+	</Accordion>
+</div>
+
+```astro
+<Accordion summary="Hover me, hold me, tab to me" color="orange">
+	Open me too, and watch the summary stay pressed.
+</Accordion>
+```
+
+The disclosure triangle is the browser's own marker, painted in the summary's color. The component draws no icon of its own, so the marker stays exactly as accessible as the browser makes it.
+
+## Animation
+
+Opening and closing are animated in CSS alone, over `0.3s ease-in-out`. The panel's height is transitioned on the element's `::details-content` pseudo-element, from `0` to `calc-size(auto, size)` — the content's own height, with nothing measured and no maximum to guess — and `content-visibility` rides along with `transition-behavior: allow-discrete` so the panel can animate *shut* instead of vanishing in one frame. The content inside fades and slides into place from an `@starting-style`, which it needs because the panel's contents are not rendered at all while it is closed.
+
+This is **progressive enhancement**. The whole block, the collapsed height included, sits behind one test:
+
+```css
+@supports (block-size: calc-size(auto, size)) and selector(::details-content) {
+	/* the animation */
+}
+```
+
+A browser that fails the test never sees the collapsed height either, so it renders the plain native `<details>`: the panel opens and closes instantly, at full height, with its content completely readable. Nothing is ever stuck at zero height.
+
+Readers who ask their system for reduced motion get the same instant disclosure, and the same instant summary states — the component zeroes both of its duration properties rather than dropping any of the appearances.
+
+<div class="not-content demo demo--stack">
+	<Accordion summary="A taller panel, to watch it grow" color="cyan">
+		<p>The panel animates to whatever height its content happens to have.</p>
+		<p>Nothing here declares a height, a maximum height or a line count.</p>
+		<p>Close it again and the panel shrinks back over the same 0.3s.</p>
+	</Accordion>
+</div>
+
+```astro
+<Accordion summary="A taller panel, to watch it grow" color="cyan">
+	<p>The panel animates to whatever height its content happens to have.</p>
+	<p>Nothing here declares a height, a maximum height or a line count.</p>
+	<p>Close it again and the panel shrinks back over the same 0.3s.</p>
+</Accordion>
+```
+
+## Light and dark
+
+Each hue is declared once with `light-dark()`: `--nf-<hue>-l-40` / `--nf-<hue>-l-80` in light, `--nf-<hue>-d-50` / `--nf-<hue>-d-90` in dark — the same pairing `Button` uses. `reset.css` sets `color-scheme: light dark` on `:root`, so an accordion follows the reader's preferred scheme with no extra work; flip this site's theme toggle and watch it change.
+
+To pin a scheme, set `color-scheme` yourself in unlayered CSS; it wins over the library's reset without any extra specificity, and it works per subtree:
+
+<div class="not-content demo demo--stack">
+	<span style="color-scheme: only light"><Accordion summary="Light" color="pink">Pinned light.</Accordion></span>
+	<span style="color-scheme: only dark"><Accordion summary="Dark" color="pink">Pinned dark.</Accordion></span>
+</div>
+
+```astro
+<span style="color-scheme: only light"><Accordion summary="Light" color="pink">Pinned light.</Accordion></span>
+<span style="color-scheme: only dark"><Accordion summary="Dark" color="pink">Pinned dark.</Accordion></span>
+```
+
+The animation does not depend on `reset.css` at all: the component writes `calc-size(auto, size)` itself rather than relying on the reset's `interpolate-size`, so it animates the same whether you import `index.css` or only `tokens.css` and the palette.
+
+## Props
+
+| Prop | Type | Default | Notes |
+|---|---|---|---|
+| `summary` | `string` | — | **Required.** The summary line's text. It is not forwarded to the element, so it produces no tooltip. |
+| `color` | `'blue' \| 'cyan' \| 'green' \| 'grey' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | `'purple'` | Rendered as `data-ui-color` on the element. |
+
+| Slot | Optional | Notes |
+|---|---|---|
+| default | yes | The disclosed content, rendered inside `div.nf-accordion-content`. Omit it and the panel is empty — the summary still toggles. |
+
+Every other `<details>` attribute (`open`, `name`, `id`, `aria-*`, `class`, event attributes…) is passed through to the element. `class` is merged with the component's own.
+
+## Theming
+
+The accordion reads its colors from exactly two custom properties — `--nf-accordion-color` for the fill of both the summary and the panel, and `--nf-accordion-accent-color` for the text, the marker, the shadow and the focus outline. Set them **on the component itself**:
+
+<div class="not-content demo demo--stack">
+	<Accordion summary="Themed" style="--nf-accordion-color: var(--nf-green-l-20); --nf-accordion-accent-color: var(--nf-blue-l-90);">
+		Both parts follow the two properties.
+	</Accordion>
+</div>
+
+```astro
+<Accordion
+	summary="Themed"
+	style="--nf-accordion-color: var(--nf-green-l-20); --nf-accordion-accent-color: var(--nf-blue-l-90);"
+>
+	Both parts follow the two properties.
+</Accordion>
+```
+
+Set them on the **element**, not on an ancestor. The rule that assigns them is `[data-ui-color="…"]`, which declares both properties on the accordion itself — and a declaration on an element always beats a value inherited into it, whatever selector supplied it. The summary and the panel are descendants, so they inherit whatever the element ends up with.
+
+Overriding a palette token instead re-themes every accordion using that hue:
+
+<div class="not-content demo demo--stack" style="--nf-red-l-40: var(--nf-yellow-l-40); --nf-red-l-80: var(--nf-yellow-l-80); --nf-red-d-50: var(--nf-yellow-d-50); --nf-red-d-90: var(--nf-yellow-d-90);">
+	<Accordion color="red" summary='Still color="red"'>
+		The hue rule resolves to whatever the palette token holds.
+	</Accordion>
+</div>
+
+```astro
+<div style="--nf-red-l-40: var(--nf-yellow-l-40); --nf-red-l-80: var(--nf-yellow-l-80);">
+	<Accordion color="red" summary='Still color="red"'>
+		The hue rule resolves to whatever the palette token holds.
+	</Accordion>
+</div>
+```
+
+That one works from an ancestor, because the palette tokens are declared on `:root` rather than on the accordion.
+
+## Scoped styles
+
+The component's styles only apply to its own markup. A plain `<details>` next to it is left alone — even one carrying the same `data-ui-color` attribute, and including its instant, unanimated disclosure:
+
+<div class="not-content demo demo--stack">
+	<Accordion summary="Component">Animated, filled, raised.</Accordion>
+	<details data-ui-color="green">
+		<summary>Plain details with data-ui-color</summary>
+		Untouched by the component.
+	</details>
+</div>
+
+```astro
+<Accordion summary="Component">Animated, filled, raised.</Accordion>
+<details data-ui-color="green">
+	<summary>Plain details with data-ui-color</summary>
+	Untouched by the component.
+</details>
+```
+
+<style>{`
+	.demo {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 1.5rem;
+		margin-block: 1rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 0.5rem;
+	}
+
+	.demo--stack {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.demo--grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+		gap: 1.25rem;
+	}
+
+	.demo figure {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		gap: 0.5rem;
+		margin: 0;
+	}
+
+	.demo figcaption {
+		font-size: 0.875rem;
+		text-align: center;
+	}
+`}</style>

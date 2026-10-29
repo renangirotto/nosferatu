@@ -1,0 +1,228 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import type { ColorPalette } from "../types/components";
+
+interface Props extends HTMLAttributes<"details"> {
+	summary: string;
+	color?: ColorPalette;
+}
+
+const {
+	summary,
+	color = "purple",
+	class: className,
+	"data-ui-color": _controlled,
+	...attrs
+} = Astro.props;
+---
+
+<details {...attrs} data-ui-color={color} class:list={["nf-accordion", className]}>
+	<summary class="nf-accordion-summary">{summary}</summary>
+	<div class="nf-accordion-content">
+		<slot />
+	</div>
+</details>
+
+<style>
+	.nf-accordion {
+		--nf-accordion-depth: 4px;
+		--nf-accordion-lift: 0px;
+		--nf-accordion-border-width: 2px;
+		--nf-accordion-transition-duration: 0.15s;
+		--nf-accordion-disclosure-duration: 0.3s;
+
+		&[data-ui-color="blue"] {
+			--nf-accordion-color: light-dark(var(--nf-blue-l-40), var(--nf-blue-d-50));
+			--nf-accordion-accent-color: light-dark(
+				var(--nf-blue-l-80),
+				var(--nf-blue-d-90)
+			);
+		}
+
+		&[data-ui-color="cyan"] {
+			--nf-accordion-color: light-dark(var(--nf-cyan-l-40), var(--nf-cyan-d-50));
+			--nf-accordion-accent-color: light-dark(
+				var(--nf-cyan-l-80),
+				var(--nf-cyan-d-90)
+			);
+		}
+
+		&[data-ui-color="green"] {
+			--nf-accordion-color: light-dark(
+				var(--nf-green-l-40),
+				var(--nf-green-d-50)
+			);
+			--nf-accordion-accent-color: light-dark(
+				var(--nf-green-l-80),
+				var(--nf-green-d-90)
+			);
+		}
+
+		&[data-ui-color="grey"] {
+			--nf-accordion-color: light-dark(var(--nf-grey-l-40), var(--nf-grey-d-50));
+			--nf-accordion-accent-color: light-dark(
+				var(--nf-grey-l-80),
+				var(--nf-grey-d-90)
+			);
+		}
+
+		&[data-ui-color="orange"] {
+			--nf-accordion-color: light-dark(
+				var(--nf-orange-l-40),
+				var(--nf-orange-d-50)
+			);
+			--nf-accordion-accent-color: light-dark(
+				var(--nf-orange-l-80),
+				var(--nf-orange-d-90)
+			);
+		}
+
+		&[data-ui-color="pink"] {
+			--nf-accordion-color: light-dark(var(--nf-pink-l-40), var(--nf-pink-d-50));
+			--nf-accordion-accent-color: light-dark(
+				var(--nf-pink-l-80),
+				var(--nf-pink-d-90)
+			);
+		}
+
+		&[data-ui-color="purple"] {
+			--nf-accordion-color: light-dark(
+				var(--nf-purple-l-40),
+				var(--nf-purple-d-50)
+			);
+			--nf-accordion-accent-color: light-dark(
+				var(--nf-purple-l-80),
+				var(--nf-purple-d-90)
+			);
+		}
+
+		&[data-ui-color="red"] {
+			--nf-accordion-color: light-dark(var(--nf-red-l-40), var(--nf-red-d-50));
+			--nf-accordion-accent-color: light-dark(
+				var(--nf-red-l-80),
+				var(--nf-red-d-90)
+			);
+		}
+
+		&[data-ui-color="yellow"] {
+			--nf-accordion-color: light-dark(
+				var(--nf-yellow-l-40),
+				var(--nf-yellow-d-50)
+			);
+			--nf-accordion-accent-color: light-dark(
+				var(--nf-yellow-l-80),
+				var(--nf-yellow-d-90)
+			);
+		}
+	}
+
+	/* The raised control, built exactly like Button, with the native marker kept */
+	.nf-accordion-summary {
+		padding-block: var(--nf-space-2);
+		padding-inline: var(--nf-space-4);
+		border: none;
+		border-radius: var(--nf-radius-md);
+		color: var(--nf-accordion-accent-color);
+		font-weight: var(--nf-font-weight-bold);
+		background-color: var(--nf-accordion-color);
+		box-shadow: 0px var(--nf-accordion-depth) 0px
+			var(--nf-accordion-accent-color);
+		translate: 0 var(--nf-accordion-lift);
+		cursor: pointer;
+		transition-property: translate, box-shadow, background-color, color;
+		transition-duration: var(--nf-accordion-transition-duration);
+		transition-timing-function: ease-in-out;
+
+		&:hover,
+		&:focus-within {
+			--nf-accordion-depth: 2px;
+			--nf-accordion-lift: 2px;
+		}
+
+		&:active {
+			--nf-accordion-depth: 0px;
+			--nf-accordion-lift: 4px;
+		}
+
+		/* The summary has no border, so the focus ring is drawn inside its edge as one */
+		&:focus-visible {
+			outline: var(--nf-accordion-border-width) solid
+				var(--nf-accordion-accent-color);
+			outline-offset: calc(-1 * var(--nf-accordion-border-width));
+		}
+	}
+
+	/*
+	 * After the hover and active rules on purpose: an open panel keeps its
+	 * summary pressed whatever the pointer is doing, and the two selectors
+	 * weigh the same, so source order is what decides it.
+	 */
+	.nf-accordion[open] .nf-accordion-summary {
+		--nf-accordion-depth: 0px;
+		--nf-accordion-lift: 4px;
+	}
+
+	/* The inside of the control: same fill, same accent, no shadow of its own */
+	.nf-accordion-content {
+		border-end-end-radius: var(--nf-radius-md);
+		border-end-start-radius: var(--nf-radius-md);
+		padding-block: var(--nf-space-2);
+		padding-inline: var(--nf-space-4);
+		color: var(--nf-accordion-accent-color);
+		background-color: var(--nf-accordion-color);
+	}
+
+	/*
+	 * The whole disclosure animation, the collapsed height included, is gated
+	 * on the two features it needs. A browser that fails the test never sees
+	 * block-size: 0, so it keeps the plain instant <details> rather than a
+	 * panel it cannot open.
+	 */
+	@supports (block-size: calc-size(auto, size)) and selector(::details-content) {
+		.nf-accordion::details-content {
+			block-size: 0;
+			overflow: clip;
+			transition-property: block-size, content-visibility;
+			transition-duration: var(--nf-accordion-disclosure-duration);
+			transition-timing-function: ease-in-out;
+			transition-behavior: allow-discrete;
+		}
+
+		/*
+		 * calc-size() rather than a bare auto: the component carries its own
+		 * size interpolation instead of depending on reset.css being loaded.
+		 */
+		.nf-accordion[open]::details-content {
+			block-size: calc-size(auto, size);
+		}
+
+		/*
+		 * The content is not rendered while the panel is closed, so it has no
+		 * previous value to transition from — @starting-style is what gives it
+		 * one. Opening only: by the time the panel closes this box is already
+		 * gone, and the shrinking panel is what the reader sees.
+		 */
+		.nf-accordion-content {
+			opacity: 1;
+			translate: 0 0;
+			transition-property: opacity, translate;
+			transition-duration: var(--nf-accordion-disclosure-duration);
+			transition-timing-function: ease-in-out;
+		}
+
+		@starting-style {
+			.nf-accordion-content {
+				opacity: 0;
+				translate: 0 calc(-1 * var(--nf-space-2));
+			}
+		}
+	}
+
+	/* Keep the states and their feedback, drop the animation between them */
+	@media (prefers-reduced-motion: reduce) {
+		.nf-accordion {
+			--nf-accordion-transition-duration: 0s;
+			--nf-accordion-disclosure-duration: 0s;
+		}
+	}
+</style>
