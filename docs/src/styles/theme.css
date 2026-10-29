@@ -1,0 +1,50 @@
+:root {
+  --sl-font: "Outfit Variable";
+  --ec-uiFontFml: var(--sl-font-system);
+}
+
+:root[data-theme="dark"] {
+  --sl-color-bg: var(--nf-grey-d-100);
+  --sl-color-bg-nav: var(--nf-grey-d-100);
+  --sl-color-bg-sidebar: var(--nf-grey-d-100);
+  --sl-color-bg-inline-code: var(--nf-grey-d-120);
+  --sl-color-text: var(--nf-grey-d-20);
+  --sl-color-text-accent: var(--nf-purple-d-50);
+  --sl-color-text-invert: var(--nf-grey-d-100);
+  --sl-color-hairline-shade: transparent;
+  --ec-brdRad: 8px;
+  --ec-brdCol: var(--nf-grey-d-80-25);
+}
+
+:root[data-theme="dark"] starlight-toc a:hover {
+  color: var(--sl-color-text-accent);
+}
+
+:root[data-theme="dark"] .sl-markdown-content :not(pre) > code {
+  color: var(--nf-green-d-50);
+  font-weight: 600;
+}
+
+:root[data-theme="dark"]
+  :is(
+    .right-sidebar,
+    mobile-starlight-toc nav,
+    mobile-starlight-toc .dropdown
+  ) {
+  border-color: transparent;
+}
+
+:root[data-theme="dark"] mobile-starlight-toc :is(.toggle, .dropdown) {
+  background-color: var(--nf-grey-d-110);
+}
+
+:root[data-theme="dark"] mobile-starlight-toc .toggle {
+  border-color: var(--nf-grey-d-80-25);
+}
+
+@media (min-width: 50rem) {
+  :root[data-theme="dark"] site-search button[data-open-modal] {
+    border-color: var(--nf-grey-d-80-25);
+    background-color: var(--nf-grey-d-110);
+  }
+}

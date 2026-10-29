@@ -107,7 +107,7 @@ Each token is named `--nf-<hue>-<scale>-<step>`:
 
 - **hue**: `blue`, `cyan`, `green`, `grey`, `orange`, `pink`, `purple`, `red`, `yellow`
 - **scale**: `d` for dark mode, `l` for light mode
-- **step**: `10` to `100`, in tens
+- **step**: `10` to `100`, in tens; `grey` also has `110` to `200`
 
 For example `--nf-red-l-80` or `--nf-blue-d-20`. All values are OKLCH.
 
@@ -147,6 +147,16 @@ Both scales are bounded by the same two anchors: `#f9f9f9` at the light end and 
 	<figure><div style="background: var(--nf-grey-d-80)"></div><figcaption><code>d-80</code></figcaption></figure>
 	<figure><div style="background: var(--nf-grey-d-90)"></div><figcaption><code>d-90</code></figcaption></figure>
 	<figure><div style="background: var(--nf-grey-d-100)"></div><figcaption><code>d-100</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-d-110)"></div><figcaption><code>d-110</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-d-120)"></div><figcaption><code>d-120</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-d-130)"></div><figcaption><code>d-130</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-d-140)"></div><figcaption><code>d-140</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-d-150)"></div><figcaption><code>d-150</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-d-160)"></div><figcaption><code>d-160</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-d-170)"></div><figcaption><code>d-170</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-d-180)"></div><figcaption><code>d-180</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-d-190)"></div><figcaption><code>d-190</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-d-200)"></div><figcaption><code>d-200</code></figcaption></figure>
 </div>
 
 <div class="not-content ramp">
@@ -160,6 +170,16 @@ Both scales are bounded by the same two anchors: `#f9f9f9` at the light end and 
 	<figure><div style="background: var(--nf-grey-l-80)"></div><figcaption><code>l-80</code></figcaption></figure>
 	<figure><div style="background: var(--nf-grey-l-90)"></div><figcaption><code>l-90</code></figcaption></figure>
 	<figure><div style="background: var(--nf-grey-l-100)"></div><figcaption><code>l-100</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-l-110)"></div><figcaption><code>l-110</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-l-120)"></div><figcaption><code>l-120</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-l-130)"></div><figcaption><code>l-130</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-l-140)"></div><figcaption><code>l-140</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-l-150)"></div><figcaption><code>l-150</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-l-160)"></div><figcaption><code>l-160</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-l-170)"></div><figcaption><code>l-170</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-l-180)"></div><figcaption><code>l-180</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-l-190)"></div><figcaption><code>l-190</code></figcaption></figure>
+	<figure><div style="background: var(--nf-grey-l-200)"></div><figcaption><code>l-200</code></figcaption></figure>
 </div>
 
 | Step | `grey-d` lightness | `grey-l` lightness | Chroma |
@@ -174,11 +194,23 @@ Both scales are bounded by the same two anchors: `#f9f9f9` at the light end and 
 | 80 | `0.51` | `0.43` | `0.016` |
 | 90 | `0.4` | `0.36` | `0.018` |
 | 100 | `0.29` — `#282A36` | `0.29` — `#282A36` | `0.02` |
+| 110 | `0.27` | `0.27` | `0.019` |
+| 120 | `0.25` | `0.25` | `0.018` |
+| 130 | `0.23` | `0.23` | `0.017` |
+| 140 | `0.21` | `0.21` | `0.016` |
+| 150 | `0.19` | `0.19` | `0.015` |
+| 160 | `0.17` | `0.17` | `0.014` |
+| 170 | `0.15` | `0.15` | `0.013` |
+| 180 | `0.13` | `0.13` | `0.012` |
+| 190 | `0.11` | `0.11` | `0.011` |
+| 200 | `0.09` | `0.09` | `0.01` |
 
 The hue angle is `277.5` on every step — the cast measured off `#282A36`. Chroma climbs from `0` to `0.02` with the step, so the pale greys are exactly neutral and only the dark end carries a trace of blue.
 
+Below `#282A36`, both scales continue with ten near-black steps, `110` to `200`. These steps are the same on both scales. Lightness drops by an even `0.02` per step, down to `0.09` at `200`, which is still distinguishable from pure black. Chroma eases back to `0.01`, so the darkest greys stay neutral instead of turning blue. Use them for deep dark-mode surfaces under `grey-d-100`. They have the same 25% tier and shadow tokens as every other step.
+
 :::note[`grey-d-100` and `grey-l-100` are the same color]
-Both scales end on `#282A36`, so those two tokens resolve identically. Every other hue has a distinct `d-100` and `l-100`. That falls out of the greyscale being bounded by two fixed anchors rather than being an oversight — but it does mean `light-dark(var(--nf-grey-l-100), var(--nf-grey-d-100))` will not change between schemes.
+Both scales end on `#282A36`, so those two tokens resolve identically. Every other hue has a distinct `d-100` and `l-100`. That falls out of the greyscale being bounded by two fixed anchors rather than being an oversight — but it does mean `light-dark(var(--nf-grey-l-100), var(--nf-grey-d-100))` will not change between schemes. The same holds for every step from `110` to `200`, which the two scales share.
 :::
 
 ## Shadows

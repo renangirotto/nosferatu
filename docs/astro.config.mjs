@@ -14,7 +14,10 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'astro-nosferatu',
-			customCss: ['astro-nosferatu/styles/index.css'],
+			customCss: ['@fontsource-variable/outfit', 'astro-nosferatu/styles/index.css', './src/styles/theme.css'],
+			expressiveCode: {
+				themes: ['dracula', 'starlight-light'],
+			},
 			sidebar: [
 				{ label: 'Getting started', link: '/' },
 				{ label: 'Styles', link: '/styles/' },
