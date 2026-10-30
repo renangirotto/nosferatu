@@ -50,13 +50,14 @@ const hasBody = Astro.slots.has("default");
 		/*
 			 * Composed rather than taken whole from a --nf-shadow-<color> token:
 			 * light-dark() resolves colors, not complete box-shadow values, so the
-			 * depth comes from shadows.css and the color from the 25% tier, one
-			 * step below the surface in each scheme.
+			 * depth comes from shadows.css and the color from the 25% tier: three
+			 * steps below the surface in light (l-40 to l-70), three above it in
+			 * dark (d-50 to d-80), so the shadow is the darker tint either way.
 			 */
 		--nf-callout-shadow: var(--nf-shadow-depth)
 			var(
 				--nf-callout-shadow-color,
-				light-dark(var(--nf-grey-l-70-25), var(--nf-grey-d-90-25))
+				light-dark(var(--nf-grey-l-70-25), var(--nf-grey-d-80-25))
 			);
 
 		border: none;
@@ -93,7 +94,7 @@ const hasBody = Astro.slots.has("default");
 			);
 			--nf-callout-shadow-color: light-dark(
 				var(--nf-blue-l-70-25),
-				var(--nf-blue-d-90-25)
+				var(--nf-blue-d-80-25)
 			);
 		}
 
@@ -112,7 +113,7 @@ const hasBody = Astro.slots.has("default");
 			);
 			--nf-callout-shadow-color: light-dark(
 				var(--nf-cyan-l-70-25),
-				var(--nf-cyan-d-90-25)
+				var(--nf-cyan-d-80-25)
 			);
 		}
 
@@ -131,7 +132,7 @@ const hasBody = Astro.slots.has("default");
 			);
 			--nf-callout-shadow-color: light-dark(
 				var(--nf-green-l-70-25),
-				var(--nf-green-d-90-25)
+				var(--nf-green-d-80-25)
 			);
 		}
 
@@ -150,7 +151,7 @@ const hasBody = Astro.slots.has("default");
 			);
 			--nf-callout-shadow-color: light-dark(
 				var(--nf-grey-l-70-25),
-				var(--nf-grey-d-90-25)
+				var(--nf-grey-d-80-25)
 			);
 		}
 
@@ -169,7 +170,7 @@ const hasBody = Astro.slots.has("default");
 			);
 			--nf-callout-shadow-color: light-dark(
 				var(--nf-orange-l-70-25),
-				var(--nf-orange-d-90-25)
+				var(--nf-orange-d-80-25)
 			);
 		}
 
@@ -188,7 +189,7 @@ const hasBody = Astro.slots.has("default");
 			);
 			--nf-callout-shadow-color: light-dark(
 				var(--nf-pink-l-70-25),
-				var(--nf-pink-d-90-25)
+				var(--nf-pink-d-80-25)
 			);
 		}
 
@@ -207,7 +208,7 @@ const hasBody = Astro.slots.has("default");
 			);
 			--nf-callout-shadow-color: light-dark(
 				var(--nf-purple-l-70-25),
-				var(--nf-purple-d-90-25)
+				var(--nf-purple-d-80-25)
 			);
 		}
 
@@ -226,7 +227,7 @@ const hasBody = Astro.slots.has("default");
 			);
 			--nf-callout-shadow-color: light-dark(
 				var(--nf-red-l-70-25),
-				var(--nf-red-d-90-25)
+				var(--nf-red-d-80-25)
 			);
 		}
 
@@ -245,7 +246,7 @@ const hasBody = Astro.slots.has("default");
 			);
 			--nf-callout-shadow-color: light-dark(
 				var(--nf-yellow-l-70-25),
-				var(--nf-yellow-d-90-25)
+				var(--nf-yellow-d-80-25)
 			);
 		}
 	}

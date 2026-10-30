@@ -95,7 +95,7 @@ The component declares no props for opening, closing or grouping. All of that is
 
 ## States
 
-The summary is a `Button` in every respect but the element. It has no border: it sits 4px above its own solid shadow, in the same accent color as its text. Hover moves it 2px down and shortens the shadow to 2px; holding it down moves it 4px down and removes the shadow, so it presses flat against the spot the shadow occupied. The travel and the shadow always add up to 4px, so the summary's bottom edge never moves. The cursor is a pointer.
+The summary is a `Button` in every respect but the element. It has no border: it sits 4px above its own solid shadow, drawn in the same hue as its text — the same step in light mode, one step lighter in dark mode, so the raised edge reads as depth rather than as a second line of text. Its label is semibold. Hover moves it 2px down and shortens the shadow to 2px; holding it down moves it 4px down and removes the shadow, so it presses flat against the spot the shadow occupied. The travel and the shadow always add up to 4px, so the summary's bottom edge never moves. The cursor is a pointer.
 
 While the accordion is **open**, the summary holds that pressed appearance — down 4px, no shadow — whatever the pointer is doing, so an open panel reads as a button somebody is still holding down, sunk into the panel it opened. Moving the pointer over an open summary does not lift it back to the hover depth, and closing the accordion returns it to the raised resting state.
 
@@ -151,7 +151,7 @@ Readers who ask their system for reduced motion get the same instant disclosure,
 
 ## Light and dark
 
-Each hue is declared once with `light-dark()`: `--nf-<hue>-l-40` / `--nf-<hue>-l-80` in light, `--nf-<hue>-d-50` / `--nf-<hue>-d-90` in dark — the same pairing `Button` uses. `reset.css` sets `color-scheme: light dark` on `:root`, so an accordion follows the reader's preferred scheme with no extra work; flip this site's theme toggle and watch it change.
+Each hue is declared once with `light-dark()`. In light that is `--nf-<hue>-l-40` for the fill and `--nf-<hue>-l-80` for both the text and the shadow; in dark it is `--nf-<hue>-d-50` for the fill, `--nf-<hue>-d-90` for the text and `--nf-<hue>-d-80` for the shadow — the same pairing `Button` uses. `reset.css` sets `color-scheme: light dark` on `:root`, so an accordion follows the reader's preferred scheme with no extra work; flip this site's theme toggle and watch it change.
 
 To pin a scheme, set `color-scheme` yourself in unlayered CSS; it wins over the library's reset without any extra specificity, and it works per subtree:
 
@@ -182,32 +182,32 @@ Every other `<details>` attribute (`open`, `name`, `id`, `aria-*`, `class`, even
 
 ## Theming
 
-The accordion reads its colors from exactly two custom properties — `--nf-accordion-color` for the fill of both the summary and the panel, and `--nf-accordion-accent-color` for the text, the marker, the shadow and the focus outline. Set them **on the component itself**:
+The accordion reads its colors from exactly three custom properties — `--nf-accordion-color` for the fill of both the summary and the panel, `--nf-accordion-accent-color` for the text, the marker and the focus outline, and `--nf-accordion-shadow-color` for the summary's shadow. The shadow has its own property so it can sit a step away from the label instead of copying it. Set them **on the component itself**:
 
 <div class="not-content demo demo--stack">
-	<Accordion summary="Themed" style="--nf-accordion-color: var(--nf-green-l-20); --nf-accordion-accent-color: var(--nf-blue-l-90);">
-		Both parts follow the two properties.
+	<Accordion summary="Themed" style="--nf-accordion-color: var(--nf-green-l-20); --nf-accordion-accent-color: var(--nf-blue-l-90); --nf-accordion-shadow-color: var(--nf-blue-l-70);">
+		Both parts follow the fill and the accent.
 	</Accordion>
 </div>
 
 ```astro
 <Accordion
 	summary="Themed"
-	style="--nf-accordion-color: var(--nf-green-l-20); --nf-accordion-accent-color: var(--nf-blue-l-90);"
+	style="--nf-accordion-color: var(--nf-green-l-20); --nf-accordion-accent-color: var(--nf-blue-l-90); --nf-accordion-shadow-color: var(--nf-blue-l-70);"
 >
-	Both parts follow the two properties.
+	Both parts follow the fill and the accent.
 </Accordion>
 ```
 
 That works whether or not the accordion has a `color`. An ancestor works only for an accordion with **no** `color`:
 
-<div class="not-content demo demo--stack" style="--nf-accordion-color: var(--nf-green-l-20); --nf-accordion-accent-color: var(--nf-blue-l-90);">
+<div class="not-content demo demo--stack" style="--nf-accordion-color: var(--nf-green-l-20); --nf-accordion-accent-color: var(--nf-blue-l-90); --nf-accordion-shadow-color: var(--nf-blue-l-70);">
 	<Accordion summary="No color: themed from the wrapper">Inherited from the ancestor.</Accordion>
 	<Accordion color="red" summary='color="red": keeps its hue'>Its own rule wins.</Accordion>
 </div>
 
 ```astro
-<div style="--nf-accordion-color: var(--nf-green-l-20); --nf-accordion-accent-color: var(--nf-blue-l-90);">
+<div style="--nf-accordion-color: var(--nf-green-l-20); --nf-accordion-accent-color: var(--nf-blue-l-90); --nf-accordion-shadow-color: var(--nf-blue-l-70);">
 	<Accordion summary="No color: themed from the wrapper">Inherited from the ancestor.</Accordion>
 	<Accordion color="red" summary='color="red": keeps its hue'>Its own rule wins.</Accordion>
 </div>
