@@ -404,7 +404,7 @@ Prop types used by more than one component SHALL live in `src/types/`, exported 
 
 ### Requirement: Button color resolution
 
-`Button`'s color SHALL be resolved through exactly two component-scoped custom properties: `--nf-button-color`, which supplies the background, and `--nf-button-accent-color`, which supplies the text color, the box-shadow color and the focus outline color. Each `data-ui-color` value SHALL set both properties from the palette with `light-dark()`, using `--nf-<hue>-l-40` (light) and `--nf-<hue>-d-50` (dark) for `--nf-button-color`, and `--nf-<hue>-l-80` (light) and `--nf-<hue>-d-90` (dark) for `--nf-button-accent-color`. Where neither property is defined for the element — no `data-ui-color` and no value inherited from an ancestor — every use of them SHALL fall back to the grey pairing of the same steps (`--nf-grey-l-40`/`--nf-grey-d-50` and `--nf-grey-l-80`/`--nf-grey-d-90`). No other palette token SHALL be referenced for the button's own colors, and no semantic color token SHALL be introduced.
+`Button`'s color SHALL be resolved through exactly three component-scoped custom properties: `--nf-button-color`, which supplies the background, `--nf-button-accent-color`, which supplies the text color and the focus outline color, and `--nf-button-shadow-color`, which supplies the box-shadow color alone. Each `data-ui-color` value SHALL set all three from the palette with `light-dark()`, using `--nf-<hue>-l-40` (light) and `--nf-<hue>-d-50` (dark) for `--nf-button-color`, `--nf-<hue>-l-80` (light) and `--nf-<hue>-d-90` (dark) for `--nf-button-accent-color`, and `--nf-<hue>-l-80` (light) and `--nf-<hue>-d-80` (dark) for `--nf-button-shadow-color`. Where a property is not defined for the element — no `data-ui-color` and no value inherited from an ancestor — every use of it SHALL fall back to the grey token of the same step in the same scheme (`--nf-grey-l-40`/`--nf-grey-d-50`, `--nf-grey-l-80`/`--nf-grey-d-90` and `--nf-grey-l-80`/`--nf-grey-d-80`). The accent and the shadow SHALL therefore resolve to the same value under the light scheme and to different values under the dark scheme, where the shadow is one step lighter than the text. No other palette token SHALL be referenced for the button's own colors, and no semantic color token SHALL be introduced.
 
 #### Scenario: Light appearance
 
@@ -414,21 +414,27 @@ Prop types used by more than one component SHALL live in `src/types/`, exported 
 #### Scenario: Dark appearance
 
 - **WHEN** the page resolves to a dark color scheme and the same `Button` is inspected
-- **THEN** its computed background equals `--nf-purple-d-50`, and its color and box-shadow color both equal `--nf-purple-d-90`
+- **THEN** its computed background equals `--nf-purple-d-50`, its color equals `--nf-purple-d-90`, and its box-shadow color equals `--nf-purple-d-80`, which is a visibly lighter purple than the text
 
 #### Scenario: Default appearance
 
 - **WHEN** a `Button` with no `color` is inspected in a light and then a dark color scheme
-- **THEN** its background equals `--nf-grey-l-40` and its color and box-shadow color `--nf-grey-l-80` in light, and `--nf-grey-d-50` and `--nf-grey-d-90` in dark
+- **THEN** its background equals `--nf-grey-l-40` and its color and box-shadow color both `--nf-grey-l-80` in light, and `--nf-grey-d-50`, `--nf-grey-d-90` and `--nf-grey-d-80` respectively in dark
+
+#### Scenario: The shadow is independent of the text
+
+- **WHEN** a consumer sets only `--nf-button-shadow-color` through the `style` attribute of a `Button`
+- **THEN** the shadow takes the consumer's color while the label and the focus outline keep the color their `--nf-button-accent-color` resolves to
+- **AND** setting only `--nf-button-accent-color` changes the label and the outline while leaving the shadow where its own property puts it
 
 #### Scenario: Re-theme one button by overriding the component properties
 
-- **WHEN** a consumer sets `--nf-button-color` and `--nf-button-accent-color` in unlayered CSS on an ancestor of a `Button` that has no `color`
-- **THEN** that button uses the consumer's two values and no button outside that ancestor changes
+- **WHEN** a consumer sets `--nf-button-color`, `--nf-button-accent-color` and `--nf-button-shadow-color` in unlayered CSS on an ancestor of a `Button` that has no `color`
+- **THEN** that button uses the consumer's three values and no button outside that ancestor changes
 
 #### Scenario: Re-theme a colored button on the element
 
-- **WHEN** a consumer sets the same two properties through the `style` attribute of a `Button` that has a `color`
+- **WHEN** a consumer sets the same three properties through the `style` attribute of a `Button` that has a `color`
 - **THEN** that button uses the consumer's values, while the same properties set on an ancestor leave it in its `color` hue, because its `data-ui-color` rule declares them on the element
 
 #### Scenario: Re-theme by overriding a palette token
@@ -439,12 +445,17 @@ Prop types used by more than one component SHALL live in `src/types/`, exported 
 
 ### Requirement: Button appearance and interaction states
 
-`Button` SHALL render at `font-size: 1rem` with `padding-block: 8px`, `padding-inline: 16px`, `border-radius: 8px`, no border, and a `0px 4px 0px` box-shadow in `--nf-button-accent-color`, giving a raised appearance. On hover, and whenever focus is within it, it SHALL translate down by `2px` and reduce the shadow to `0px 2px 0px`; while active it SHALL translate down by `4px` and reduce the shadow to `0px 0px 0px`, so the button appears pressed flat. The sum of the translation and the shadow depth SHALL stay constant across the states, so the button's bottom edge does not move. Every property that changes between these states SHALL animate over `0.15s` with an `ease-in-out` timing function, except when the user has requested reduced motion, in which case the states SHALL apply instantly. On `:focus-visible` the button SHALL additionally draw a `2px` solid outline in `--nf-button-accent-color`, inset by its own width so that it reads as a border on the button rather than a ring around it. The button SHALL NOT apply the hover, focus or active movement while disabled.
+`Button` SHALL render at `font-size: 1rem` and `font-weight: 600` with `padding-block: 8px`, `padding-inline: 16px`, `border-radius: 8px`, no border, and a `0px 4px 0px` box-shadow in `--nf-button-shadow-color`, giving a raised appearance. Its label weight SHALL match `Accordion`'s summary, so the two controls read as the same control in different elements. On hover, and whenever focus is within it, it SHALL translate down by `2px` and reduce the shadow to `0px 2px 0px`; while active it SHALL translate down by `4px` and reduce the shadow to `0px 0px 0px`, so the button appears pressed flat. The sum of the translation and the shadow depth SHALL stay constant across the states, so the button's bottom edge does not move. Every property that changes between these states SHALL animate over `0.15s` with an `ease-in-out` timing function, except when the user has requested reduced motion, in which case the states SHALL apply instantly. On `:focus-visible` the button SHALL additionally draw a `2px` solid outline in `--nf-button-accent-color` — the text color, not the shadow color — inset by its own width so that it reads as a border on the button rather than a ring around it. The button SHALL NOT apply the hover, focus or active movement while disabled.
 
 #### Scenario: Resting state is raised
 
 - **WHEN** a reader looks at a `Button` that is neither hovered, focused nor pressed
-- **THEN** it shows no border and a 4px-deep solid shadow directly beneath it, in the same accent color as its text
+- **THEN** it shows no border and a 4px-deep solid shadow directly beneath it, in the hue of its text but one step lighter than the text under the dark scheme, and in the same color as the text under the light scheme
+
+#### Scenario: The label is semibold
+
+- **WHEN** the computed `font-weight` of a `Button` is inspected
+- **THEN** it is `600`, lighter than it was, and it equals the computed `font-weight` of an `Accordion`'s summary rendered beside it
 
 #### Scenario: Hover sinks the button halfway
 
@@ -464,7 +475,7 @@ Prop types used by more than one component SHALL live in `src/types/`, exported 
 #### Scenario: Keyboard focus draws an inset outline
 
 - **WHEN** a reader tabs to a `Button`
-- **THEN** it takes the hover appearance — down 2px with a 2px shadow — and a 2px outline in its accent color is drawn inside its edge, following its corner radius, without changing the button's size or position
+- **THEN** it takes the hover appearance — down 2px with a 2px shadow — and a 2px outline in its accent color, matching its label rather than its shadow, is drawn inside its edge, following its corner radius, without changing the button's size or position
 
 #### Scenario: Pointer focus does not draw the outline
 
@@ -548,22 +559,22 @@ The library SHALL export a component `Callout` at `astro-nosferatu/components/Ca
 
 ### Requirement: Callout color resolution
 
-`Callout`'s color SHALL be resolved through exactly five component-scoped custom properties, each spelling the component's full name: `--nf-callout-surface-color` for its background, `--nf-callout-accent-color` for the title, the icon and the body text, `--nf-callout-rule-color` for the separator between title and body, `--nf-callout-shadow-color` for the color of its drop shadow, and `--nf-callout-shadow` for the complete drop-shadow value. Each `data-ui-color` value SHALL set the first four from the palette with `light-dark()`, using the 25%-opacity tier for the surface (`--nf-<hue>-l-40-25` light, `--nf-<hue>-d-50-25` dark), for the rule (`--nf-<hue>-l-80-25` light, `--nf-<hue>-d-30-25` dark) and for the shadow color (`--nf-<hue>-l-70-25` light, `--nf-<hue>-d-90-25` dark), and the opaque palette for the accent (`--nf-<hue>-l-80` light, `--nf-<hue>-d-30` dark). Where any of those four is not defined for the element — no `data-ui-color` and no value inherited from an ancestor — every use of it SHALL fall back to the grey token of the same step and tier. The shadow's step SHALL pair with the surface's own step in each scheme — `l-40` with `l-70`, `d-50` with `d-90` — so the shadow is always a darker tint of the panel, and SHALL be translucent rather than opaque, so the page shows through it the way it shows through the surface. `--nf-callout-shadow` SHALL be composed once, for every hue and for the default, from `var(--nf-shadow-depth)` and the shadow color, so the depth comes from `shadows.css` and the color follows the scheme. No other palette token SHALL be referenced for the callout's own colors, and no semantic color token SHALL be introduced.
+`Callout`'s color SHALL be resolved through exactly five component-scoped custom properties, each spelling the component's full name: `--nf-callout-surface-color` for its background, `--nf-callout-accent-color` for the title, the icon and the body text, `--nf-callout-rule-color` for the separator between title and body, `--nf-callout-shadow-color` for the color of its drop shadow, and `--nf-callout-shadow` for the complete drop-shadow value. Each `data-ui-color` value SHALL set the first four from the palette with `light-dark()`, using the 25%-opacity tier for the surface (`--nf-<hue>-l-40-25` light, `--nf-<hue>-d-50-25` dark), for the rule (`--nf-<hue>-l-80-25` light, `--nf-<hue>-d-30-25` dark) and for the shadow color (`--nf-<hue>-l-70-25` light, `--nf-<hue>-d-80-25` dark), and the opaque palette for the accent (`--nf-<hue>-l-80` light, `--nf-<hue>-d-30` dark). Where any of those four is not defined for the element — no `data-ui-color` and no value inherited from an ancestor — every use of it SHALL fall back to the grey token of the same step and tier. The shadow SHALL be translucent rather than opaque, so the page shows through it the way it shows through the surface, and SHALL read as a darker tint of the panel in each scheme. `--nf-callout-shadow` SHALL be composed once, for every hue and for the default, from `var(--nf-shadow-depth)` and the shadow color, so the depth comes from `shadows.css` and the color follows the scheme. No other palette token SHALL be referenced for the callout's own colors, and no semantic color token SHALL be introduced.
 
 #### Scenario: Light appearance
 
 - **WHEN** the page resolves to a light color scheme and a `Callout` with `color="purple"` is inspected
 - **THEN** its computed background equals `--nf-purple-l-40-25`, its title, icon and body color equal `--nf-purple-l-80`, its rule color equals `--nf-purple-l-80-25`, and its shadow color equals `--nf-purple-l-70-25`
 
-#### Scenario: Shadow pairs with the surface step
-
-- **WHEN** a `Callout`'s surface and shadow steps are compared in each scheme
-- **THEN** a light panel's `l-40` surface is shadowed with `l-70`, and a dark panel's `d-50` surface is shadowed with `d-90`, both at 25% alpha
-
 #### Scenario: Dark appearance
 
 - **WHEN** the page resolves to a dark color scheme and the same `Callout` is inspected
-- **THEN** its computed background equals `--nf-purple-d-50-25`, its title, icon and body color equal `--nf-purple-d-30`, its rule color equals `--nf-purple-d-30-25`, and its shadow color equals `--nf-purple-d-90-25`
+- **THEN** its computed background equals `--nf-purple-d-50-25`, its title, icon and body color equal `--nf-purple-d-30`, its rule color equals `--nf-purple-d-30-25`, and its shadow color equals `--nf-purple-d-80-25`
+
+#### Scenario: Shadow pairs with the surface step
+
+- **WHEN** a `Callout`'s surface and shadow steps are compared in each scheme
+- **THEN** a light panel's `l-40` surface is shadowed with `l-70`, and a dark panel's `d-50` surface is shadowed with `d-80`, both at 25% alpha
 
 #### Scenario: Default appearance
 
@@ -696,7 +707,7 @@ The library SHALL export a component `Accordion` at `astro-nosferatu/components/
 
 ### Requirement: Accordion color resolution
 
-`Accordion`'s color SHALL be resolved through exactly two component-scoped custom properties, matching `Button`'s approach: `--nf-accordion-color`, which fills both the summary and the content panel, and `--nf-accordion-accent-color`, which supplies the summary's text and disclosure marker, the content's text, the summary's box-shadow and its focus outline. Each `data-ui-color` value SHALL set both properties from the palette with `light-dark()`, using `--nf-<hue>-l-40` (light) and `--nf-<hue>-d-50` (dark) for `--nf-accordion-color`, and `--nf-<hue>-l-80` (light) and `--nf-<hue>-d-90` (dark) for `--nf-accordion-accent-color`. Where neither property is defined for the element — no `data-ui-color` and no value inherited from an ancestor — every use of them SHALL fall back to the grey pairing of the same steps. No other palette token SHALL be referenced for the accordion's own colors, and no semantic color token SHALL be introduced.
+`Accordion`'s color SHALL be resolved through exactly three component-scoped custom properties, matching `Button`'s approach: `--nf-accordion-color`, which fills both the summary and the content panel, `--nf-accordion-accent-color`, which supplies the summary's text and disclosure marker, the content's text and the summary's focus outline, and `--nf-accordion-shadow-color`, which supplies the summary's box-shadow color alone. Each `data-ui-color` value SHALL set all three from the palette with `light-dark()`, using `--nf-<hue>-l-40` (light) and `--nf-<hue>-d-50` (dark) for `--nf-accordion-color`, `--nf-<hue>-l-80` (light) and `--nf-<hue>-d-90` (dark) for `--nf-accordion-accent-color`, and `--nf-<hue>-l-80` (light) and `--nf-<hue>-d-80` (dark) for `--nf-accordion-shadow-color`. Where a property is not defined for the element — no `data-ui-color` and no value inherited from an ancestor — every use of it SHALL fall back to the grey token of the same step in the same scheme. The accent and the shadow SHALL therefore resolve to the same value under the light scheme and to different values under the dark scheme, where the shadow is one step lighter than the text. No other palette token SHALL be referenced for the accordion's own colors, and no semantic color token SHALL be introduced.
 
 #### Scenario: Light appearance
 
@@ -706,12 +717,17 @@ The library SHALL export a component `Accordion` at `astro-nosferatu/components/
 #### Scenario: Dark appearance
 
 - **WHEN** the page resolves to a dark color scheme and the same `Accordion` is inspected
-- **THEN** both backgrounds equal `--nf-purple-d-50`, and the text and box-shadow color equal `--nf-purple-d-90`
+- **THEN** both backgrounds equal `--nf-purple-d-50`, the text of the summary and of the content equals `--nf-purple-d-90`, and the summary's box-shadow color equals `--nf-purple-d-80`
 
 #### Scenario: Default appearance
 
 - **WHEN** an `Accordion` with no `color` is inspected in a light and then a dark color scheme
-- **THEN** both backgrounds equal `--nf-grey-l-40` and the text and box-shadow color `--nf-grey-l-80` in light, and `--nf-grey-d-50` and `--nf-grey-d-90` in dark
+- **THEN** both backgrounds equal `--nf-grey-l-40` and the text and box-shadow color `--nf-grey-l-80` in light, and `--nf-grey-d-50`, `--nf-grey-d-90` and `--nf-grey-d-80` respectively in dark
+
+#### Scenario: The shadow is independent of the text
+
+- **WHEN** a consumer sets only `--nf-accordion-shadow-color` through the `style` attribute of an `Accordion`
+- **THEN** the summary's shadow takes the consumer's color while the summary text, the disclosure marker, the content text and the focus outline keep the color `--nf-accordion-accent-color` resolves to
 
 #### Scenario: Every hue is distinct
 
@@ -720,13 +736,13 @@ The library SHALL export a component `Accordion` at `astro-nosferatu/components/
 
 #### Scenario: Re-theme one accordion by overriding the component properties
 
-- **WHEN** a consumer sets `--nf-accordion-color` and `--nf-accordion-accent-color` on the `Accordion` element itself, through its `style` attribute
-- **THEN** that accordion uses the consumer's two values, for its summary and its content alike, and no other accordion on the page changes
+- **WHEN** a consumer sets `--nf-accordion-color`, `--nf-accordion-accent-color` and `--nf-accordion-shadow-color` on the `Accordion` element itself, through its `style` attribute
+- **THEN** that accordion uses the consumer's three values, for its summary and its content alike, and no other accordion on the page changes
 
 #### Scenario: An ancestor cannot supply the two properties
 
-- **WHEN** a consumer sets the same two properties on an ancestor of an `Accordion` with no `color` and of one with `color="green"`
-- **THEN** the uncolored accordion uses the consumer's values, and the green one keeps its hue, because the rule that matches its own `data-ui-color` declares both properties on the element, and a declaration on the element always beats an inherited value
+- **WHEN** a consumer sets the same three properties on an ancestor of an `Accordion` with no `color` and of one with `color="green"`
+- **THEN** the uncolored accordion uses the consumer's values, and the green one keeps its hue, because the rule that matches its own `data-ui-color` declares all three properties on the element, and a declaration on the element always beats an inherited value
 - **AND** the component's documentation tells consumers to set them on the element itself when the accordion has a `color`
 
 #### Scenario: Re-theme by overriding a palette token
@@ -736,14 +752,19 @@ The library SHALL export a component `Accordion` at `astro-nosferatu/components/
 
 ### Requirement: Accordion appearance and interaction states
 
-`Accordion`'s summary SHALL carry the same raised treatment as `Button`: `padding-block: 8px`, `padding-inline: 16px`, `border-radius: 8px`, no border, a fill of `--nf-accordion-color`, text in `--nf-accordion-accent-color`, and a `0px 4px 0px` box-shadow in `--nf-accordion-accent-color`. It SHALL keep the browser's own disclosure marker, which inherits the summary's color, and SHALL show a pointer cursor. On hover, and whenever focus is within it, the summary SHALL translate down by `2px` and reduce its shadow to `0px 2px 0px`; while `:active` it SHALL translate down by `4px` and reduce the shadow to `0px 0px 0px`. While the `<details>` is `[open]` the summary SHALL hold that pressed appearance — down `4px` with no shadow — regardless of hover, so an open panel reads as a button that stays pressed, and SHALL return to the raised resting appearance when the panel closes. The sum of the translation and the shadow depth SHALL stay constant across every state, so the summary's bottom edge does not move. On `:focus-visible` the summary SHALL additionally draw a `2px` solid outline in `--nf-accordion-accent-color`, inset by its own width so it reads as a border on the summary rather than a ring around it.
+`Accordion`'s summary SHALL carry the same raised treatment as `Button`: `padding-block: 8px`, `padding-inline: 16px`, `border-radius: 8px`, no border, a fill of `--nf-accordion-color`, text in `--nf-accordion-accent-color` at `font-weight: 600`, and a `0px 4px 0px` box-shadow in `--nf-accordion-shadow-color`. It SHALL keep the browser's own disclosure marker, which inherits the summary's color, and SHALL show a pointer cursor. On hover, and whenever focus is within it, the summary SHALL translate down by `2px` and reduce its shadow to `0px 2px 0px`; while `:active` it SHALL translate down by `4px` and reduce the shadow to `0px 0px 0px`. While the `<details>` is `[open]` the summary SHALL hold that pressed appearance — down `4px` with no shadow — regardless of hover, so an open panel reads as a button that stays pressed, and SHALL return to the raised resting appearance when the panel closes. The sum of the translation and the shadow depth SHALL stay constant across every state, so the summary's bottom edge does not move. On `:focus-visible` the summary SHALL additionally draw a `2px` solid outline in `--nf-accordion-accent-color` — the text color, not the shadow color — inset by its own width so it reads as a border on the summary rather than a ring around it.
 
 The content `<div>` SHALL carry the same `padding-block: 8px` and `padding-inline: 16px`, the same fill and the same text color as the summary, and no shadow of its own. Every property that changes between the states SHALL animate over `0.15s` with an `ease-in-out` timing function, except when the user has requested reduced motion, in which case each state SHALL be reached instantly while still looking exactly as described.
 
 #### Scenario: Resting state is raised
 
 - **WHEN** a reader looks at a closed `Accordion` that is neither hovered nor focused
-- **THEN** its summary shows no border and a 4px-deep solid shadow directly beneath it, in the same accent color as its text, and the content is not visible
+- **THEN** its summary shows no border and a 4px-deep solid shadow directly beneath it, in the hue of its text but one step lighter than the text under the dark scheme, and the content is not visible
+
+#### Scenario: The summary is semibold
+
+- **WHEN** the computed `font-weight` of an `Accordion`'s summary is inspected
+- **THEN** it is `600`, lighter than it was, and the content panel's text keeps whatever weight it inherits from the page
 
 #### Scenario: Hover sinks the summary halfway
 
@@ -763,7 +784,7 @@ The content `<div>` SHALL carry the same `padding-block: 8px` and `padding-inlin
 #### Scenario: Keyboard focus draws an inset outline
 
 - **WHEN** a reader tabs to an `Accordion`'s summary
-- **THEN** a 2px outline in the accent color is drawn inside the summary's edge, following its corner radius, without changing its size or position, and the summary takes the hover depth while it is closed and stays pressed while it is open
+- **THEN** a 2px outline in the accent color, matching the summary's text rather than its shadow, is drawn inside the summary's edge, following its corner radius, without changing its size or position, and the summary takes the hover depth while it is closed and stays pressed while it is open
 
 #### Scenario: Padding is the same on both parts
 
@@ -1000,9 +1021,9 @@ Within each palette file, a hue's tokens SHALL be written as two consecutive blo
 
 ### Requirement: Grey palette ramp
 
-The palette SHALL include a ninth hue, `grey`, that reads as a near-neutral greyscale. Its two scales SHALL share a hue angle of `277.5` and a chroma that rises with the step — `0, 0.002, 0.004, 0.007, 0.009, 0.011, 0.013, 0.016, 0.018, 0.02` for steps `10` through `100` — so the lightest greys are exactly neutral and the darkest carry a faint cool cast. The dark scale's lightness SHALL run `0.98, 0.93, 0.88, 0.83, 0.78, 0.70, 0.61, 0.51, 0.40, 0.29` and the light scale's `0.92, 0.85, 0.78, 0.71, 0.64, 0.57, 0.50, 0.43, 0.36, 0.29`, so both scales descend monotonically from light to dark like every other hue. `--nf-grey-d-10` SHALL be `oklch(0.98 0 277.5)`, the two-decimal OKLCH rounding of `#f9f9f9`, and `--nf-grey-d-100` and `--nf-grey-l-100` SHALL both be `oklch(0.29 0.02 277.5)`, the rounding of `#282A36` — the two anchors of the greyscale's main range.
+The palette SHALL include a ninth hue, `grey`, that reads as a near-neutral greyscale. Its two scales SHALL share a hue angle of `277.51` and a chroma that rises with the step through the main range — `0, 0.0022, 0.0044, 0.0077, 0.0099, 0.0122, 0.0144, 0.0177, 0.0199, 0.0221` for steps `10` through `100` — so the lightest greys are exactly neutral and the darkest carry a faint cool cast. The dark scale's lightness SHALL run `0.98, 0.93, 0.88, 0.83, 0.78, 0.70, 0.61, 0.51, 0.40, 0.2882` and the light scale's `0.92, 0.85, 0.78, 0.71, 0.64, 0.57, 0.50, 0.43, 0.36, 0.2882`, so both scales descend monotonically from light to dark like every other hue. `--nf-grey-d-10` SHALL be `oklch(0.98 0 277.51)`, the OKLCH rounding of `#f9f9f9`, and `--nf-grey-d-100` and `--nf-grey-l-100` SHALL both be `oklch(0.2882 0.0221 277.51)`, which is `#282A36` exactly rather than a rounding of it — the two anchors of the greyscale's main range.
 
-Below that anchor, both scales SHALL continue with steps `110` through `200`, identical on the two scales: lightness `0.27, 0.25, 0.23, 0.21, 0.19, 0.17, 0.15, 0.13, 0.11, 0.09` and chroma `0.019, 0.018, 0.017, 0.016, 0.015, 0.014, 0.013, 0.012, 0.011, 0.01`, at the same hue angle `277.5`. The extension SHALL keep descending monotonically, SHALL end at a near-black rather than pure black, and SHALL let the cool cast fade as the color darkens.
+Below that anchor, both scales SHALL continue with steps `110` through `200`, identical on the two scales: lightness `0.27, 0.25, 0.23, 0.21, 0.19, 0.17, 0.15, 0.13, 0.11, 0.09` and chroma `0.021, 0.0199, 0.0188, 0.0177, 0.0166, 0.0155, 0.0144, 0.0133, 0.0122, 0.0111`, at the same hue angle `277.51`. Chroma SHALL therefore peak at the `#282A36` anchor and taper on either side of it. The extension SHALL keep descending monotonically, SHALL end at a near-black rather than pure black, and SHALL let the cool cast fade as the color darkens.
 
 Grey SHALL receive the same 25%-opacity tier and the same shadow tokens as every other hue, at every one of its steps, and SHALL NOT receive any component rule, token name or default treatment the other hues do not have.
 
@@ -1011,10 +1032,15 @@ Grey SHALL receive the same 25%-opacity tier and the same shadow tokens as every
 - **WHEN** a reader compares a swatch of `--nf-grey-l-50` against `--nf-blue-l-50` at the same step
 - **THEN** the grey swatch reads as grey, with no identifiable hue, while the blue is plainly blue
 
+#### Scenario: The dark anchor is exact
+
+- **WHEN** `--nf-grey-d-100` and `--nf-grey-l-100` are rendered as swatches and sampled with a color picker
+- **THEN** both read `#282A36` with no channel off by even one 8-bit step, because the token is the full-precision OKLCH of that color rather than a two-decimal rounding of it
+
 #### Scenario: The anchors land where specified
 
 - **WHEN** `--nf-grey-d-10` and `--nf-grey-l-100` are rendered as swatches and sampled
-- **THEN** the first is the near-white `#f9f9f9` and the second the dark `#282A36`, each within one 8-bit channel step of the source color, the difference coming from the palette's two-decimal precision
+- **THEN** the first is the near-white `#f9f9f9` to within one 8-bit channel step, the difference coming from that step's two-decimal lightness, and the second is the dark `#282A36` with no channel off at all
 
 #### Scenario: Both grey scales descend without a flat run
 
@@ -1024,12 +1050,17 @@ Grey SHALL receive the same 25%-opacity tier and the same shadow tokens as every
 #### Scenario: The extension continues from the shared anchor
 
 - **WHEN** a consumer reads `--nf-grey-d-110` and `--nf-grey-l-110`
-- **THEN** both are `oklch(0.27 0.019 277.5)`, a step darker than `--nf-grey-d-100` and `--nf-grey-l-100`
+- **THEN** both are `oklch(0.27 0.021 277.51)`, a step darker than `--nf-grey-d-100` and `--nf-grey-l-100`
 
 #### Scenario: The darkest grey is near-black, not black
 
 - **WHEN** `--nf-grey-d-200` is rendered as a swatch next to `#000`
-- **THEN** it is `oklch(0.09 0.01 277.5)` and still reads as a separate, very dark grey
+- **THEN** it is `oklch(0.09 0.0111 277.51)` and still reads as a separate, very dark grey
+
+#### Scenario: The two scales share everything from the anchor down
+
+- **WHEN** the declarations for steps `100` through `200` in `colors-dark.css` and `colors-light.css` are compared token by token
+- **THEN** each `--nf-grey-d-<step>` has the identical OKLCH value to the `--nf-grey-l-<step>` of the same step, opaque and 25% tiers alike
 
 #### Scenario: Extended steps behave like any other step
 

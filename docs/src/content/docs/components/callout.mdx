@@ -166,7 +166,7 @@ The icon inherits the title's color, so an SVG drawn in `currentColor` needs not
 
 Each hue is declared once with `light-dark()`. The surface is the palette's 25% tier — `--nf-<hue>-l-40-25` in light, `--nf-<hue>-d-50-25` in dark — so the page shows through the panel in both schemes.
 
-The rule and the drop shadow use that same 25% tier. The rule follows the accent (`--nf-<hue>-l-80-25` in light, `--nf-<hue>-d-30-25` in dark), while the shadow pairs with the **surface's** own step — `l-40` surface, `l-80` shadow in light; `d-50` surface, `d-90` shadow in dark — so it always reads as a darker edge of the panel rather than a second copy of the text color.
+The rule and the drop shadow use that same 25% tier. The rule follows the accent (`--nf-<hue>-l-80-25` in light, `--nf-<hue>-d-30-25` in dark), while the shadow pairs with the **surface's** own step — `l-40` surface, `l-70` shadow in light; `d-50` surface, `d-80` shadow in dark — so it always reads as a darker edge of the panel rather than a second copy of the text color.
 
 That is why the accent pairing differs from `Button`'s. A button sits on an opaque fill that is light in both schemes, so it can use a dark accent in both (`l-80` / `d-90`). A callout's surface is translucent: in dark mode the panel reads dark, so the accent flips to a **light** step — `--nf-<hue>-l-80` in light, `--nf-<hue>-d-30` in dark.
 
@@ -237,19 +237,19 @@ A callout that has a `color` ignores those inherited values: its `[data-ui-color
 
 The same inheritance reaches a callout with no `color` nested inside a colored one: it takes the outer callout's hue. Pass `color="grey"` to keep it grey.
 
-Overriding a palette token instead re-themes every callout using that hue. A callout resolves seven tokens per hue — surface, accent, rule tint and shadow tint in each scheme, with light's rule and shadow sharing `l-80-25` — so override the ones you need:
+Overriding a palette token instead re-themes every callout using that hue. A callout resolves eight tokens per hue — surface, accent, rule tint and shadow tint in each scheme — so override the ones you need:
 
-<div class="not-content demo demo--stack" style="--nf-red-l-40-25: var(--nf-yellow-l-40-25); --nf-red-l-80: var(--nf-yellow-l-80); --nf-red-l-80-25: var(--nf-yellow-l-80-25); --nf-red-d-50-25: var(--nf-yellow-d-50-25); --nf-red-d-30: var(--nf-yellow-d-30); --nf-red-d-30-25: var(--nf-yellow-d-30-25); --nf-red-d-90-25: var(--nf-yellow-d-90-25);">
+<div class="not-content demo demo--stack" style="--nf-red-l-40-25: var(--nf-yellow-l-40-25); --nf-red-l-80: var(--nf-yellow-l-80); --nf-red-l-80-25: var(--nf-yellow-l-80-25); --nf-red-l-70-25: var(--nf-yellow-l-70-25); --nf-red-d-50-25: var(--nf-yellow-d-50-25); --nf-red-d-30: var(--nf-yellow-d-30); --nf-red-d-30-25: var(--nf-yellow-d-30-25); --nf-red-d-80-25: var(--nf-yellow-d-80-25);">
 	<Callout color="red" title='Still color="red"' icon={em(ColorFilter)}>Only the palette tokens moved.</Callout>
 </div>
 
 ```astro
-<div style="--nf-red-l-40-25: var(--nf-yellow-l-40-25); --nf-red-l-80: var(--nf-yellow-l-80); --nf-red-l-80-25: var(--nf-yellow-l-80-25); --nf-red-d-50-25: var(--nf-yellow-d-50-25); --nf-red-d-30: var(--nf-yellow-d-30); --nf-red-d-30-25: var(--nf-yellow-d-30-25); --nf-red-d-90-25: var(--nf-yellow-d-90-25);">
+<div style="--nf-red-l-40-25: var(--nf-yellow-l-40-25); --nf-red-l-80: var(--nf-yellow-l-80); --nf-red-l-80-25: var(--nf-yellow-l-80-25); --nf-red-l-70-25: var(--nf-yellow-l-70-25); --nf-red-d-50-25: var(--nf-yellow-d-50-25); --nf-red-d-30: var(--nf-yellow-d-30); --nf-red-d-30-25: var(--nf-yellow-d-30-25); --nf-red-d-80-25: var(--nf-yellow-d-80-25);">
 	<Callout color="red" title='Still color="red"'>Only the palette tokens moved.</Callout>
 </div>
 ```
 
-The drop shadow's depth comes from [`shadows.css`](/styles/#shadows): `--nf-callout-shadow` is composed once as `var(--nf-shadow-depth) var(--nf-callout-shadow-color)`, so the offsets are the library's shared `0px 4px 0px` and the color is a 25% tint one step below the surface — translucent, like the surface, rather than a hard opaque bar. Load the library through `index.css` — or through `tokens.css`, which imports the shadows — and the depth is there; pick the token groups one by one, taking `colors/index.css`, `spacings.css` and `borders.css` but not `shadows.css`, and the panel keeps its surface, accent, rule, padding and corners but draws no shadow.
+The drop shadow's depth comes from [`shadows.css`](/styles/#shadows): `--nf-callout-shadow` is composed once as `var(--nf-shadow-depth) var(--nf-callout-shadow-color)`, so the offsets are the library's shared `0px 4px 0px` and the color is a 25% tint a few steps darker than the surface — translucent, like the surface, rather than a hard opaque bar. Load the library through `index.css` — or through `tokens.css`, which imports the shadows — and the depth is there; pick the token groups one by one, taking `colors/index.css`, `spacings.css` and `borders.css` but not `shadows.css`, and the panel keeps its surface, accent, rule, padding and corners but draws no shadow.
 
 A callout has no interactive states — it is static content, so hovering, clicking or tabbing through it changes nothing, and nothing about it animates.
 

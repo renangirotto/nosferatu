@@ -44,6 +44,10 @@ const {
 				var(--nf-blue-l-80),
 				var(--nf-blue-d-90)
 			);
+			--nf-accordion-shadow-color: light-dark(
+				var(--nf-blue-l-80),
+				var(--nf-blue-d-80)
+			);
 		}
 
 		&[data-ui-color="cyan"] {
@@ -54,6 +58,10 @@ const {
 			--nf-accordion-accent-color: light-dark(
 				var(--nf-cyan-l-80),
 				var(--nf-cyan-d-90)
+			);
+			--nf-accordion-shadow-color: light-dark(
+				var(--nf-cyan-l-80),
+				var(--nf-cyan-d-80)
 			);
 		}
 
@@ -66,6 +74,10 @@ const {
 				var(--nf-green-l-80),
 				var(--nf-green-d-90)
 			);
+			--nf-accordion-shadow-color: light-dark(
+				var(--nf-green-l-80),
+				var(--nf-green-d-80)
+			);
 		}
 
 		&[data-ui-color="grey"] {
@@ -76,6 +88,10 @@ const {
 			--nf-accordion-accent-color: light-dark(
 				var(--nf-grey-l-80),
 				var(--nf-grey-d-90)
+			);
+			--nf-accordion-shadow-color: light-dark(
+				var(--nf-grey-l-80),
+				var(--nf-grey-d-80)
 			);
 		}
 
@@ -88,6 +104,10 @@ const {
 				var(--nf-orange-l-80),
 				var(--nf-orange-d-90)
 			);
+			--nf-accordion-shadow-color: light-dark(
+				var(--nf-orange-l-80),
+				var(--nf-orange-d-80)
+			);
 		}
 
 		&[data-ui-color="pink"] {
@@ -98,6 +118,10 @@ const {
 			--nf-accordion-accent-color: light-dark(
 				var(--nf-pink-l-80),
 				var(--nf-pink-d-90)
+			);
+			--nf-accordion-shadow-color: light-dark(
+				var(--nf-pink-l-80),
+				var(--nf-pink-d-80)
 			);
 		}
 
@@ -110,6 +134,10 @@ const {
 				var(--nf-purple-l-80),
 				var(--nf-purple-d-90)
 			);
+			--nf-accordion-shadow-color: light-dark(
+				var(--nf-purple-l-80),
+				var(--nf-purple-d-80)
+			);
 		}
 
 		&[data-ui-color="red"] {
@@ -117,6 +145,10 @@ const {
 			--nf-accordion-accent-color: light-dark(
 				var(--nf-red-l-80),
 				var(--nf-red-d-90)
+			);
+			--nf-accordion-shadow-color: light-dark(
+				var(--nf-red-l-80),
+				var(--nf-red-d-80)
 			);
 		}
 
@@ -128,6 +160,10 @@ const {
 			--nf-accordion-accent-color: light-dark(
 				var(--nf-yellow-l-80),
 				var(--nf-yellow-d-90)
+			);
+			--nf-accordion-shadow-color: light-dark(
+				var(--nf-yellow-l-80),
+				var(--nf-yellow-d-80)
 			);
 		}
 	}
@@ -142,15 +178,15 @@ const {
 			--nf-accordion-accent-color,
 			light-dark(var(--nf-grey-l-80), var(--nf-grey-d-90))
 		);
-		font-weight: 700;
+		font-weight: 600;
 		background-color: var(
 			--nf-accordion-color,
 			light-dark(var(--nf-grey-l-40), var(--nf-grey-d-50))
 		);
 		box-shadow: 0px var(--nf-accordion-depth) 0px
 			var(
-				--nf-accordion-accent-color,
-				light-dark(var(--nf-grey-l-80), var(--nf-grey-d-90))
+				--nf-accordion-shadow-color,
+				light-dark(var(--nf-grey-l-80), var(--nf-grey-d-80))
 			);
 		translate: 0 var(--nf-accordion-lift);
 		cursor: pointer;
