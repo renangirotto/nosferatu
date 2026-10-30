@@ -29,7 +29,21 @@
     "src"
   ],
   "peerDependencies": {
+    "@fontsource-variable/geist-mono": "^5.3.0",
+    "@fontsource-variable/outfit": "^5.3.0",
+    "@fontsource-variable/plus-jakarta-sans": "^5.3.0",
     "astro": "^7.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@fontsource-variable/geist-mono": {
+      "optional": true
+    },
+    "@fontsource-variable/outfit": {
+      "optional": true
+    },
+    "@fontsource-variable/plus-jakarta-sans": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "astro": "^7.4.1"

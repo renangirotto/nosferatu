@@ -1,4 +1,20 @@
 :root {
+  /*
+   * Base fonts. The library names the families and never loads them: a
+   * consumer installs the matching Fontsource package (or supplies the font
+   * itself) and each stack falls through to a system font when they do not.
+   * The variable family name comes first, then the static one, so either
+   * @fontsource-variable/* or @fontsource/* works.
+   */
+  --nf-font-family:
+    "Outfit Variable", "Outfit", system-ui, -apple-system, sans-serif;
+  --nf-font-family-blog-post:
+    "Plus Jakarta Sans Variable", "Plus Jakarta Sans", system-ui, -apple-system,
+    sans-serif;
+  --nf-font-family-code-blog-post:
+    "Geist Mono Variable", "Geist Mono", ui-monospace, monospace;
+  --nf-font-weight: 400;
+
   /* Viewport interpolation */
   --nf-typography-viewport-min: 560px;
   --nf-typography-viewport-max: 1088px;
@@ -55,6 +71,16 @@
           var(--nf-typography-font-size-base-min)
       )
   );
+}
+
+/*
+ * The one element the library gives a font to; everything else inherits.
+ * This sits outside the @supports guard below, which is about progress() and
+ * not about fonts: a browser without it still gets the typeface.
+ */
+body {
+  font-family: var(--nf-font-family);
+  font-weight: var(--nf-font-weight);
 }
 
 /*

@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@astrojs/starlight": "^0.42.6",
+    "@fontsource-variable/geist-mono": "^5.3.0",
     "@fontsource-variable/outfit": "^5.3.0",
+    "@fontsource-variable/plus-jakarta-sans": "^5.3.0",
     "astro": "^7.4.1",
     "astro-nosferatu": "workspace:*",
     "iconoir": "^7.12.1"

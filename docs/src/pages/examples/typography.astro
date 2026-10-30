@@ -8,6 +8,15 @@
  * heading rules win. Here the library's layers are the only ones present, so
  * the type scale is what a plain consuming page actually sees.
  */
+/*
+ * The fonts are the consumer's to load: the library only names them. Importing
+ * the three Fontsource packages here is exactly the opt-in a consuming project
+ * makes, and it is what makes the font readout below show a real typeface
+ * rather than a system fallback.
+ */
+import '@fontsource-variable/outfit';
+import '@fontsource-variable/plus-jakarta-sans';
+import '@fontsource-variable/geist-mono';
 import 'astro-nosferatu/styles/index.css';
 
 const rows = [
@@ -84,6 +93,24 @@ const rows = [
 				<p>
 					Viewport width: <strong data-viewport-width>—</strong>
 				</p>
+
+				<h2>Computed font</h2>
+				<p>
+					<code>body</code> is the one element the library gives a font to;
+					everything on this page inherits it.
+				</p>
+				<table>
+					<tbody>
+						<tr>
+							<td><code>font-family</code></td>
+							<td data-computed-font-family>—</td>
+						</tr>
+						<tr>
+							<td><code>font-weight</code></td>
+							<td data-computed-font-weight>—</td>
+						</tr>
+					</tbody>
+				</table>
 			</section>
 		</main>
 
@@ -99,6 +126,12 @@ const rows = [
 				});
 				const width = document.querySelector('[data-viewport-width]');
 				if (width) width.textContent = `${window.innerWidth}px`;
+
+				const bodyStyle = getComputedStyle(document.body);
+				const family = document.querySelector('[data-computed-font-family]');
+				if (family) family.textContent = bodyStyle.fontFamily;
+				const weight = document.querySelector('[data-computed-font-weight]');
+				if (weight) weight.textContent = bodyStyle.fontWeight;
 			};
 
 			report();

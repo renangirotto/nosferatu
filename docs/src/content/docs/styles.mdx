@@ -23,9 +23,9 @@ It includes, in order:
 | `colors/colors-light.css` | Every `-l-` token on `:root` — the light-mode scale, opaque and 25% opacity |
 | `shadows.css` | `--nf-shadow-*` box-shadow values on `:root`, one per palette color, plus `--nf-shadow-depth` |
 | `reset.css` | box-sizing, margin reset, `color-scheme`, `100dvh` body container, media and form-control defaults, text wrapping |
-| `typography.css` | `--nf-typography-*` custom properties on `:root`, and a fluid `font-size` on `h1`, `h2`, `h3` and `p` |
+| `typography.css` | `--nf-typography-*` and `--nf-font-*` custom properties on `:root`, a fluid `font-size` on `h1`, `h2`, `h3` and `p`, and the font family and weight of `body` |
 
-`typography.css` is the only file besides the reset that touches your own elements: loading `index.css` sizes your `h1`, `h2`, `h3` and `p`. It sizes nothing else — `a`, `h4`–`h6`, lists, blockquotes and code keep the browser's own sizes — and it sets no font family, weight, color, line-height or margin on anything. See [Typography](#typography) for the full property list and how to opt out.
+`typography.css` is the only file besides the reset that touches your own elements: loading `index.css` sizes your `h1`, `h2`, `h3` and `p`, and sets the font family and weight of your `body`, which everything else inherits. It sizes nothing else — `a`, `h4`–`h6`, lists, blockquotes and code keep the browser's own sizes — and it sets no color, line-height or margin on anything. See [Typography](#typography) for the full property list, [Fonts](#fonts) for the three typefaces, and both for how to opt out.
 
 ## Cascade layers
 
@@ -93,7 +93,7 @@ Every value the library uses is a custom property prefixed with `--nf-`:
 | Group | Tokens |
 |---|---|
 | Spacing | `--nf-space-1` (0.25rem), `--nf-space-2`, `--nf-space-3`, `--nf-space-4`, `--nf-space-6`, `--nf-space-8` (2rem) |
-| Font family | `--nf-font-body`, `--nf-font-heading`, `--nf-font-mono` |
+| Font family | `--nf-font-body`, `--nf-font-heading`, `--nf-font-mono` — each defers to a [base font](#fonts), with the system stack as its fallback |
 | Font size | `--nf-font-size-sm`, `-md`, `-lg`, `-xl`, `-2xl`, `-3xl` |
 | Font weight | `--nf-font-weight-normal`, `-medium`, `-bold` |
 | Line height | `--nf-line-height-body`, `--nf-line-height-heading` |
@@ -262,9 +262,9 @@ import 'astro-nosferatu/styles/typography.css';
 ---
 ```
 
-It is the one library stylesheet besides the reset that styles your own markup, and it sets `font-size` only — no family, weight, color, line-height or margin. `a` is deliberately left out, so a link inside a heading renders at the heading's size instead of shrinking to body size. `h4`, `h5` and `h6` are left alone too.
+It is the one library stylesheet besides the reset that styles your own markup. On those four elements it sets `font-size` and nothing else — no color, line-height or margin — and it additionally sets the font family and weight of `body`, which is covered under [Fonts](#fonts) below. `a` is deliberately left out of the scale, so a link inside a heading renders at the heading's size instead of shrinking to body size. `h4`, `h5` and `h6` are left alone too.
 
-[**See it live →**](/examples/typography/) — a standalone page that loads the library's styles and nothing else, reporting the viewport width and each element's computed size as you resize.
+[**See it live →**](/examples/typography/) — a standalone page that loads the library's styles and nothing else, reporting the viewport width, each element's computed size as you resize, and the computed font of `body`.
 
 ### Properties
 
@@ -326,7 +326,7 @@ To opt one element out of the scale entirely, set its resolved property to a con
 
 ### Opting out completely
 
-`typography.css` only arrives with `index.css`. Import the other four files individually to get everything else and keep your own text styling:
+`typography.css` only arrives with `index.css`, and it carries both the type scale and the [font properties](#fonts). Import the other four files individually to get everything else and keep your own text styling:
 
 ```astro
 ---
@@ -346,6 +346,57 @@ It relies on the CSS [`progress()`](https://developer.mozilla.org/en-US/docs/Web
 :::note[Why the headings on this page are not fluid]
 These docs are a Starlight site, and Starlight declares its own cascade layers *after* importing the library. Later-declared layers win, so Starlight's heading rules outrank `nosferatu.typography` here — only the paragraphs on this page are sized by the scale. That is ordinary layer precedence rather than a defect, and it is why the demo lives on [its own page](/examples/typography/). The same happens in your project if you declare layers after loading `index.css`.
 :::
+
+## Fonts
+
+The library uses three typefaces, each with a job:
+
+| Property | Default | Where it applies |
+|---|---|---|
+| `--nf-font-family` | `'Outfit Variable', 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif` | `body` — the whole page, by inheritance |
+| `--nf-font-family-blog-post` | `'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif` | `p`, `strong`, `span` and `a` inside [BlogArticle](/layouts/blog-article/) |
+| `--nf-font-family-code-blog-post` | `'Geist Mono Variable', 'Geist Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace` | `code` and `pre` inside [BlogArticle](/layouts/blog-article/) |
+| `--nf-font-weight` | `400` | `body`, and `BlogArticle`'s paragraphs |
+
+All four are declared on `:root` by `typography.css`.
+
+:::caution[The library names these fonts. It does not load them.]
+No font file ships in the package, there is no `@font-face` rule anywhere in it, and nothing is ever requested from a font host. **Install nothing and every stack falls through to the system font it ends with** — the same rendering you had before, with no failed request.
+:::
+
+### Opting in
+
+Install the families you want — they are optional peer dependencies, so your package manager never pulls them in by itself — and import them in your project:
+
+```sh
+npm install @fontsource-variable/outfit @fontsource-variable/plus-jakarta-sans @fontsource-variable/geist-mono
+```
+
+```astro
+---
+import '@fontsource-variable/outfit';
+import '@fontsource-variable/plus-jakarta-sans';
+import '@fontsource-variable/geist-mono';
+import 'astro-nosferatu/styles/index.css';
+---
+```
+
+Each stack names the variable family first and the static one second, so `@fontsource/outfit` works just as well as `@fontsource-variable/outfit`; the variable build wins when both are installed. This site does exactly the above, which is why you are reading it in Outfit and its code samples in Geist Mono.
+
+### Using your own font
+
+Override the property in unlayered CSS — there is no element rule to rewrite:
+
+```css
+/* your stylesheet, unlayered */
+:root {
+	--nf-font-family: 'Inter Variable', system-ui, sans-serif;
+}
+```
+
+`--nf-font-body` and `--nf-font-heading` follow `--nf-font-family`, and `--nf-font-mono` follows `--nf-font-family-code-blog-post`, so one override moves the tokens components read too.
+
+To keep the library's sizing but none of its fonts, set the three family properties to your own stacks. To drop both, import the other four stylesheets individually instead of `index.css`, as under [Opting out completely](#opting-out-completely) — the font properties arrive with `typography.css`.
 
 ## Theming
 

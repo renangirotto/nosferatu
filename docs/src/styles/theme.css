@@ -1,5 +1,11 @@
+/*
+ * The site takes its fonts from the library's properties rather than naming a
+ * family itself — the docs are a consumer following the opt-in path: install
+ * the Fontsource packages (see astro.config.mjs), then point the theme here.
+ */
 :root {
-  --sl-font: "Outfit Variable";
+  --sl-font: var(--nf-font-family);
+  --sl-font-mono: var(--nf-font-family-code-blog-post);
   --ec-uiFontFml: var(--sl-font-system);
 }
 
