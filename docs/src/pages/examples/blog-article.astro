@@ -36,4 +36,18 @@ import BlogArticle from 'astro-nosferatu/layouts/BlogArticle.astro';
 		<li>The page description metadata is the <code>description</code> prop.</li>
 		<li>Nothing else is added around them.</li>
 	</ul>
+	<h2>Three fonts, three jobs</h2>
+	<p>
+		This paragraph is set in Plus Jakarta Sans at weight 400, and so is
+		<strong>this emphasis</strong>, which stays bolder than the text around
+		it, and <a href="/styles/">this link</a>. The heading above it is in
+		Outfit, the page's general font, because headings inherit from
+		<code>body</code> instead of taking the article font.
+	</p>
+	<pre><code>const font = 'Geist Mono'; // a code block renders in it too</code></pre>
+	<p>
+		None of this is loaded by the library: the docs site installs the three
+		Fontsource packages itself. Without them every stack falls back to a
+		system font.
+	</p>
 </BlogArticle>

@@ -76,9 +76,36 @@ In a real build you will also see Astro's own scope on these elements (an `astro
 
 ## Styling
 
-The layout styles exactly one thing: the **size** of the text it renders. `h1`–`h4` and the paragraph are sized from a type scale that interpolates with the viewport width — between `560px` and `1088px` the base size grows from `1rem` to `1.125rem` and the scale ratio from `1.2` to `1.414`, clamping at both ends. Outside font size it writes nothing: no spacing, no color, no measure, no font family. Those are yours.
+The layout styles two things: the **size** of its text and the **font** it is set in. `h1`–`h4` and the paragraph are sized from a type scale that interpolates with the viewport width — between `560px` and `1088px` the base size grows from `1rem` to `1.125rem` and the scale ratio from `1.2` to `1.414`, clamping at both ends. Outside size and font it writes nothing: no spacing, no color, no measure. Those are yours.
 
-`.nf-layout-blog-article` is the hook for everything else:
+### The article's fonts
+
+| Elements | Property | Default |
+| --- | --- | --- |
+| `p`, `strong`, `span`, `a` | `--nf-layout-blog-article-font-family` | [`--nf-font-family-blog-post`](/styles/#fonts) — Plus Jakarta Sans |
+| `p` | `--nf-layout-blog-article-font-weight` | [`--nf-font-weight`](/styles/#fonts) — `400` |
+| `code`, `pre` | `--nf-layout-blog-article-font-family-code` | [`--nf-font-family-code-blog-post`](/styles/#fonts) — Geist Mono |
+
+Three details are deliberate:
+
+- **Headings are left out.** They inherit the page's general font from `body`, so an article reads as Outfit for its structure and Plus Jakarta Sans for its prose.
+- **`strong` gets the family but not the weight.** Applying `400` to it would un-bold every emphasis in the article, so it keeps the browser's own heavier weight.
+- **`pre` is styled as well as `code`**, because a fenced block is `<pre><code>` and `pre` carries the browser's own monospace, which would otherwise beat inheritance.
+
+All of this applies to the markup you pass into the default slot just as much as to the heading and description the layout renders itself — the rules are rooted at `.nf-layout-blog-article`, and the body of an article *is* slot content. Nothing outside that root is touched.
+
+As everywhere else in the library, the fonts are **named, not loaded**: install the [Fontsource packages](/styles/#opting-in) to get them, or let each stack fall through to a system font.
+
+```css
+/* A serif article on an otherwise sans-serif site */
+.nf-layout-blog-article {
+	--nf-layout-blog-article-font-family: 'Lora Variable', Georgia, serif;
+}
+```
+
+### Everything else
+
+`.nf-layout-blog-article` is the hook for everything the layout leaves alone:
 
 ```css
 .nf-layout-blog-article {
@@ -100,9 +127,9 @@ Everything the library's **stylesheets** ship sits in the `nosferatu` cascade la
 The two scales are not the same, so the same element renders at different sizes inside and outside the article: at a `1200px` viewport the layout's `h1` is `50.9px` while the global scale's is `56px`. Headings in your site header or sidebar, outside `.nf-layout-blog-article`, get the global scale; everything inside the article gets the properties below.
 :::
 
-### Re-tuning the type scale
+### Every property the layout exposes
 
-Set these on `.nf-layout-blog-article` to re-tune the scale in one place, instead of overriding each heading rule:
+Set these on `.nf-layout-blog-article` to re-tune the scale and the fonts in one place, instead of overriding each rule:
 
 | Property | Default | What it controls |
 | --- | --- | --- |
@@ -118,6 +145,9 @@ Set these on `.nf-layout-blog-article` to re-tune the scale in one place, instea
 | `--nf-layout-blog-article-font-size-h3` | `base * ratio²` | `h3` size. |
 | `--nf-layout-blog-article-font-size-h4` | `base * ratio^1.5` | `h4` size. |
 | `--nf-layout-blog-article-font-size-p` | `base` | Paragraph size. |
+| `--nf-layout-blog-article-font-family` | `var(--nf-font-family-blog-post)` | Font of `p`, `strong`, `span` and `a`. |
+| `--nf-layout-blog-article-font-family-code` | `var(--nf-font-family-code-blog-post)` | Font of `code` and `pre`. |
+| `--nf-layout-blog-article-font-weight` | `var(--nf-font-weight)` | Weight of the article's paragraphs. |
 
 ```css
 /* Bigger body text, gentler jump between heading levels */

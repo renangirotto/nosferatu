@@ -78,6 +78,17 @@ const { title, description, lang = "en", imageSocialMedia } = Astro.props;
       --nf-layout-blog-article-font-size-base
     );
 
+    /*
+     * The article's own fonts, defaulting to the library's. Going through a
+     * layout-scoped property is what lets a consumer re-tune one article
+     * without moving the page's general font.
+     */
+    --nf-layout-blog-article-font-family: var(--nf-font-family-blog-post);
+    --nf-layout-blog-article-font-family-code: var(
+      --nf-font-family-code-blog-post
+    );
+    --nf-layout-blog-article-font-weight: var(--nf-font-weight);
+
     h1 {
       font-size: var(--nf-layout-blog-article-font-size-h1);
     }
@@ -96,6 +107,29 @@ const { title, description, lang = "en", imageSocialMedia } = Astro.props;
 
     p {
       font-size: var(--nf-layout-blog-article-font-size-p);
+      font-family: var(--nf-layout-blog-article-font-family);
+      font-weight: var(--nf-layout-blog-article-font-weight);
+    }
+
+    /*
+     * Family only: a weight here would un-bold every <strong> in the article.
+     * Headings are deliberately left out — they inherit the page's general
+     * font, so an article reads as Outfit for structure and the article font
+     * for prose.
+     */
+    strong,
+    span,
+    a {
+      font-family: var(--nf-layout-blog-article-font-family);
+    }
+
+    /*
+     * A fenced code block is <pre><code>, and <pre> carries the UA's own
+     * monospace, which beats inheritance — so both need the rule.
+     */
+    code,
+    pre {
+      font-family: var(--nf-layout-blog-article-font-family-code);
     }
   }
 </style>

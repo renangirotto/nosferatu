@@ -101,7 +101,7 @@ The documentation site SHALL document `Accordion` on its own page, rendering it 
 - **THEN** `summary` is listed as a required `string` that is not forwarded as an attribute, `color` as an optional palette hue whose default is grey with no `data-ui-color` attribute rendered, the default slot is described as the disclosed content, and the page states that all other native `<details>` attributes pass through
 
 ### Requirement: Layout pages document markup, props, slots and styling
-The documentation site SHALL document each layout the library publishes on its own page, reachable from the sidebar under a layouts group. Because a layout renders a whole document and therefore cannot be embedded inside a documentation page, the page SHALL instead show the layout's import line, a copyable usage example, the exact markup the layout produces, a props table giving each prop's type, whether it is required and its default, and a description of each slot. The page SHALL link to a standalone example page on the docs site that is built with the layout, so a reader can see it rendered for real. Where a layout delegates its document skeleton or its head metadata to a published html file, the page SHALL say so and link to that file's page instead of repeating its metadata list. The page SHALL state accurately what the layout styles and what it leaves to the consumer, and where the layout ships styles it SHALL list every custom property a consumer can override, with that property's default, together with runnable code for overriding them and for overriding the layout from unlayered CSS.
+The documentation site SHALL document each layout the library publishes on its own page, reachable from the sidebar under a layouts group. Because a layout renders a whole document and therefore cannot be embedded inside a documentation page, the page SHALL instead show the layout's import line, a copyable usage example, the exact markup the layout produces, a props table giving each prop's type, whether it is required and its default, and a description of each slot. The page SHALL link to a standalone example page on the docs site that is built with the layout, so a reader can see it rendered for real. Where a layout delegates its document skeleton or its head metadata to a published html file, the page SHALL say so and link to that file's page instead of repeating its metadata list. The page SHALL state accurately what the layout styles and what it leaves to the consumer, and where the layout ships styles it SHALL list every custom property a consumer can override, with that property's default, together with runnable code for overriding them and for overriding the layout from unlayered CSS. Where a layout styles the content passed into a slot, the page SHALL say so, rather than describing the styling as limited to the markup the layout renders itself.
 
 #### Scenario: BlogArticle page
 - **WHEN** a reader opens the BlogArticle page of the docs site
@@ -118,15 +118,20 @@ The documentation site SHALL document each layout the library publishes on its o
 #### Scenario: A real rendered example exists
 - **WHEN** a reader follows the example link on the BlogArticle page
 - **THEN** a standalone page of the docs site, built with the layout, opens and shows the heading, the description paragraph and the article body outside the Starlight documentation chrome
+- **AND** that page's prose renders in Plus Jakarta Sans, its code in Geist Mono and its headings in Outfit, because the docs site installs the font packages
 
 #### Scenario: The styling section describes what the layout really does
 - **WHEN** a reader looks at the BlogArticle page's styling section
-- **THEN** it states that the layout sizes its headings and paragraphs from a fluid type scale and styles nothing else, names `.nf-layout-blog-article` as the hook to target, and shows how a consumer styles it from its own unlayered CSS
-- **AND** it does not claim that the layout ships no styles
+- **THEN** it states that the layout sizes its headings and paragraphs from a fluid type scale, sets its prose in the article font and its code in the code font, and styles nothing else, names `.nf-layout-blog-article` as the hook to target, and shows how a consumer styles it from its own unlayered CSS
+- **AND** it does not claim that the layout ships no styles or sets no font
+
+#### Scenario: The article's fonts are documented
+- **WHEN** a reader looks for which elements the article font reaches
+- **THEN** the page states that `p`, `strong`, `span` and `a` take the article font at weight `400`, that `code` and `pre` take the code font, that headings keep the page's general font, and that all of it applies to slot content as well as to the heading and description the layout renders
 
 #### Scenario: The theming properties are listed
-- **WHEN** a reader looks for how to re-tune the BlogArticle type scale
-- **THEN** the page lists every `--nf-layout-blog-article-*` property with its default value and shows a runnable override example, so a reader never has to read the layout's source to discover them
+- **WHEN** a reader looks for how to re-tune the BlogArticle type scale or its fonts
+- **THEN** the page lists every `--nf-layout-blog-article-*` property with its default value, including the two font-family properties and the font-weight property, and shows a runnable override example, so a reader never has to read the layout's source to discover them
 
 #### Scenario: The layout is reachable in the sidebar
 - **WHEN** a reader browses the docs site's sidebar
@@ -153,7 +158,9 @@ The documentation site SHALL document each document-structure file the library p
 - **THEN** an HTML group lists the BaseHtml and BaseHead pages, and following either opens that page
 
 ### Requirement: Stylesheets are documented
-The documentation site's styles page SHALL list every stylesheet the library exports, including `shadows.css` and `typography.css`, with its import path and what it defines. Where a stylesheet applies rules to a consumer's own elements rather than only defining custom properties, the page SHALL say so plainly, name the cascade layer it occupies, list every custom property a consumer can override together with that property's default, and show how to load the rest of the library without it. The page SHALL NOT claim the library leaves all text to the consumer.
+The documentation site's styles page SHALL list every stylesheet the library exports, including `shadows.css` and `typography.css`, with its import path and what it defines. Where a stylesheet applies rules to a consumer's own elements rather than only defining custom properties, the page SHALL say so plainly, name the cascade layer it occupies, list every custom property a consumer can override together with that property's default, and show how to load the rest of the library without it. The page SHALL NOT claim the library leaves all text to the consumer, and SHALL NOT claim the library sets no font family or weight.
+
+The page SHALL document the library's three base fonts as an opt-in: it SHALL name the three family properties and the weight property with their defaults, state which text each one reaches, show the install and import lines for the Fontsource packages, and state plainly that the library ships no font file and that a project which installs nothing renders in the system fonts the stacks end with.
 
 Because the documentation site is itself a consumer whose own cascade layers outrank the library's, a stylesheet whose effect the site's own CSS overrides SHALL be demonstrated on a standalone example page that loads the library's styles without the site's, rather than inline in the documentation page. The styles page SHALL link to that page, and SHALL state that the site's own layers are why the effect is not visible in the surrounding documentation.
 
@@ -167,8 +174,21 @@ Because the documentation site is itself a consumer whose own cascade layers out
 
 #### Scenario: The page says which elements are styled
 - **WHEN** a reader looks at the styles page's typography section
-- **THEN** it states that importing `index.css` sizes `h1`, `h2`, `h3` and `p` on their own page, and that `a` and `h4`–`h6` are left alone
-- **AND** no sentence anywhere on the page still says the library styles no headings or paragraphs
+- **THEN** it states that importing `index.css` sizes `h1`, `h2`, `h3` and `p` on their own page and sets the font family and weight of `body`, and that `a` and `h4`–`h6` are left alone
+- **AND** no sentence anywhere on the page still says the library styles no headings or paragraphs, or that it sets no font family
+
+#### Scenario: The three fonts are documented with their jobs
+- **WHEN** a reader looks for what font the library uses
+- **THEN** the page lists `--nf-font-family` (Outfit, the page's general text), `--nf-font-family-blog-post` (Plus Jakarta Sans, `BlogArticle` prose), `--nf-font-family-code-blog-post` (Geist Mono, `BlogArticle` code) and `--nf-font-weight` (`400`), each with the full stack it ships
+
+#### Scenario: Opting in is shown as runnable code
+- **WHEN** a reader wants the actual fonts
+- **THEN** the page shows the package manager line installing `@fontsource-variable/outfit`, `@fontsource-variable/plus-jakarta-sans` and `@fontsource-variable/geist-mono`, and the import lines that load them in a consumer's own layout or config
+- **AND** it states that the library ships no font file, loads nothing on the reader's behalf, and falls back to the system stacks when the packages are absent
+
+#### Scenario: Substituting a font is documented
+- **WHEN** a reader wants a different font
+- **THEN** the page shows setting `--nf-font-family` on `:root` in unlayered CSS and explains that `--nf-font-body` and `--nf-font-heading` follow it
 
 #### Scenario: Every typography property is documented with its default
 - **WHEN** a reader looks for the knobs on the type scale
@@ -194,12 +214,13 @@ Because the documentation site is itself a consumer whose own cascade layers out
 - **AND** it shows how to opt one element out of the scale entirely by setting its resolved `--nf-typography-font-size-*` property to a constant
 
 #### Scenario: Opting out is documented
-- **WHEN** a reader does not want the library sizing their text
-- **THEN** the page shows importing `tokens.css`, `colors/index.css`, `shadows.css` and `reset.css` individually in place of `index.css`, and notes that files imported on their own are not layered
+- **WHEN** a reader does not want the library sizing their text or setting their font
+- **THEN** the page shows importing `tokens.css`, `colors/index.css`, `shadows.css` and `reset.css` individually in place of `index.css`, notes that files imported on their own are not layered, and states that the font properties come with `typography.css`
 
 #### Scenario: The browser-support caveat is stated
 - **WHEN** a reader looks at the typography section
 - **THEN** it states that the scale relies on the CSS `progress()` function, that browsers without it fall back to their own heading and paragraph sizes, and that the scale is therefore progressive enhancement rather than a guaranteed appearance
+
 ### Requirement: Docs are never published
 The documentation site SHALL be marked private so it cannot be published to a registry.
 
@@ -266,20 +287,24 @@ In its dark theme, the documentation site SHALL take the following colors from t
 - **WHEN** a maintainer runs `pnpm pack:check` after this change
 - **THEN** the listed tarball contents are identical to before the change
 
-### Requirement: Docs text uses the Outfit font
-In both its light and dark themes, the documentation site SHALL set its body and interface text — paragraphs, headings, sidebar, top bar, table of contents and search — in the Outfit font, served by the site itself rather than from a third-party font host. Code SHALL NOT use Outfit: inline code and fenced code blocks, including a code block's frame title and copy-button label, SHALL keep the fonts they had before this change. The library itself SHALL NOT load or name any font to support this.
+### Requirement: Docs text uses the library's base fonts
+In both its light and dark themes, the documentation site SHALL set its body and interface text — paragraphs, headings, sidebar, top bar, table of contents and search — in the library's general font, and its code — inline code and fenced code blocks — in the library's code font, served by the site itself rather than from a third-party font host. The site SHALL take both from the library's font properties rather than naming a family of its own, so that the docs demonstrate the opt-in path a consumer follows: it installs the Fontsource packages, imports them, and feeds its own theme from `--nf-font-family` and `--nf-font-family-code-blog-post`. The library SHALL still load no font on the site's behalf.
 
 #### Scenario: Plain text is in Outfit
 - **WHEN** a reader inspects a body paragraph, a heading, a sidebar link and a table-of-contents link, in either theme
 - **THEN** each one's rendered font is `Outfit Variable`
 
 #### Scenario: Code is not in Outfit
-- **WHEN** a reader inspects inline code, the code inside a fenced code block, and a code block's frame title
-- **THEN** none of them renders in Outfit; inline and block code use the monospace font, and the frame title uses the system UI font
+- **WHEN** a reader inspects inline code and the code inside a fenced code block
+- **THEN** each renders in `Geist Mono Variable`, and no code renders in Outfit
+
+#### Scenario: The theme reads the library's properties
+- **WHEN** the docs site's own theme stylesheet is inspected
+- **THEN** its font variables are defined from `var(--nf-font-family)` and `var(--nf-font-family-code-blog-post)`, and no font family name is written literally in the site's CSS
 
 #### Scenario: Font is self-hosted
 - **WHEN** a reader loads a documentation page with the browser's network panel open
-- **THEN** the Outfit font file is requested from the docs site's own origin, and no request goes to a font CDN
+- **THEN** the font files are requested from the docs site's own origin, and no request goes to a font CDN
 
 ### Requirement: Color-variant pages document the unset default
 On the page of every component that accepts a `color` prop, the documentation site SHALL state that omitting `color` renders the component in grey with no `data-ui-color` attribute, that `color="grey"` looks the same but carries the attribute, and SHALL list the prop's default in the props table as grey (unset) rather than as a hue the component writes into its markup.

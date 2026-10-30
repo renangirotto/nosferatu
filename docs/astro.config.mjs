@@ -14,7 +14,15 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'astro-nosferatu',
-			customCss: ['@fontsource-variable/outfit', 'astro-nosferatu/styles/index.css', './src/styles/theme.css'],
+			// The font packages come first: the library only names the families,
+			// so the @font-face rules have to be loaded before anything uses them.
+			customCss: [
+				'@fontsource-variable/outfit',
+				'@fontsource-variable/plus-jakarta-sans',
+				'@fontsource-variable/geist-mono',
+				'astro-nosferatu/styles/index.css',
+				'./src/styles/theme.css',
+			],
 			expressiveCode: {
 				themes: ['dracula', 'starlight-light'],
 			},
