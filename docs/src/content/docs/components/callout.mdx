@@ -249,7 +249,7 @@ Overriding a palette token instead re-themes every callout using that hue. A cal
 </div>
 ```
 
-The drop shadow's depth comes from [`shadows.css`](/styles/#shadows): `--nf-callout-shadow` is composed once as `var(--nf-shadow-depth) var(--nf-callout-shadow-color)`, so the offsets are the library's shared `0px 4px 0px` and the color is a 25% tint one step below the surface — translucent, like the surface, rather than a hard opaque bar. Load the library through `index.css` and the depth is there; load `tokens.css` and `colors/index.css` on their own, without `shadows.css`, and the panel keeps its surface, accent and rule but draws no shadow.
+The drop shadow's depth comes from [`shadows.css`](/styles/#shadows): `--nf-callout-shadow` is composed once as `var(--nf-shadow-depth) var(--nf-callout-shadow-color)`, so the offsets are the library's shared `0px 4px 0px` and the color is a 25% tint one step below the surface — translucent, like the surface, rather than a hard opaque bar. Load the library through `index.css` — or through `tokens.css`, which imports the shadows — and the depth is there; pick the token groups one by one, taking `colors/index.css`, `spacings.css` and `borders.css` but not `shadows.css`, and the panel keeps its surface, accent, rule, padding and corners but draws no shadow.
 
 A callout has no interactive states — it is static content, so hovering, clicking or tabbing through it changes nothing, and nothing about it animates.
 

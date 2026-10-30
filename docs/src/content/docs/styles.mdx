@@ -17,27 +17,33 @@ It includes, in order:
 
 | File                      | What it contains                                                                                                                                              |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tokens.css`              | `--nf-*` custom properties on `:root` (spacing, fonts, radius)                                                                                                |
+| `tokens.css`              | Every token the library publishes, as four imports — it declares nothing itself                                                                               |
 | `colors/index.css`        | The color palette, which is a folder: it imports the two files below and declares nothing itself                                                              |
 | `colors/colors-dark.css`  | Every `-d-` token on `:root` — the dark-mode scale, opaque and 25% opacity                                                                                    |
 | `colors/colors-light.css` | Every `-l-` token on `:root` — the light-mode scale, opaque and 25% opacity                                                                                   |
 | `shadows.css`             | `--nf-shadow-*` box-shadow values on `:root`, one per palette color, plus `--nf-shadow-depth`                                                                 |
+| `spacings.css`            | `--nf-spacing-*` on `:root` — the spacing scale, in `px`                                                                                                      |
+| `borders.css`             | `--nf-border-radius-*` on `:root` — the corner radii, in `px`                                                                                                 |
 | `reset.css`               | box-sizing, margin reset, `color-scheme`, `100dvh` body container, media and form-control defaults, text wrapping                                             |
 | `typography.css`          | `--nf-typography-*` and `--nf-font-*` custom properties on `:root`, a fluid `font-size` on `h1`, `h2`, `h3` and `p`, and the font family and weight of `body` |
+
+`tokens.css` is the aggregate: importing it is the same as importing `colors/index.css`, `shadows.css`, `spacings.css` and `borders.css`, and it declares no property of its own. The typographic properties are **not** part of it — `--nf-font-family`, `--nf-font-weight` and the `--nf-typography-*` scale come with `typography.css`, which also owns the element rules that use them.
 
 `typography.css` is the only file besides the reset that touches your own elements: loading `index.css` sizes your `h1`, `h2`, `h3` and `p`, and sets the font family and weight of your `body`, which everything else inherits. It sizes nothing else — `a`, `h4`–`h6`, lists, blockquotes and code keep the browser's own sizes — and it sets no color, line-height or margin on anything. See [Typography](#typography) for the full property list, [Fonts](#fonts) for the three typefaces, and both for how to opt out.
 
 ## Cascade layers
 
-`index.css` puts every file in its own cascade layer:
+`index.css` declares three cascade layers:
 
 ```css
-@layer nosferatu.tokens, nosferatu.colors, nosferatu.shadows, nosferatu.reset, nosferatu.typography;
+@layer nosferatu.tokens, nosferatu.reset, nosferatu.typography;
 ```
 
 ```
-nosferatu.tokens < nosferatu.colors < nosferatu.shadows < nosferatu.reset < nosferatu.typography < your unlayered CSS
+nosferatu.tokens < nosferatu.reset < nosferatu.typography < your unlayered CSS
 ```
+
+The palette and the shadows sit inside `nosferatu.tokens`: they arrive through `tokens.css`, which `index.css` imports into that one layer. There is no `nosferatu.colors` and no `nosferatu.shadows` — if you want your own overrides inside the library's layer order rather than unlayered, `@layer nosferatu.tokens { … }` is the layer to target.
 
 Any CSS you write outside a layer wins over the library, whatever its specificity. No `!important` needed:
 
@@ -48,7 +54,7 @@ h1 {
 }
 ```
 
-Tokens and colors are layered too, so an unlayered `:root { --nf-… }` override wins whether it loads before or after `index.css`.
+The tokens are layered too, so an unlayered `:root { --nf-… }` override wins whether it loads before or after `index.css`.
 
 ## Import single files
 
@@ -57,8 +63,18 @@ Each file can be imported on its own, for example to keep your own reset:
 ```astro
 ---
 import 'astro-nosferatu/styles/tokens.css';
+import 'astro-nosferatu/styles/typography.css';
+---
+```
+
+Or take one token group and leave the rest — `tokens.css` is a convenience, and each group it imports stands on its own:
+
+```astro
+---
 import 'astro-nosferatu/styles/colors/index.css';
 import 'astro-nosferatu/styles/shadows.css';
+import 'astro-nosferatu/styles/spacings.css';
+import 'astro-nosferatu/styles/borders.css';
 ---
 ```
 
@@ -86,18 +102,78 @@ import 'astro-nosferatu/styles/colors/index.css';
 No token was renamed or revalued, so nothing else in your CSS changes. If you load `astro-nosferatu/styles/index.css`, there is nothing to do.
 :::
 
+:::note[Renamed and removed in this release]
+`tokens.css` no longer declares anything itself, and the spacing, radius and font ladders it used to hold are gone. Rename what you use:
+
+| Removed            | Was       | Use instead                     | Value  |
+| ------------------ | --------- | ------------------------------- | ------ |
+| `--nf-space-1`     | `0.25rem` | `--nf-spacing-base-low-3`       | `4px`  |
+| `--nf-space-2`     | `0.5rem`  | `--nf-spacing-base-low-2`       | `8px`  |
+| `--nf-space-3`     | `0.75rem` | `--nf-spacing-base-low-1`       | `12px` |
+| `--nf-space-4`     | `1rem`    | `--nf-spacing-base`             | `16px` |
+| `--nf-space-6`     | `1.5rem`  | `--nf-spacing-base-up-2`        | `24px` |
+| `--nf-space-8`     | `2rem`    | `--nf-spacing-base-up-4`        | `32px` |
+| `--nf-radius-sm`   | `0.25rem` | `--nf-border-radius-base-low-1` | `4px`  |
+| `--nf-radius-md`   | `0.5rem`  | `--nf-border-radius-base`       | `8px`  |
+| `--nf-radius-full` | `9999px`  | nothing — write the value       | —      |
+
+The new values are `px` where the old ones were `rem`. They are the same size at the default root font size and differ if you changed it; override a step to get a scaling value back.
+
+The font tokens are gone too. `--nf-font-body` and `--nf-font-heading` were `--nf-font-family` with a fallback, and `--nf-font-mono` was `--nf-font-family-code-blog-post` with one — use those two properties, which come from `typography.css` and are still [the single place to substitute a font](#fonts). The rest have no replacement; write the value they held:
+
+- `--nf-font-size-sm`, `-md`, `-lg`, `-xl`, `-2xl`, `-3xl` → `0.875rem`, `1rem`, `1.25rem`, `1.5rem`, `2rem`, `2.5rem`, or the fluid [`--nf-typography-font-size-*`](#typography) properties for document text
+- `--nf-font-weight-normal`, `-medium`, `-bold` → `400`, `500`, `700`
+- `--nf-line-height-body`, `--nf-line-height-heading` → `1.6`, `1.2`
+
+Finally, the `nosferatu.colors` and `nosferatu.shadows` layers no longer exist. If you wrote `@layer nosferatu.colors { … }`, target `@layer nosferatu.tokens` instead — that is now the one layer holding every token.
+:::
+
 ## Tokens
 
-Every value the library uses is a custom property prefixed with `--nf-`:
+Every value the library uses is a custom property prefixed with `--nf-`, and every one of them is grouped in the stylesheet that defines it:
 
-| Group       | Tokens                                                                                                                                |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| Spacing     | `--nf-space-1` (0.25rem), `--nf-space-2`, `--nf-space-3`, `--nf-space-4`, `--nf-space-6`, `--nf-space-8` (2rem)                       |
-| Font family | `--nf-font-body`, `--nf-font-heading`, `--nf-font-mono` — each defers to a [base font](#fonts), with the system stack as its fallback |
-| Font size   | `--nf-font-size-sm`, `-md`, `-lg`, `-xl`, `-2xl`, `-3xl`                                                                              |
-| Font weight | `--nf-font-weight-normal`, `-medium`, `-bold`                                                                                         |
-| Line height | `--nf-line-height-body`, `--nf-line-height-heading`                                                                                   |
-| Radius      | `--nf-radius-sm`, `--nf-radius-md`, `--nf-radius-full`                                                                                |
+| Group         | File               | Tokens                                                                                                          |
+| ------------- | ------------------ | --------------------------------------------------------------------------------------------------------------- |
+| Spacing       | `spacings.css`     | `--nf-spacing-*`, [below](#spacing)                                                                             |
+| Border radius | `borders.css`      | `--nf-border-radius-*`, [below](#border-radius)                                                                 |
+| Color         | `colors/index.css` | `--nf-<hue>-<d\|l>-<step>`, see [Colors](#colors)                                                               |
+| Shadow        | `shadows.css`      | `--nf-shadow-*`, see [Shadows](#shadows)                                                                        |
+| Typography    | `typography.css`   | `--nf-font-family*`, `--nf-font-weight`, `--nf-typography-*`, see [Typography](#typography) and [Fonts](#fonts) |
+
+### Spacing
+
+Space between and inside elements — `margin`, `padding`, `gap` and the like. The scale is named by distance from a `16px` base:
+
+| Token                     | Value  |
+| ------------------------- | ------ |
+| `--nf-spacing-none`       | `0px`  |
+| `--nf-spacing-base-low-4` | `2px`  |
+| `--nf-spacing-base-low-3` | `4px`  |
+| `--nf-spacing-base-low-2` | `8px`  |
+| `--nf-spacing-base-low-1` | `12px` |
+| `--nf-spacing-base`       | `16px` |
+| `--nf-spacing-base-up-1`  | `20px` |
+| `--nf-spacing-base-up-2`  | `24px` |
+| `--nf-spacing-base-up-3`  | `28px` |
+| `--nf-spacing-base-up-4`  | `32px` |
+
+### Border radius
+
+Corner radii, and nothing else: the library publishes no token for a border's width, style or color.
+
+| Token                           | Value  |
+| ------------------------------- | ------ |
+| `--nf-border-radius-base-low-1` | `4px`  |
+| `--nf-border-radius-base`       | `8px`  |
+| `--nf-border-radius-base-up-1`  | `12px` |
+
+Both scales are absolute `px`, not `rem`. They are geometry, so they stay put when a reader — or your own CSS — changes the root font size; only type scales with it. Override a step on `:root` in unlayered CSS if you want different spacing, including a value that does scale:
+
+```css
+:root {
+	--nf-spacing-base: 1.25rem;
+}
+```
 
 ## Colors
 
@@ -326,13 +402,11 @@ To opt one element out of the scale entirely, set its resolved property to a con
 
 ### Opting out completely
 
-`typography.css` only arrives with `index.css`, and it carries both the type scale and the [font properties](#fonts). Import the other four files individually to get everything else and keep your own text styling:
+`typography.css` only arrives with `index.css`, and it carries both the type scale and the [font properties](#fonts). Import the other two files individually to get everything else and keep your own text styling:
 
 ```astro
 ---
 import 'astro-nosferatu/styles/tokens.css';
-import 'astro-nosferatu/styles/colors/index.css';
-import 'astro-nosferatu/styles/shadows.css';
 import 'astro-nosferatu/styles/reset.css';
 ---
 ```
@@ -394,9 +468,9 @@ Override the property in unlayered CSS — there is no element rule to rewrite:
 }
 ```
 
-`--nf-font-body` and `--nf-font-heading` follow `--nf-font-family`, and `--nf-font-mono` follows `--nf-font-family-code-blog-post`, so one override moves the tokens components read too.
+`--nf-font-family` is the only property for the page's general text: `body` takes it, everything inside inherits it, and the library's own components read it directly, so one override moves all three.
 
-To keep the library's sizing but none of its fonts, set the three family properties to your own stacks. To drop both, import the other four stylesheets individually instead of `index.css`, as under [Opting out completely](#opting-out-completely) — the font properties arrive with `typography.css`.
+To keep the library's sizing but none of its fonts, set the three family properties to your own stacks. To drop both, import `tokens.css` and `reset.css` individually instead of `index.css`, as under [Opting out completely](#opting-out-completely) — the font properties arrive with `typography.css`.
 
 ## Theming
 
@@ -406,7 +480,8 @@ Override tokens after loading the styles to re-theme the library, including comp
 :root {
 	--nf-red-l-80: var(--nf-purple-l-80);
 	--nf-red-l-90: var(--nf-purple-l-90);
-	--nf-font-body: 'Inter', sans-serif;
+	--nf-font-family: 'Inter', sans-serif;
+	--nf-spacing-base: 20px;
 }
 ```
 

@@ -1,0 +1,12 @@
+/*
+ * Border tokens. Named for the property family, holding radii only: the
+ * library has no opinion on border width, style or color, so a component that
+ * draws a border states the width itself and takes the color from the palette.
+ *
+ * Absolute px, like the spacing scale — a corner is geometry, not type.
+ */
+:root {
+	--nf-border-radius-base-low-1: 4px;
+	--nf-border-radius-base: 8px;
+	--nf-border-radius-base-up-1: 12px;
+}

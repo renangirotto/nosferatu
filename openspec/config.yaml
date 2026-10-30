@@ -26,14 +26,19 @@ context: |
   Invariants (from openspec/specs — violating one is a bug, not a tradeoff):
     1. Every CSS custom property is `--nf-` prefixed.
     2. No semantic color tokens. Never define or use `--nf-color-*`. Colors come
-       only from the palette in colors.css, named `--nf-<hue>-<d|l>-<step>`
-       (8 hues x dark/light x steps 10..100 in tens = 160 tokens, OKLCH).
-    3. Cascade layer order is fixed in index.css: nosferatu.tokens, nosferatu.colors,
-       nosferatu.reset, nosferatu.base, nosferatu.typography. Unlayered consumer CSS
+       only from the palette in colors/, named `--nf-<hue>-<d|l>-<step>`
+       (8 hues x dark/light x steps 10..100 in tens = 160 tokens, OKLCH). Space comes
+       only from `--nf-spacing-*` (spacings.css) and corners only from
+       `--nf-border-radius-*` (borders.css), both absolute px.
+    3. Cascade layer order is fixed in index.css: nosferatu.tokens, nosferatu.reset,
+       nosferatu.typography. Every token group reaches nosferatu.tokens through
+       tokens.css, which is only @imports. Unlayered consumer CSS
        must keep winning over all library CSS — never raise specificity to force an override.
     4. Each stylesheet is independently importable; index.css includes all of them.
-    5. Components are self-styled: scoped <style> only, design values exclusively
-       through var(--nf-*), and no selector may reach outside the component's own markup.
+    5. Components are self-styled: scoped <style> only, every value that has a token
+       taken from it through var(--nf-*), a value with no token inline or in a
+       component-scoped --nf-<component>-* property, and no selector may reach
+       outside the component's own markup.
     6. Public import paths only: astro-nosferatu/components/<Name>.astro and
        astro-nosferatu/styles/<name>.css. Docs import by package name, never by
        relative path into packages/ui/src.
