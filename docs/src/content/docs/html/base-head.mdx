@@ -64,11 +64,11 @@ The two image tags are rendered **only** when `imageSocialMedia` is set. Everyth
 
 ## Props
 
-| Prop | Type | Required | Default | What it does |
-| --- | --- | --- | --- | --- |
-| `title` | `string` | Yes | — | The document `<title>`, the `title` meta, `og:title` and `twitter:title`. |
-| `description` | `string` | Yes | — | The `description` meta, `og:description` and `twitter:description`. |
-| `imageSocialMedia` | `string` | No | — | The sharing image, rendered as `og:image` and `twitter:image`. A relative path such as `/og/nosferatu.png` is resolved to an absolute URL; omit the prop and neither tag is rendered. |
+| Prop               | Type     | Required | Default | What it does                                                                                                                                                                          |
+| ------------------ | -------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`            | `string` | Yes      | —       | The document `<title>`, the `title` meta, `og:title` and `twitter:title`.                                                                                                             |
+| `description`      | `string` | Yes      | —       | The `description` meta, `og:description` and `twitter:description`.                                                                                                                   |
+| `imageSocialMedia` | `string` | No       | —       | The sharing image, rendered as `og:image` and `twitter:image`. A relative path such as `/og/nosferatu.png` is resolved to an absolute URL; omit the prop and neither tag is rendered. |
 
 `astro check` reports a missing `title` or `description` as a type error rather than rendering an empty tag.
 
@@ -89,11 +89,11 @@ If your project has no `site` configured, `BaseHead` falls back to the current p
 
 Three values are deliberately not props:
 
-| Fixed | Value |
-| --- | --- |
-| Favicon | `/favicon.svg`, as `<link rel="icon" type="image/svg+xml">` |
-| Open Graph type | `website` |
-| Twitter card | `summary_large_image` |
+| Fixed           | Value                                                       |
+| --------------- | ----------------------------------------------------------- |
+| Favicon         | `/favicon.svg`, as `<link rel="icon" type="image/svg+xml">` |
+| Open Graph type | `website`                                                   |
+| Twitter card    | `summary_large_image`                                       |
 
 A page that needs something else — another favicon, `og:type="article"`, an RSS link, a `theme-color`, structured data — adds it through `BaseHtml`'s `head` slot, next to `BaseHead`:
 

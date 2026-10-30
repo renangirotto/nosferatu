@@ -3,164 +3,176 @@ import type { HTMLAttributes } from "astro/types";
 import type { ColorPalette } from "../types/components";
 
 interface Props extends HTMLAttributes<"button"> {
-  color?: ColorPalette;
+	color?: ColorPalette;
 }
 
 const {
-  color,
-  type = "button",
-  class: className,
-  "data-ui-color": _controlled,
-  ...attrs
+	color,
+	type = "button",
+	class: className,
+	"data-ui-color": _controlled,
+	...attrs
 } = Astro.props;
 ---
 
 <button
-  {...attrs}
-  type={type}
-  data-ui-color={color}
-  class:list={["nf-button", className]}
+	{...attrs}
+	type={type}
+	data-ui-color={color}
+	class:list={["nf-button", className]}
 >
-  <slot />
+	<slot />
 </button>
 
 <style>
-  .nf-button {
-    --nf-button-depth: 4px;
-    --nf-button-lift: 0px;
-    --nf-button-border-width: 2px;
-    --nf-button-transition-duration: 0.15s;
+	.nf-button {
+		--nf-button-depth: 4px;
+		--nf-button-lift: 0px;
+		--nf-button-border-width: 2px;
+		--nf-button-transition-duration: 0.15s;
 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--nf-space-2);
-    padding-block: var(--nf-space-2);
-    padding-inline: var(--nf-space-4);
-    border: none;
-    border-radius: var(--nf-radius-md);
-    color: var(--nf-button-accent-color, light-dark(var(--nf-grey-l-80), var(--nf-grey-d-90)));
-    font-family: var(--nf-font-body);
-    font-weight: 700;
-    background-color: var(--nf-button-color, light-dark(var(--nf-grey-l-40), var(--nf-grey-d-50)));
-    box-shadow: 0px var(--nf-button-depth) 0px
-      var(--nf-button-accent-color, light-dark(var(--nf-grey-l-80), var(--nf-grey-d-90)));
-    translate: 0 var(--nf-button-lift);
-    cursor: pointer;
-    transition-property:
-      translate, box-shadow, background-color, color, border-color;
-    transition-duration: var(--nf-button-transition-duration);
-    transition-timing-function: ease-in-out;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: var(--nf-space-2);
+		padding-block: var(--nf-space-2);
+		padding-inline: var(--nf-space-4);
+		border: none;
+		border-radius: var(--nf-radius-md);
+		color: var(
+			--nf-button-accent-color,
+			light-dark(var(--nf-grey-l-80), var(--nf-grey-d-90))
+		);
+		font-family: var(--nf-font-body);
+		font-weight: 700;
+		background-color: var(
+			--nf-button-color,
+			light-dark(var(--nf-grey-l-40), var(--nf-grey-d-50))
+		);
+		box-shadow: 0px var(--nf-button-depth) 0px
+			var(
+				--nf-button-accent-color,
+				light-dark(var(--nf-grey-l-80), var(--nf-grey-d-90))
+			);
+		translate: 0 var(--nf-button-lift);
+		cursor: pointer;
+		transition-property:
+			translate, box-shadow, background-color, color, border-color;
+		transition-duration: var(--nf-button-transition-duration);
+		transition-timing-function: ease-in-out;
 
-    &[data-ui-color="blue"] {
-      --nf-button-color: light-dark(var(--nf-blue-l-40), var(--nf-blue-d-50));
-      --nf-button-accent-color: light-dark(
-        var(--nf-blue-l-80),
-        var(--nf-blue-d-90)
-      );
-    }
+		&[data-ui-color="blue"] {
+			--nf-button-color: light-dark(var(--nf-blue-l-40), var(--nf-blue-d-50));
+			--nf-button-accent-color: light-dark(
+				var(--nf-blue-l-80),
+				var(--nf-blue-d-90)
+			);
+		}
 
-    &[data-ui-color="cyan"] {
-      --nf-button-color: light-dark(var(--nf-cyan-l-40), var(--nf-cyan-d-50));
-      --nf-button-accent-color: light-dark(
-        var(--nf-cyan-l-80),
-        var(--nf-cyan-d-90)
-      );
-    }
+		&[data-ui-color="cyan"] {
+			--nf-button-color: light-dark(var(--nf-cyan-l-40), var(--nf-cyan-d-50));
+			--nf-button-accent-color: light-dark(
+				var(--nf-cyan-l-80),
+				var(--nf-cyan-d-90)
+			);
+		}
 
-    &[data-ui-color="green"] {
-      --nf-button-color: light-dark(var(--nf-green-l-40), var(--nf-green-d-50));
-      --nf-button-accent-color: light-dark(
-        var(--nf-green-l-80),
-        var(--nf-green-d-90)
-      );
-    }
+		&[data-ui-color="green"] {
+			--nf-button-color: light-dark(var(--nf-green-l-40), var(--nf-green-d-50));
+			--nf-button-accent-color: light-dark(
+				var(--nf-green-l-80),
+				var(--nf-green-d-90)
+			);
+		}
 
-    &[data-ui-color="grey"] {
-      --nf-button-color: light-dark(var(--nf-grey-l-40), var(--nf-grey-d-50));
-      --nf-button-accent-color: light-dark(
-        var(--nf-grey-l-80),
-        var(--nf-grey-d-90)
-      );
-    }
+		&[data-ui-color="grey"] {
+			--nf-button-color: light-dark(var(--nf-grey-l-40), var(--nf-grey-d-50));
+			--nf-button-accent-color: light-dark(
+				var(--nf-grey-l-80),
+				var(--nf-grey-d-90)
+			);
+		}
 
-    &[data-ui-color="orange"] {
-      --nf-button-color: light-dark(
-        var(--nf-orange-l-40),
-        var(--nf-orange-d-50)
-      );
-      --nf-button-accent-color: light-dark(
-        var(--nf-orange-l-80),
-        var(--nf-orange-d-90)
-      );
-    }
+		&[data-ui-color="orange"] {
+			--nf-button-color: light-dark(
+				var(--nf-orange-l-40),
+				var(--nf-orange-d-50)
+			);
+			--nf-button-accent-color: light-dark(
+				var(--nf-orange-l-80),
+				var(--nf-orange-d-90)
+			);
+		}
 
-    &[data-ui-color="pink"] {
-      --nf-button-color: light-dark(var(--nf-pink-l-40), var(--nf-pink-d-50));
-      --nf-button-accent-color: light-dark(
-        var(--nf-pink-l-80),
-        var(--nf-pink-d-90)
-      );
-    }
+		&[data-ui-color="pink"] {
+			--nf-button-color: light-dark(var(--nf-pink-l-40), var(--nf-pink-d-50));
+			--nf-button-accent-color: light-dark(
+				var(--nf-pink-l-80),
+				var(--nf-pink-d-90)
+			);
+		}
 
-    &[data-ui-color="purple"] {
-      --nf-button-color: light-dark(
-        var(--nf-purple-l-40),
-        var(--nf-purple-d-50)
-      );
-      --nf-button-accent-color: light-dark(
-        var(--nf-purple-l-80),
-        var(--nf-purple-d-90)
-      );
-    }
+		&[data-ui-color="purple"] {
+			--nf-button-color: light-dark(
+				var(--nf-purple-l-40),
+				var(--nf-purple-d-50)
+			);
+			--nf-button-accent-color: light-dark(
+				var(--nf-purple-l-80),
+				var(--nf-purple-d-90)
+			);
+		}
 
-    &[data-ui-color="red"] {
-      --nf-button-color: light-dark(var(--nf-red-l-40), var(--nf-red-d-50));
-      --nf-button-accent-color: light-dark(
-        var(--nf-red-l-80),
-        var(--nf-red-d-90)
-      );
-    }
+		&[data-ui-color="red"] {
+			--nf-button-color: light-dark(var(--nf-red-l-40), var(--nf-red-d-50));
+			--nf-button-accent-color: light-dark(
+				var(--nf-red-l-80),
+				var(--nf-red-d-90)
+			);
+		}
 
-    &[data-ui-color="yellow"] {
-      --nf-button-color: light-dark(
-        var(--nf-yellow-l-40),
-        var(--nf-yellow-d-50)
-      );
-      --nf-button-accent-color: light-dark(
-        var(--nf-yellow-l-80),
-        var(--nf-yellow-d-90)
-      );
-    }
+		&[data-ui-color="yellow"] {
+			--nf-button-color: light-dark(
+				var(--nf-yellow-l-40),
+				var(--nf-yellow-d-50)
+			);
+			--nf-button-accent-color: light-dark(
+				var(--nf-yellow-l-80),
+				var(--nf-yellow-d-90)
+			);
+		}
 
-    &:hover:not(:disabled),
-    &:focus-within:not(:disabled) {
-      --nf-button-depth: 3px;
-      --nf-button-lift: 1px;
-    }
+		&:hover:not(:disabled),
+		&:focus-within:not(:disabled) {
+			--nf-button-depth: 3px;
+			--nf-button-lift: 1px;
+		}
 
-    &:active:not(:disabled) {
-      --nf-button-depth: 0px;
-      --nf-button-lift: 4px;
-    }
+		&:active:not(:disabled) {
+			--nf-button-depth: 0px;
+			--nf-button-lift: 4px;
+		}
 
-    /* The button has no border, so the focus ring is drawn inside its edge as one */
-    &:focus-visible {
-      outline: var(--nf-button-border-width) solid
-        var(--nf-button-accent-color, light-dark(var(--nf-grey-l-80), var(--nf-grey-d-90)));
-      outline-offset: calc(-1 * var(--nf-button-border-width));
-    }
+		/* The button has no border, so the focus ring is drawn inside its edge as one */
+		&:focus-visible {
+			outline: var(--nf-button-border-width) solid
+				var(
+					--nf-button-accent-color,
+					light-dark(var(--nf-grey-l-80), var(--nf-grey-d-90))
+				);
+			outline-offset: calc(-1 * var(--nf-button-border-width));
+		}
 
-    &:disabled {
-      cursor: not-allowed;
-      opacity: 0.5;
-    }
-  }
+		&:disabled {
+			cursor: not-allowed;
+			opacity: 0.5;
+		}
+	}
 
-  /* Keep the states and their feedback, drop the animation between them */
-  @media (prefers-reduced-motion: reduce) {
-    .nf-button {
-      --nf-button-transition-duration: 0s;
-    }
-  }
+	/* Keep the states and their feedback, drop the animation between them */
+	@media (prefers-reduced-motion: reduce) {
+		.nf-button {
+			--nf-button-transition-duration: 0s;
+		}
+	}
 </style>

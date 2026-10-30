@@ -97,7 +97,7 @@ The body is the default slot and it is optional. Supply children and the callout
 <Callout color="green" title="This callout has no body" />
 ```
 
-The decision is made on whether the slot was *supplied*, not on whether it renders anything visible — so children that collapse to whitespace still produce the rule.
+The decision is made on whether the slot was _supplied_, not on whether it renders anything visible — so children that collapse to whitespace still produce the rule.
 
 The body is a `<p>` and the title is a `<p>` too, not a heading: a component cannot know where it sits in your document outline, so it stays out of it. It is also not forwarded to the element as the native `title` attribute, so it produces no browser tooltip.
 
@@ -186,18 +186,18 @@ Each half above sits on its own canvas, and that is not decoration: the surface 
 
 ## Props
 
-| Prop | Type | Default | Notes |
-|---|---|---|---|
-| `title` | `string` | — | **Required.** Rendered as the panel's title line. Not forwarded as the HTML `title` attribute and not a heading element. |
-| `icon` | component | — | Any component — an imported `.svg`, an icon component, your own `.astro`. Rendered before the title with no props, in a box sized by `--nf-callout-icon-size`. |
-| `color` | `'blue' \| 'cyan' \| 'green' \| 'grey' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | grey (unset) | Rendered as `data-ui-color` on the element when passed. Omitted, the element has no `data-ui-color` and renders grey. |
+| Prop    | Type                                                                                           | Default      | Notes                                                                                                                                                          |
+| ------- | ---------------------------------------------------------------------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title` | `string`                                                                                       | —            | **Required.** Rendered as the panel's title line. Not forwarded as the HTML `title` attribute and not a heading element.                                       |
+| `icon`  | component                                                                                      | —            | Any component — an imported `.svg`, an icon component, your own `.astro`. Rendered before the title with no props, in a box sized by `--nf-callout-icon-size`. |
+| `color` | `'blue' \| 'cyan' \| 'green' \| 'grey' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | grey (unset) | Rendered as `data-ui-color` on the element when passed. Omitted, the element has no `data-ui-color` and renders grey.                                          |
 
 The callout renders a `<div>`. Every other `<div>` attribute (`id`, `role`, `aria-*`, `class`, `data-*`...) is passed through to it — add `role`/`aria-label` yourself if a given callout is a landmark.
 
 ## Slots
 
-| Slot | Notes |
-|---|---|
+| Slot    | Notes                                                                                          |
+| ------- | ---------------------------------------------------------------------------------------------- |
 | default | The body, below the separator rule. Omit it and neither the rule nor the body box is rendered. |
 
 ## Theming

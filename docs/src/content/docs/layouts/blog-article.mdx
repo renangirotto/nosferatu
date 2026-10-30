@@ -59,20 +59,20 @@ In a real build you will also see Astro's own scope on these elements (an `astro
 
 ## Props
 
-| Prop | Type | Required | Default | What it does |
-| --- | --- | --- | --- | --- |
-| `title` | `string` | Yes | — | Used twice: as the document's `<title>` and as the `h1` at the top of the article. |
-| `description` | `string` | Yes | — | Used twice: as the page's `<meta name="description">` and as the paragraph directly under the heading. |
-| `lang` | `string` | No | `'en'` | The `lang` attribute of the `<html>` element, passed through to [BaseHtml](/html/base-html/). |
-| `imageSocialMedia` | `string` | No | — | The sharing image, passed through to [BaseHead](/html/base-head/) and rendered as `og:image` and `twitter:image`. Omit it and neither tag appears. |
+| Prop               | Type     | Required | Default | What it does                                                                                                                                       |
+| ------------------ | -------- | -------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`            | `string` | Yes      | —       | Used twice: as the document's `<title>` and as the `h1` at the top of the article.                                                                 |
+| `description`      | `string` | Yes      | —       | Used twice: as the page's `<meta name="description">` and as the paragraph directly under the heading.                                             |
+| `lang`             | `string` | No       | `'en'`  | The `lang` attribute of the `<html>` element, passed through to [BaseHtml](/html/base-html/).                                                      |
+| `imageSocialMedia` | `string` | No       | —       | The sharing image, passed through to [BaseHead](/html/base-head/) and rendered as `og:image` and `twitter:image`. Omit it and neither tag appears. |
 
 `title` and `description` are required, and `astro check` reports a missing one as a type error rather than rendering an empty heading or paragraph. The layout accepts nothing else: it does not forward native attributes and does not merge a `class`, because the markup above is its contract.
 
 ## Slots
 
-| Slot | Required | What it renders |
-| --- | --- | --- |
-| default | No | The article body, rendered inside the `article` immediately after the description paragraph. Omit it and the article is just the heading and the description. |
+| Slot    | Required | What it renders                                                                                                                                               |
+| ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| default | No       | The article body, rendered inside the `article` immediately after the description paragraph. Omit it and the article is just the heading and the description. |
 
 ## Styling
 
@@ -80,11 +80,11 @@ The layout styles two things: the **size** of its text and the **font** it is se
 
 ### The article's fonts
 
-| Elements | Property | Default |
-| --- | --- | --- |
-| `p`, `strong`, `span`, `a` | `--nf-layout-blog-article-font-family` | [`--nf-font-family-blog-post`](/styles/#fonts) — Plus Jakarta Sans |
-| `p` | `--nf-layout-blog-article-font-weight` | [`--nf-font-weight`](/styles/#fonts) — `400` |
-| `code`, `pre` | `--nf-layout-blog-article-font-family-code` | [`--nf-font-family-code-blog-post`](/styles/#fonts) — Geist Mono |
+| Elements                   | Property                                    | Default                                                            |
+| -------------------------- | ------------------------------------------- | ------------------------------------------------------------------ |
+| `p`, `strong`, `span`, `a` | `--nf-layout-blog-article-font-family`      | [`--nf-font-family-blog-post`](/styles/#fonts) — Plus Jakarta Sans |
+| `p`                        | `--nf-layout-blog-article-font-weight`      | [`--nf-font-weight`](/styles/#fonts) — `400`                       |
+| `code`, `pre`              | `--nf-layout-blog-article-font-family-code` | [`--nf-font-family-code-blog-post`](/styles/#fonts) — Geist Mono   |
 
 Three details are deliberate:
 
@@ -92,7 +92,7 @@ Three details are deliberate:
 - **`strong` gets the family but not the weight.** Applying `400` to it would un-bold every emphasis in the article, so it keeps the browser's own heavier weight.
 - **`pre` is styled as well as `code`**, because a fenced block is `<pre><code>` and `pre` carries the browser's own monospace, which would otherwise beat inheritance.
 
-All of this applies to the markup you pass into the default slot just as much as to the heading and description the layout renders itself — the rules are rooted at `.nf-layout-blog-article`, and the body of an article *is* slot content. Nothing outside that root is touched.
+All of this applies to the markup you pass into the default slot just as much as to the heading and description the layout renders itself — the rules are rooted at `.nf-layout-blog-article`, and the body of an article _is_ slot content. Nothing outside that root is touched.
 
 As everywhere else in the library, the fonts are **named, not loaded**: install the [Fontsource packages](/styles/#opting-in) to get them, or let each stack fall through to a system font.
 
@@ -131,23 +131,23 @@ The two scales are not the same, so the same element renders at different sizes 
 
 Set these on `.nf-layout-blog-article` to re-tune the scale and the fonts in one place, instead of overriding each rule:
 
-| Property | Default | What it controls |
-| --- | --- | --- |
-| `--nf-layout-blog-article-viewport-min` | `560px` | Viewport width at which the scale stops shrinking. |
-| `--nf-layout-blog-article-viewport-max` | `1088px` | Viewport width at which the scale stops growing. |
-| `--nf-layout-blog-article-viewport-progress` | `progress(100svw, min, max)` | The 0–1 position between those two bounds. Computed; override it to drive the scale from something other than viewport width. |
-| `--nf-layout-blog-article-font-size-base` | `calc(1rem + progress * 0.125rem)` | Paragraph size, and the root of every heading size. |
-| `--nf-layout-blog-article-type-scale-min` | `1.2` | Scale ratio at the lower bound. |
-| `--nf-layout-blog-article-type-scale-max` | `1.414` | Scale ratio at the upper bound. |
-| `--nf-layout-blog-article-type-scale` | interpolated between the two | The ratio actually in use. |
-| `--nf-layout-blog-article-font-size-h1` | `base * ratio³` | `h1` size. |
-| `--nf-layout-blog-article-font-size-h2` | `base * ratio^2.5` | `h2` size. |
-| `--nf-layout-blog-article-font-size-h3` | `base * ratio²` | `h3` size. |
-| `--nf-layout-blog-article-font-size-h4` | `base * ratio^1.5` | `h4` size. |
-| `--nf-layout-blog-article-font-size-p` | `base` | Paragraph size. |
-| `--nf-layout-blog-article-font-family` | `var(--nf-font-family-blog-post)` | Font of `p`, `strong`, `span` and `a`. |
-| `--nf-layout-blog-article-font-family-code` | `var(--nf-font-family-code-blog-post)` | Font of `code` and `pre`. |
-| `--nf-layout-blog-article-font-weight` | `var(--nf-font-weight)` | Weight of the article's paragraphs. |
+| Property                                     | Default                                | What it controls                                                                                                              |
+| -------------------------------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `--nf-layout-blog-article-viewport-min`      | `560px`                                | Viewport width at which the scale stops shrinking.                                                                            |
+| `--nf-layout-blog-article-viewport-max`      | `1088px`                               | Viewport width at which the scale stops growing.                                                                              |
+| `--nf-layout-blog-article-viewport-progress` | `progress(100svw, min, max)`           | The 0–1 position between those two bounds. Computed; override it to drive the scale from something other than viewport width. |
+| `--nf-layout-blog-article-font-size-base`    | `calc(1rem + progress * 0.125rem)`     | Paragraph size, and the root of every heading size.                                                                           |
+| `--nf-layout-blog-article-type-scale-min`    | `1.2`                                  | Scale ratio at the lower bound.                                                                                               |
+| `--nf-layout-blog-article-type-scale-max`    | `1.414`                                | Scale ratio at the upper bound.                                                                                               |
+| `--nf-layout-blog-article-type-scale`        | interpolated between the two           | The ratio actually in use.                                                                                                    |
+| `--nf-layout-blog-article-font-size-h1`      | `base * ratio³`                        | `h1` size.                                                                                                                    |
+| `--nf-layout-blog-article-font-size-h2`      | `base * ratio^2.5`                     | `h2` size.                                                                                                                    |
+| `--nf-layout-blog-article-font-size-h3`      | `base * ratio²`                        | `h3` size.                                                                                                                    |
+| `--nf-layout-blog-article-font-size-h4`      | `base * ratio^1.5`                     | `h4` size.                                                                                                                    |
+| `--nf-layout-blog-article-font-size-p`       | `base`                                 | Paragraph size.                                                                                                               |
+| `--nf-layout-blog-article-font-family`       | `var(--nf-font-family-blog-post)`      | Font of `p`, `strong`, `span` and `a`.                                                                                        |
+| `--nf-layout-blog-article-font-family-code`  | `var(--nf-font-family-code-blog-post)` | Font of `code` and `pre`.                                                                                                     |
+| `--nf-layout-blog-article-font-weight`       | `var(--nf-font-weight)`                | Weight of the article's paragraphs.                                                                                           |
 
 ```css
 /* Bigger body text, gentler jump between heading levels */

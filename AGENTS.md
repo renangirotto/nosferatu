@@ -17,15 +17,23 @@ openspec/      specs (source of truth for behaviour) and change proposals
 
 Run from the repository root:
 
-| Command | What it does |
-|---|---|
-| `pnpm install` | Install the workspace |
-| `pnpm dev` | Start the docs site (library edits appear on reload, no reinstall) |
-| `pnpm build` | Build the docs site — the closest thing to a full check |
-| `pnpm pack:check` | Dry-run pack of `astro-nosferatu`; lists exactly what would be published |
-| `pnpm --filter docs check` | `astro check` over the docs site |
+| Command                    | What it does                                                             |
+| -------------------------- | ------------------------------------------------------------------------ |
+| `pnpm install`             | Install the workspace                                                    |
+| `pnpm dev`                 | Start the docs site (library edits appear on reload, no reinstall)       |
+| `pnpm build`               | Build the docs site — the closest thing to a full check                  |
+| `pnpm pack:check`          | Dry-run pack of `astro-nosferatu`; lists exactly what would be published |
+| `pnpm --filter docs check` | `astro check` over the docs site                                         |
+| `pnpm lint`                | Lint the workspace; exits non-zero on any error                          |
+| `pnpm lint:fix`            | Apply the linter's safe automatic fixes                                  |
+| `pnpm format`              | Format the workspace in place                                            |
+| `pnpm format:check`        | Verify formatting without writing; exits non-zero if anything is off     |
 
 There is **no build step, no bundler, and no test runner** for the library: consumers compile the sources. Never add one without an approved OpenSpec change. Verify library work with `pnpm build` (docs builds against the real package exports) and `pnpm pack:check`.
+
+The linter is [Oxlint](https://oxc.rs/docs/guide/usage/linter.html), configured in `.oxlintrc.json`; it covers `.js`, `.mjs`, `.ts` and the frontmatter and `<script>` blocks of `.astro` files. The formatter is [Prettier with the official `prettier-plugin-astro`](https://docs.astro.build/en/editor-setup/), configured in `.prettierrc.json` and `.prettierignore`; it owns `.astro`, `.css`, `.ts`, `.mjs`, `.json`, `.md` and `.mdx`. **Neither runs as part of `pnpm build`** — they are commands you run, never a build step. Both are configured only at the workspace root: `packages/ui` deliberately carries no tooling config, scripts or dependencies, so the published tarball is unaffected.
+
+Two things the formatter deliberately leaves alone: code inside Markdown and MDX fences, so a documented import line stays exactly as authored, and the generated `.agents/skills/openspec-*/` files, which `openspec update` owns.
 
 ## Specs come first
 
@@ -52,7 +60,7 @@ These are spec requirements, not preferences. Breaking one is a bug:
 
 ## Conventions
 
-- Indentation is **tabs** in `.astro` and `.css` sources; keep the existing style of any file you touch.
+- Indentation is **tabs** in `.astro` and `.css` sources. You do not apply this by hand: `pnpm format` enforces it (`useTabs`), with JSON the one exception, indented with two spaces so that pnpm's rewrites of `package.json` do not fight the formatter.
 - Component classes are `nf-` prefixed and **not BEM**: the root is `.nf-<component>` and every other part is `.nf-<component>-<part>` (`.nf-callout-title`), with plain hyphens. Component-scoped custom properties spell the component's full name: `--nf-button-color`, `--nf-callout-surface-color`, never `--nf-btn-*`. Inside every rule, `--nf-*` declarations come before the ordinary properties. A prop that selects from a set of values renders as `data-ui-<prop>` and is matched in CSS to set those properties, rather than as a modifier class — see the `component-build` skill.
 - Prop types shared by more than one component live in `packages/ui/src/types/` (`ColorPalette` for the palette hues) and are imported **relatively** from component source. The `@/*` alias is configured for `packages/ui` and `docs` but must never appear in published source: a consumer compiles it without the library's tsconfig, and an aliased type import degrades the prop to `any`.
 - Components accept and forward native attributes (`interface Props extends HTMLAttributes<'button'>`), merge a consumer `class` through `class:list`, and spread the rest.

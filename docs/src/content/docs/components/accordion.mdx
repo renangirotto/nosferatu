@@ -119,7 +119,7 @@ The disclosure triangle is the browser's own marker, painted in the summary's co
 
 ## Animation
 
-Opening and closing are animated in CSS alone, over `0.3s ease-in-out`. The panel's height is transitioned on the element's `::details-content` pseudo-element, from `0` to `calc-size(auto, size)` — the content's own height, with nothing measured and no maximum to guess — and `content-visibility` rides along with `transition-behavior: allow-discrete` so the panel can animate *shut* instead of vanishing in one frame. The content inside fades and slides into place from an `@starting-style`, which it needs because the panel's contents are not rendered at all while it is closed.
+Opening and closing are animated in CSS alone, over `0.3s ease-in-out`. The panel's height is transitioned on the element's `::details-content` pseudo-element, from `0` to `calc-size(auto, size)` — the content's own height, with nothing measured and no maximum to guess — and `content-visibility` rides along with `transition-behavior: allow-discrete` so the panel can animate _shut_ instead of vanishing in one frame. The content inside fades and slides into place from an `@starting-style`, which it needs because the panel's contents are not rendered at all while it is closed.
 
 This is **progressive enhancement**. The whole block, the collapsed height included, sits behind one test:
 
@@ -169,14 +169,14 @@ The animation does not depend on `reset.css` at all: the component writes `calc-
 
 ## Props
 
-| Prop | Type | Default | Notes |
-|---|---|---|---|
-| `summary` | `string` | — | **Required.** The summary line's text. It is not forwarded to the element, so it produces no tooltip. |
-| `color` | `'blue' \| 'cyan' \| 'green' \| 'grey' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | grey (unset) | Rendered as `data-ui-color` on the element when passed. Omitted, the element has no `data-ui-color` and renders grey. |
+| Prop      | Type                                                                                           | Default      | Notes                                                                                                                 |
+| --------- | ---------------------------------------------------------------------------------------------- | ------------ | --------------------------------------------------------------------------------------------------------------------- |
+| `summary` | `string`                                                                                       | —            | **Required.** The summary line's text. It is not forwarded to the element, so it produces no tooltip.                 |
+| `color`   | `'blue' \| 'cyan' \| 'green' \| 'grey' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | grey (unset) | Rendered as `data-ui-color` on the element when passed. Omitted, the element has no `data-ui-color` and renders grey. |
 
-| Slot | Optional | Notes |
-|---|---|---|
-| default | yes | The disclosed content, rendered inside `div.nf-accordion-content`. Omit it and the panel is empty — the summary still toggles. |
+| Slot    | Optional | Notes                                                                                                                          |
+| ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| default | yes      | The disclosed content, rendered inside `div.nf-accordion-content`. Omit it and the panel is empty — the summary still toggles. |
 
 Every other `<details>` attribute (`open`, `name`, `id`, `aria-*`, `class`, event attributes…) is passed through to the element. `class` is merged with the component's own.
 

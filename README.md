@@ -16,9 +16,9 @@ docs/          Astro Starlight documentation site (private, never published)
 
 Run these from the repository root:
 
-| Command | What it does |
-|---|---|
-| `pnpm install` | Installs the workspace |
-| `pnpm dev` | Starts the docs site locally. Library edits show up on reload. |
-| `pnpm build` | Builds the docs site |
+| Command           | What it does                                                      |
+| ----------------- | ----------------------------------------------------------------- |
+| `pnpm install`    | Installs the workspace                                            |
+| `pnpm dev`        | Starts the docs site locally. Library edits show up on reload.    |
+| `pnpm build`      | Builds the docs site                                              |
 | `pnpm pack:check` | Lists exactly which files would be published in `astro-nosferatu` |

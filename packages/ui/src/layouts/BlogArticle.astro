@@ -7,129 +7,129 @@ import BaseHtml from "../html/BaseHtml.astro";
 import BaseHead from "../html/BaseHead.astro";
 
 interface Props {
-  title: string;
-  description: string;
-  lang?: string;
-  imageSocialMedia?: string;
+	title: string;
+	description: string;
+	lang?: string;
+	imageSocialMedia?: string;
 }
 
 const { title, description, lang = "en", imageSocialMedia } = Astro.props;
 ---
 
 <BaseHtml lang={lang}>
-  <BaseHead
-    slot="head"
-    title={title}
-    description={description}
-    imageSocialMedia={imageSocialMedia}
-  />
-  <main class="nf-layout-blog-article">
-    <article>
-      <h1>{title}</h1>
-      <p>{description}</p>
-      <slot />
-    </article>
-  </main>
+	<BaseHead
+		slot="head"
+		title={title}
+		description={description}
+		imageSocialMedia={imageSocialMedia}
+	/>
+	<main class="nf-layout-blog-article">
+		<article>
+			<h1>{title}</h1>
+			<p>{description}</p>
+			<slot />
+		</article>
+	</main>
 </BaseHtml>
 
 <style>
-  .nf-layout-blog-article {
-    --nf-layout-blog-article-viewport-min: 560px;
-    --nf-layout-blog-article-viewport-max: 1088px;
+	.nf-layout-blog-article {
+		--nf-layout-blog-article-viewport-min: 560px;
+		--nf-layout-blog-article-viewport-max: 1088px;
 
-    --nf-layout-blog-article-viewport-progress: progress(
-      100svw,
-      var(--nf-layout-blog-article-viewport-min),
-      var(--nf-layout-blog-article-viewport-max)
-    );
+		--nf-layout-blog-article-viewport-progress: progress(
+			100svw,
+			var(--nf-layout-blog-article-viewport-min),
+			var(--nf-layout-blog-article-viewport-max)
+		);
 
-    --nf-layout-blog-article-font-size-base: calc(
-      1rem + var(--nf-layout-blog-article-viewport-progress) * 0.125rem
-    );
+		--nf-layout-blog-article-font-size-base: calc(
+			1rem + var(--nf-layout-blog-article-viewport-progress) * 0.125rem
+		);
 
-    --nf-layout-blog-article-type-scale-min: 1.2;
-    --nf-layout-blog-article-type-scale-max: 1.414;
-    --nf-layout-blog-article-type-scale: calc(
-      var(--nf-layout-blog-article-type-scale-min) +
-        var(--nf-layout-blog-article-viewport-progress) *
-        (
-          var(--nf-layout-blog-article-type-scale-max) -
-            var(--nf-layout-blog-article-type-scale-min)
-        )
-    );
+		--nf-layout-blog-article-type-scale-min: 1.2;
+		--nf-layout-blog-article-type-scale-max: 1.414;
+		--nf-layout-blog-article-type-scale: calc(
+			var(--nf-layout-blog-article-type-scale-min) +
+				var(--nf-layout-blog-article-viewport-progress) *
+				(
+					var(--nf-layout-blog-article-type-scale-max) -
+						var(--nf-layout-blog-article-type-scale-min)
+				)
+		);
 
-    --nf-layout-blog-article-font-size-h1: calc(
-      var(--nf-layout-blog-article-font-size-base) *
-        pow(var(--nf-layout-blog-article-type-scale), 3)
-    );
-    --nf-layout-blog-article-font-size-h2: calc(
-      var(--nf-layout-blog-article-font-size-base) *
-        pow(var(--nf-layout-blog-article-type-scale), 2.5)
-    );
-    --nf-layout-blog-article-font-size-h3: calc(
-      var(--nf-layout-blog-article-font-size-base) *
-        pow(var(--nf-layout-blog-article-type-scale), 2)
-    );
-    --nf-layout-blog-article-font-size-h4: calc(
-      var(--nf-layout-blog-article-font-size-base) *
-        pow(var(--nf-layout-blog-article-type-scale), 1.5)
-    );
-    --nf-layout-blog-article-font-size-p: var(
-      --nf-layout-blog-article-font-size-base
-    );
+		--nf-layout-blog-article-font-size-h1: calc(
+			var(--nf-layout-blog-article-font-size-base) *
+				pow(var(--nf-layout-blog-article-type-scale), 3)
+		);
+		--nf-layout-blog-article-font-size-h2: calc(
+			var(--nf-layout-blog-article-font-size-base) *
+				pow(var(--nf-layout-blog-article-type-scale), 2.5)
+		);
+		--nf-layout-blog-article-font-size-h3: calc(
+			var(--nf-layout-blog-article-font-size-base) *
+				pow(var(--nf-layout-blog-article-type-scale), 2)
+		);
+		--nf-layout-blog-article-font-size-h4: calc(
+			var(--nf-layout-blog-article-font-size-base) *
+				pow(var(--nf-layout-blog-article-type-scale), 1.5)
+		);
+		--nf-layout-blog-article-font-size-p: var(
+			--nf-layout-blog-article-font-size-base
+		);
 
-    /*
-     * The article's own fonts, defaulting to the library's. Going through a
-     * layout-scoped property is what lets a consumer re-tune one article
-     * without moving the page's general font.
-     */
-    --nf-layout-blog-article-font-family: var(--nf-font-family-blog-post);
-    --nf-layout-blog-article-font-family-code: var(
-      --nf-font-family-code-blog-post
-    );
-    --nf-layout-blog-article-font-weight: var(--nf-font-weight);
+		/*
+	   * The article's own fonts, defaulting to the library's. Going through a
+	   * layout-scoped property is what lets a consumer re-tune one article
+	   * without moving the page's general font.
+	   */
+		--nf-layout-blog-article-font-family: var(--nf-font-family-blog-post);
+		--nf-layout-blog-article-font-family-code: var(
+			--nf-font-family-code-blog-post
+		);
+		--nf-layout-blog-article-font-weight: var(--nf-font-weight);
 
-    h1 {
-      font-size: var(--nf-layout-blog-article-font-size-h1);
-    }
+		h1 {
+			font-size: var(--nf-layout-blog-article-font-size-h1);
+		}
 
-    h2 {
-      font-size: var(--nf-layout-blog-article-font-size-h2);
-    }
+		h2 {
+			font-size: var(--nf-layout-blog-article-font-size-h2);
+		}
 
-    h3 {
-      font-size: var(--nf-layout-blog-article-font-size-h3);
-    }
+		h3 {
+			font-size: var(--nf-layout-blog-article-font-size-h3);
+		}
 
-    h4 {
-      font-size: var(--nf-layout-blog-article-font-size-h4);
-    }
+		h4 {
+			font-size: var(--nf-layout-blog-article-font-size-h4);
+		}
 
-    p {
-      font-size: var(--nf-layout-blog-article-font-size-p);
-      font-family: var(--nf-layout-blog-article-font-family);
-      font-weight: var(--nf-layout-blog-article-font-weight);
-    }
+		p {
+			font-size: var(--nf-layout-blog-article-font-size-p);
+			font-family: var(--nf-layout-blog-article-font-family);
+			font-weight: var(--nf-layout-blog-article-font-weight);
+		}
 
-    /*
-     * Family only: a weight here would un-bold every <strong> in the article.
-     * Headings are deliberately left out — they inherit the page's general
-     * font, so an article reads as Outfit for structure and the article font
-     * for prose.
-     */
-    strong,
-    span,
-    a {
-      font-family: var(--nf-layout-blog-article-font-family);
-    }
+		/*
+	   * Family only: a weight here would un-bold every <strong> in the article.
+	   * Headings are deliberately left out — they inherit the page's general
+	   * font, so an article reads as Outfit for structure and the article font
+	   * for prose.
+	   */
+		strong,
+		span,
+		a {
+			font-family: var(--nf-layout-blog-article-font-family);
+		}
 
-    /*
-     * A fenced code block is <pre><code>, and <pre> carries the UA's own
-     * monospace, which beats inheritance — so both need the rule.
-     */
-    code,
-    pre {
-      font-family: var(--nf-layout-blog-article-font-family-code);
-    }
-  }
+		/*
+	   * A fenced code block is <pre><code>, and <pre> carries the UA's own
+	   * monospace, which beats inheritance — so both need the rule.
+	   */
+		code,
+		pre {
+			font-family: var(--nf-layout-blog-article-font-family-code);
+		}
+	}
 </style>
