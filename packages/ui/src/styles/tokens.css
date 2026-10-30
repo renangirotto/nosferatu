@@ -1,49 +1,12 @@
-:root {
-	/* Spacing */
-	--nf-space-1: 0.25rem;
-	--nf-space-2: 0.5rem;
-	--nf-space-3: 0.75rem;
-	--nf-space-4: 1rem;
-	--nf-space-6: 1.5rem;
-	--nf-space-8: 2rem;
-
-	/* Typography */
-	/*
-	 * Deferred to the base fonts named in typography.css, with the system stack
-	 * each token used to hold as the fallback — so tokens.css imported on its
-	 * own, without typography.css, still resolves to a renderable font.
-	 */
-	--nf-font-body: var(
-		--nf-font-family,
-		system-ui,
-		-apple-system,
-		"Segoe UI",
-		Roboto,
-		sans-serif
-	);
-	--nf-font-heading: var(--nf-font-body);
-	--nf-font-mono: var(
-		--nf-font-family-code-blog-post,
-		ui-monospace,
-		"SF Mono",
-		Menlo,
-		Consolas,
-		monospace
-	);
-	--nf-font-size-sm: 0.875rem;
-	--nf-font-size-md: 1rem;
-	--nf-font-size-lg: 1.25rem;
-	--nf-font-size-xl: 1.5rem;
-	--nf-font-size-2xl: 2rem;
-	--nf-font-size-3xl: 2.5rem;
-	--nf-font-weight-normal: 400;
-	--nf-font-weight-medium: 500;
-	--nf-font-weight-bold: 700;
-	--nf-line-height-body: 1.6;
-	--nf-line-height-heading: 1.2;
-
-	/* Radius */
-	--nf-radius-sm: 0.25rem;
-	--nf-radius-md: 0.5rem;
-	--nf-radius-full: 9999px;
-}
+/*
+ * The aggregate entry point for every token the library publishes: the
+ * palette, the shadows, the spacing scale and the border radii. It declares
+ * nothing of its own — take a single group by importing its file directly.
+ *
+ * The typographic properties are deliberately not here: typography.css owns
+ * them, together with the element rules that use them.
+ */
+@import "./colors/index.css";
+@import "./shadows.css";
+@import "./spacings.css";
+@import "./borders.css";

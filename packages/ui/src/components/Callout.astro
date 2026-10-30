@@ -46,7 +46,7 @@ const hasBody = Astro.slots.has("default");
 <style>
 	.nf-callout {
 		/* 24px against the 1rem title, at the default root size */
-		--nf-callout-icon-size: var(--nf-font-size-xl);
+		--nf-callout-icon-size: 1.5rem;
 		/*
 			 * Composed rather than taken whole from a --nf-shadow-<color> token:
 			 * light-dark() resolves colors, not complete box-shadow values, so the
@@ -60,8 +60,8 @@ const hasBody = Astro.slots.has("default");
 			);
 
 		border: none;
-		border-radius: var(--nf-radius-md);
-		padding: var(--nf-space-6);
+		border-radius: var(--nf-border-radius-base);
+		padding: var(--nf-spacing-base-up-2);
 		color: var(
 			--nf-callout-accent-color,
 			light-dark(var(--nf-grey-l-80), var(--nf-grey-d-30))
@@ -254,11 +254,11 @@ const hasBody = Astro.slots.has("default");
 	.nf-callout-title {
 		display: flex;
 		align-items: flex-start;
-		gap: var(--nf-space-2);
-		margin: 0;
-		font-size: var(--nf-font-size-md);
-		font-weight: var(--nf-font-weight-medium);
-		line-height: var(--nf-line-height-heading);
+		gap: var(--nf-spacing-base-low-2);
+		margin: var(--nf-spacing-none);
+		font-size: 1rem;
+		font-weight: 500;
+		line-height: 1.2;
 	}
 
 	/*
@@ -271,20 +271,21 @@ const hasBody = Astro.slots.has("default");
 		flex: none;
 		align-items: center;
 		justify-content: center;
-		block-size: calc(var(--nf-font-size-md) * var(--nf-line-height-heading));
+		/* The title's own size times its line height: one line of it, exactly */
+		block-size: calc(1rem * 1.2);
 		font-size: var(--nf-callout-icon-size);
 	}
 
 	.nf-callout-body {
 		/* A <p>, so any paragraph margin the page gives it has to go */
-		margin-block: var(--nf-space-4) 0;
+		margin-block: var(--nf-spacing-base) var(--nf-spacing-none);
 		border-block-start: 1px solid
 			var(
 				--nf-callout-rule-color,
 				light-dark(var(--nf-grey-l-80-25), var(--nf-grey-d-30-25))
 			);
-		padding-block-start: var(--nf-space-4);
-		font-size: var(--nf-font-size-md);
-		font-weight: var(--nf-font-weight-medium);
+		padding-block-start: var(--nf-spacing-base);
+		font-size: 1rem;
+		font-weight: 500;
 	}
 </style>

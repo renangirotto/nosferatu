@@ -197,7 +197,11 @@ The documentation site SHALL document each document-structure file the library p
 
 ### Requirement: Stylesheets are documented
 
-The documentation site's styles page SHALL list every stylesheet the library exports, including `shadows.css` and `typography.css`, with its import path and what it defines. Where a stylesheet applies rules to a consumer's own elements rather than only defining custom properties, the page SHALL say so plainly, name the cascade layer it occupies, list every custom property a consumer can override together with that property's default, and show how to load the rest of the library without it. The page SHALL NOT claim the library leaves all text to the consumer, and SHALL NOT claim the library sets no font family or weight.
+The documentation site's styles page SHALL list every stylesheet the library exports, including `spacings.css`, `borders.css`, `shadows.css` and `typography.css`, with its import path and what it defines. It SHALL present `tokens.css` as the aggregate it is — the one import that brings in the palette, the shadows, the spacing scale and the border radii, and declares nothing itself — and SHALL state that the typographic properties are not part of it and come with `typography.css`. Where a stylesheet applies rules to a consumer's own elements rather than only defining custom properties, the page SHALL say so plainly, name the cascade layer it occupies, list every custom property a consumer can override together with that property's default, and show how to load the rest of the library without it. The page SHALL NOT claim the library leaves all text to the consumer, and SHALL NOT claim the library sets no font family or weight.
+
+The page SHALL document every token the library publishes with the value it ships, grouped by the stylesheet that defines it, and SHALL NOT list a token the library no longer publishes. For the spacing and border-radius scales it SHALL give each step's name and `px` value in scale order, state that the values are absolute `px` and therefore do not follow the reader's root font size, and state what each scale is for — spacing for `margin`, `padding` and `gap`, the radius scale for corners.
+
+The page SHALL document the removal of the previous `--nf-space-*`, `--nf-radius-*` and `--nf-font-*` ladder tokens as a migration note, in the same form as the note about the old flat palette path: it SHALL give the replacement for each removed token, or state plainly that there is none, and SHALL say that a consumer who wrote CSS against the former `nosferatu.colors` or `nosferatu.shadows` layer targets `nosferatu.tokens` instead.
 
 The page SHALL document the library's three base fonts as an opt-in: it SHALL name the three family properties and the weight property with their defaults, state which text each one reaches, show the install and import lines for the Fontsource packages, and state plainly that the library ships no font file and that a project which installs nothing renders in the system fonts the stacks end with.
 
@@ -207,6 +211,31 @@ Because the documentation site is itself a consumer whose own cascade layers out
 
 - **WHEN** a reader opens the styles page
 - **THEN** they see `astro-nosferatu/styles/shadows.css`, the `--nf-shadow-<hue>-<d|l>-<step>` naming pattern, and an example of applying one
+
+#### Scenario: The spacing scale is listed
+
+- **WHEN** a reader opens the styles page
+- **THEN** they see `astro-nosferatu/styles/spacings.css` in the stylesheet table and all ten steps with their values — `--nf-spacing-none` `0px`, `--nf-spacing-base-low-4` `2px`, `-low-3` `4px`, `-low-2` `8px`, `-low-1` `12px`, `--nf-spacing-base` `16px`, `-up-1` `20px`, `-up-2` `24px`, `-up-3` `28px`, `-up-4` `32px` — described as the tokens to use for margin, padding and gap
+
+#### Scenario: The border radii are listed
+
+- **WHEN** a reader opens the styles page
+- **THEN** they see `astro-nosferatu/styles/borders.css` in the stylesheet table with `--nf-border-radius-base-low-1` `4px`, `--nf-border-radius-base` `8px` and `--nf-border-radius-base-up-1` `12px`, and a statement that the library publishes no token for the border's width, style or color
+
+#### Scenario: The token table matches what the library ships
+
+- **WHEN** a reader compares the styles page's token table against the library's stylesheets
+- **THEN** no `--nf-space-*`, `--nf-radius-*`, `--nf-font-size-*`, `--nf-font-weight-normal|-medium|-bold`, `--nf-line-height-*`, `--nf-font-body`, `--nf-font-heading` or `--nf-font-mono` appears anywhere on the page except in the migration note
+
+#### Scenario: The removals are documented as a migration
+
+- **WHEN** a reader upgrading from the previous release opens the styles page
+- **THEN** a migration note maps `--nf-space-1`, `-2`, `-3`, `-4`, `-6` and `-8` to `--nf-spacing-base-low-3`, `-low-2`, `-low-1`, `--nf-spacing-base`, `--nf-spacing-base-up-2` and `--nf-spacing-base-up-4`, maps `--nf-radius-sm` and `--nf-radius-md` to `--nf-border-radius-base-low-1` and `--nf-border-radius-base`, states that `--nf-radius-full` has no replacement, points the three font tokens at `--nf-font-family` and `--nf-font-family-code-blog-post`, gives the literal values the size, weight and line-height tokens held, and tells a reader who layered into `nosferatu.colors` or `nosferatu.shadows` to use `nosferatu.tokens`
+
+#### Scenario: The layer diagram shows three layers
+
+- **WHEN** a reader looks at the cascade-layers section
+- **THEN** the `@layer` line and the precedence diagram both read `nosferatu.tokens`, `nosferatu.reset`, `nosferatu.typography`, followed by the reader's own unlayered CSS, and the page explains that the palette and the shadows sit inside `nosferatu.tokens` because `tokens.css` imports them
 
 #### Scenario: Typography is listed
 
@@ -233,7 +262,7 @@ Because the documentation site is itself a consumer whose own cascade layers out
 #### Scenario: Substituting a font is documented
 
 - **WHEN** a reader wants a different font
-- **THEN** the page shows setting `--nf-font-family` on `:root` in unlayered CSS and explains that `--nf-font-body` and `--nf-font-heading` follow it
+- **THEN** the page shows setting `--nf-font-family` on `:root` in unlayered CSS and explains that `body`, everything inheriting from it, and the library's own components all follow it, because `--nf-font-family` is the single property for the page's general text
 
 #### Scenario: Every typography property is documented with its default
 
@@ -266,7 +295,8 @@ Because the documentation site is itself a consumer whose own cascade layers out
 #### Scenario: Opting out is documented
 
 - **WHEN** a reader does not want the library sizing their text or setting their font
-- **THEN** the page shows importing `tokens.css`, `colors/index.css`, `shadows.css` and `reset.css` individually in place of `index.css`, notes that files imported on their own are not layered, and states that the font properties come with `typography.css`
+- **THEN** the page shows importing `tokens.css` and `reset.css` individually in place of `index.css`, notes that files imported on their own are not layered, and states that the font properties come with `typography.css`
+- **AND** it shows that a reader who wants one token group alone imports `colors/index.css`, `shadows.css`, `spacings.css` or `borders.css` directly rather than `tokens.css`
 
 #### Scenario: The browser-support caveat is stated
 

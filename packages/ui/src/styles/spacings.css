@@ -1,0 +1,21 @@
+/*
+ * The spacing scale: space between and inside elements — margin, padding, gap
+ * and nothing else. Border widths, shadow offsets and travel distances are not
+ * spacing and stay with the component that draws them.
+ *
+ * Values are absolute px on purpose, so a consumer who scales the root font
+ * size for readability does not also inflate every gap and padding. Named by
+ * distance from a 16px base: -low-N steps down, -up-N steps up.
+ */
+:root {
+	--nf-spacing-none: 0px;
+	--nf-spacing-base-low-4: 2px;
+	--nf-spacing-base-low-3: 4px;
+	--nf-spacing-base-low-2: 8px;
+	--nf-spacing-base-low-1: 12px;
+	--nf-spacing-base: 16px;
+	--nf-spacing-base-up-1: 20px;
+	--nf-spacing-base-up-2: 24px;
+	--nf-spacing-base-up-3: 28px;
+	--nf-spacing-base-up-4: 32px;
+}
