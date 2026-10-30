@@ -5,7 +5,7 @@
  * must not be able to land on <html>.
  */
 interface Props {
-	lang?: string;
+  lang?: string;
 }
 
 const { lang = "en" } = Astro.props;
@@ -13,10 +13,10 @@ const { lang = "en" } = Astro.props;
 
 <!doctype html>
 <html lang={lang}>
-	<head>
-		<slot name="head" />
-	</head>
-	<body>
-		<slot />
-	</body>
+  <head>
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+  </body>
 </html>

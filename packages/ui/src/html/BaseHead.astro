@@ -5,9 +5,9 @@
 import "../styles/index.css";
 
 interface Props {
-	title: string;
-	description: string;
-	imageSocialMedia?: string;
+  title: string;
+  description: string;
+  imageSocialMedia?: string;
 }
 
 const { title, description, imageSocialMedia } = Astro.props;
@@ -17,8 +17,8 @@ const { title, description, imageSocialMedia } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 
 const socialMediaURL = imageSocialMedia
-	? new URL(imageSocialMedia, Astro.url)
-	: undefined;
+  ? new URL(imageSocialMedia, Astro.url)
+  : undefined;
 ---
 
 <!-- Global Metadata -->
