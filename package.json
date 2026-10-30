@@ -9,6 +9,15 @@
   "scripts": {
     "dev": "pnpm --filter docs dev",
     "build": "pnpm --filter docs build",
-    "pack:check": "pnpm --filter astro-nosferatu pack --dry-run"
+    "pack:check": "pnpm --filter astro-nosferatu pack --dry-run",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check"
+  },
+  "devDependencies": {
+    "oxlint": "^1.90.0",
+    "prettier": "3.9.10",
+    "prettier-plugin-astro": "1.1.2"
   }
 }
