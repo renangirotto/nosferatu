@@ -13,7 +13,7 @@ The repository has no linter and no formatter. Style rules that the project trea
 - Document both tools in the root `AGENTS.md` command table and in the tooling section, so agents run them instead of re-deriving style by hand.
 - No CI workflow is added: enforcement stays at the `pnpm` scripts, matching how every other check in this repository is run.
 
-**Not a breaking change for consumers.** No published file's *content* changes meaning: formatting rewrites whitespace in `packages/ui/src/**`, but no selector, declaration, token name, token value, prop, class name or export path is touched. The published tarball's file list is unchanged — `packages/ui/package.json` gains no scripts and no dependencies, and the new config files live at the workspace root, outside `files: ["src"]`. Consumers see byte-different but semantically identical sources.
+**Not a breaking change for consumers.** No published file's _content_ changes meaning: formatting rewrites whitespace in `packages/ui/src/**`, but no selector, declaration, token name, token value, prop, class name or export path is touched. The published tarball's file list is unchanged — `packages/ui/package.json` gains no scripts and no dependencies, and the new config files live at the workspace root, outside `files: ["src"]`. Consumers see byte-different but semantically identical sources.
 
 ## Non-goals
 

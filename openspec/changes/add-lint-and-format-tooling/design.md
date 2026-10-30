@@ -15,7 +15,7 @@ See [proposal.md](proposal.md) — Why. What shapes the approach here:
 **Goals:**
 
 - One linter and one formatter, configured once at the workspace root, covering both packages.
-- The formatter *encodes* the repository's existing conventions; adopting it must not silently change what the conventions are.
+- The formatter _encodes_ the repository's existing conventions; adopting it must not silently change what the conventions are.
 - A single adoption commit whose non-config diff is provably whitespace-only over `packages/ui/src`.
 - Leave a clean path to CI later (the scripts already exit non-zero correctly) without adding CI now.
 
@@ -33,6 +33,7 @@ See [proposal.md](proposal.md) — Why. What shapes the approach here:
 Why: it needs no plugin to read `.astro` files — Oxlint lints the script blocks of `.astro`, `.vue` and `.svelte` natively — and its default rule set is correctness-focused, so adoption produces signal rather than a wall of style complaints that Prettier is about to settle anyway.
 
 Alternatives considered:
+
 - **ESLint + `eslint-plugin-astro`**, which Astro's editor-setup page lists first. Rejected: a large dependency tree and a flat-config file to maintain, for a repository with four JavaScript files. There is no existing ESLint config to preserve, so the usual migration argument does not apply.
 - **Biome** as one tool for both jobs. Rejected: its `.astro` support is explicitly experimental and limited to frontmatter, and Astro's own docs say so. The formatter half is the part this repository cares about most, and it is the weakest.
 - **Type-aware linting** (`tsgo`). Rejected for now: it needs a running TypeScript program per package and buys little when the only typed code is prop interfaces, which `astro check` already covers.
@@ -45,7 +46,7 @@ Scope note: Oxlint will effectively see very little code. That is accepted — i
 
 Why this and not Oxc's own formatter: **Oxfmt does not support `.astro`**, the repository's primary source format. Picking Oxfmt would mean formatting four JavaScript files and leaving every component and stylesheet unformatted — the opposite of the goal. Mixing Oxfmt for JS with Prettier for Astro would mean two formatters disagreeing about the same frontmatter. So the toolchain is deliberately split: Oxc for linting, Prettier for formatting.
 
-Alternatives considered: **dprint + `markup_fmt`** (also listed by Astro) — more configurable and faster, but a community plugin for `.astro` against Astro's own first-party one; the official plugin is the safer default for a library whose source *is* its artifact.
+Alternatives considered: **dprint + `markup_fmt`** (also listed by Astro) — more configurable and faster, but a community plugin for `.astro` against Astro's own first-party one; the official plugin is the safer default for a library whose source _is_ its artifact.
 
 ### `useTabs: true`, with a two-space override for JSON
 
@@ -55,9 +56,25 @@ JSON is the exception: pnpm rewrites `package.json` with two spaces on every ins
 
 No other Prettier option is set. Print width, quotes and semicolons stay at Prettier's defaults rather than being argued about.
 
+### Code inside Markdown fences is never reformatted
+
+`embeddedLanguageFormatting: "off"`, scoped by an override to `*.md` and `*.mdx` only.
+
+Discovered during implementation: with Prettier's default (`auto`), formatting the docs rewrote the code samples readers see — every `import Button from 'astro-nosferatu/…'` became double-quoted, and one sample gained a blank line. Six scenarios in the live `documentation-site` spec quote those import lines with single quotes, so the default would have put the docs out of step with their own spec inside a change that is not meant to touch documentation behaviour at all.
+
+Documented samples are hand-curated teaching material, not code the formatter owns. Turning embedded formatting off for Markdown keeps them byte-for-byte as authored while the surrounding MDX prose, tables and JSX are still formatted. Verified: the built documentation HTML is byte-identical to the pre-format build.
+
+The override is deliberately scoped rather than global, because `prettier-plugin-astro` formats a component's `<style>` block through the same embedded-formatting mechanism, and those blocks _are_ the formatter's job.
+
+Alternatives considered: updating the six `documentation-site` scenarios to double quotes (grows this change into a live spec it was not meant to touch); `singleQuote: true` repo-wide (flips every import in published source for the sake of documentation prose).
+
 ### Formatter ownership includes `.css` and `.mdx`
 
 Chosen over a narrower file set so that there is exactly one answer to "how is this file formatted". The cost is a large one-time diff in the palette stylesheets and the docs pages; the mitigations are below.
+
+### The formatter does not own generated files
+
+Also discovered during implementation: the first full `pnpm format` rewrote the eight generated `.agents/skills/openspec-*/SKILL.md` files, which `AGENTS.md` states are produced by `openspec update` and must never be hand-patched. Formatting them would be undone on the next regeneration, so the diff is pure churn. They join `openspec/changes/archive/` in `.prettierignore`, by the same rule: the formatter owns files this repository authors and maintains, not files another tool generates or has frozen. The hand-written `component-build` and `component-doc` skills next to them stay formatted.
 
 ### Everything at the workspace root; `packages/ui` untouched
 
@@ -81,7 +98,7 @@ Upholds, and does not bend, every invariant in `openspec/specs`:
 - **`prettier-plugin-astro` and `prettier` drift apart on a patch release.** → Both pinned exactly, as Astro's docs instruct; upgrades become a visible, intentional change.
 - **Oxlint's defaults flag something in `docs/`** that is idiomatic Astro. → Disable the specific rule in `.oxlintrc.json` with a comment saying why; do not disable whole plugins and do not add file-level ignore comments.
 - **`prettier-plugin-astro` requires Node >= 22.12 and Oxlint >= 22.12** → already satisfied by the repository's `engines.node: ">=22.22"`.
-- **Two tools instead of one.** Accepted: no single tool formats `.astro` well *and* lints as well as Oxlint today. If Oxfmt gains `.astro` support, consolidating becomes a small, isolated follow-up change.
+- **Two tools instead of one.** Accepted: no single tool formats `.astro` well _and_ lints as well as Oxlint today. If Oxfmt gains `.astro` support, consolidating becomes a small, isolated follow-up change.
 
 ## Migration Plan
 
