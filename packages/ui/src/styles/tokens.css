@@ -17,7 +17,7 @@
 		--nf-font-family,
 		system-ui,
 		-apple-system,
-		'Segoe UI',
+		"Segoe UI",
 		Roboto,
 		sans-serif
 	);
@@ -25,7 +25,7 @@
 	--nf-font-mono: var(
 		--nf-font-family-code-blog-post,
 		ui-monospace,
-		'SF Mono',
+		"SF Mono",
 		Menlo,
 		Consolas,
 		monospace

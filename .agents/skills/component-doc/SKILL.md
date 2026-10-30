@@ -54,7 +54,7 @@ The library's styles load globally through `customCss` in `astro.config.mjs`; ne
 
 Every page has these, in this order. The heading is given — use it verbatim, as `##`, so every component page reads the same way:
 
-1. *(no heading)* **Import line** — the live `import`, then the same import in an `astro` code block, then one plain demo of the component with no props set.
+1. _(no heading)_ **Import line** — the live `import`, then the same import in an `astro` code block, then one plain demo of the component with no props set.
 2. `## <Prop>s` — **one demo per value of every enumerated prop the component declares itself** (`## Colors` for `color`, `## Sizes` for `size`). All of them, each labelled with the literal value that produces it. A reader must never have to guess what `color="cyan"` looks like. One section per such prop. For `color`, put an uncolored instance first, captioned `default`, and say in prose that leaving `color` out renders grey with **no** `data-ui-color` attribute, while `color="grey"` looks the same but carries the attribute. A native attribute you merely default (`type` on a button) is **not** one of these — it belongs in the props table only.
 3. `## States` — what hover, active, focus and disabled do, in prose, next to a demo the reader can actually hover and press. Cover every state the component's CSS defines, including the dull ones: cursor, opacity, and which of them are animated.
 4. `## Light and dark` — only if the component uses `light-dark()`. See step 6.

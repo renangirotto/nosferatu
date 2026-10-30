@@ -54,18 +54,18 @@ The file writes no class, no attribute other than `lang`, and no element of its 
 
 ## Props
 
-| Prop | Type | Required | Default | What it does |
-| --- | --- | --- | --- | --- |
-| `lang` | `string` | No | `'en'` | The `lang` attribute of the `<html>` element. |
+| Prop   | Type     | Required | Default | What it does                                  |
+| ------ | -------- | -------- | ------- | --------------------------------------------- |
+| `lang` | `string` | No       | `'en'`  | The `lang` attribute of the `<html>` element. |
 
 `BaseHtml` accepts nothing else: it does not forward native attributes and does not merge a `class`, because the markup above is its contract. An arbitrary attribute landing on `<html>` would make the document skeleton unpredictable.
 
 ## Slots
 
-| Slot | Required | What it renders |
-| --- | --- | --- |
-| `head` | No | Rendered inside `<head>`, in the order you wrote it. This is where `BaseHead` goes, and where you add anything it does not cover — a font link, an alternate favicon, an RSS link, an analytics snippet. |
-| default | No | Rendered inside `<body>`. Omit both slots and you get a valid, empty document. |
+| Slot    | Required | What it renders                                                                                                                                                                                          |
+| ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `head`  | No       | Rendered inside `<head>`, in the order you wrote it. This is where `BaseHead` goes, and where you add anything it does not cover — a font link, an alternate favicon, an RSS link, an analytics snippet. |
+| default | No       | Rendered inside `<body>`. Omit both slots and you get a valid, empty document.                                                                                                                           |
 
 ## Styling
 

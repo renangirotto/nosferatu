@@ -17,13 +17,13 @@ openspec/      specs (source of truth for behaviour) and change proposals
 
 Run from the repository root:
 
-| Command | What it does |
-|---|---|
-| `pnpm install` | Install the workspace |
-| `pnpm dev` | Start the docs site (library edits appear on reload, no reinstall) |
-| `pnpm build` | Build the docs site — the closest thing to a full check |
-| `pnpm pack:check` | Dry-run pack of `astro-nosferatu`; lists exactly what would be published |
-| `pnpm --filter docs check` | `astro check` over the docs site |
+| Command                    | What it does                                                             |
+| -------------------------- | ------------------------------------------------------------------------ |
+| `pnpm install`             | Install the workspace                                                    |
+| `pnpm dev`                 | Start the docs site (library edits appear on reload, no reinstall)       |
+| `pnpm build`               | Build the docs site — the closest thing to a full check                  |
+| `pnpm pack:check`          | Dry-run pack of `astro-nosferatu`; lists exactly what would be published |
+| `pnpm --filter docs check` | `astro check` over the docs site                                         |
 
 There is **no build step, no bundler, and no test runner** for the library: consumers compile the sources. Never add one without an approved OpenSpec change. Verify library work with `pnpm build` (docs builds against the real package exports) and `pnpm pack:check`.
 

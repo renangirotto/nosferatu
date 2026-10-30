@@ -14,16 +14,16 @@
  * makes, and it is what makes the font readout below show a real typeface
  * rather than a system fallback.
  */
-import '@fontsource-variable/outfit';
-import '@fontsource-variable/plus-jakarta-sans';
-import '@fontsource-variable/geist-mono';
-import 'astro-nosferatu/styles/index.css';
+import "@fontsource-variable/outfit";
+import "@fontsource-variable/plus-jakarta-sans";
+import "@fontsource-variable/geist-mono";
+import "astro-nosferatu/styles/index.css";
 
 const rows = [
-	{ selector: 'h1', min: '3rem', max: '3.5rem' },
-	{ selector: 'h2', min: '2.5rem', max: '3rem' },
-	{ selector: 'h3', min: '2rem', max: '2.5rem' },
-	{ selector: 'p', min: '1rem', max: '1.125rem' },
+	{ selector: "h1", min: "3rem", max: "3.5rem" },
+	{ selector: "h2", min: "2.5rem", max: "3rem" },
+	{ selector: "h3", min: "2rem", max: "2.5rem" },
+	{ selector: "p", min: "1rem", max: "1.125rem" },
 ];
 ---
 
@@ -40,7 +40,9 @@ const rows = [
 	</head>
 	<body>
 		<main>
-			<h1>Fluid type <a href="#readout">scale</a></h1>
+			<h1>
+				Fluid type <a href="#readout">scale</a>
+			</h1>
 			<p>
 				Resize the window and watch the readout below. This page loads
 				<code>astro-nosferatu/styles/index.css</code> and no documentation-site
@@ -58,8 +60,8 @@ const rows = [
 			<h3>A third-level heading</h3>
 			<p>
 				Below <code>560px</code> and above <code>1088px</code> the sizes keep
-				following the same line rather than holding at a bound. The two
-				viewport bounds set the slope, not a limit.
+				following the same line rather than holding at a bound. The two viewport
+				bounds set the slope, not a limit.
 			</p>
 
 			<h4>h4 is not sized by the library</h4>
@@ -78,16 +80,16 @@ const rows = [
 						</tr>
 					</thead>
 					<tbody>
-						{
-							rows.map((row) => (
-								<tr>
-									<td><code>{row.selector}</code></td>
-									<td>{row.min}</td>
-									<td>{row.max}</td>
-									<td data-computed={row.selector}>—</td>
-								</tr>
-							))
-						}
+						{rows.map((row) => (
+							<tr>
+								<td>
+									<code>{row.selector}</code>
+								</td>
+								<td>{row.min}</td>
+								<td>{row.max}</td>
+								<td data-computed={row.selector}>—</td>
+							</tr>
+						))}
 					</tbody>
 				</table>
 				<p>
@@ -102,11 +104,15 @@ const rows = [
 				<table>
 					<tbody>
 						<tr>
-							<td><code>font-family</code></td>
+							<td>
+								<code>font-family</code>
+							</td>
 							<td data-computed-font-family>—</td>
 						</tr>
 						<tr>
-							<td><code>font-weight</code></td>
+							<td>
+								<code>font-weight</code>
+							</td>
 							<td data-computed-font-weight>—</td>
 						</tr>
 					</tbody>
@@ -116,26 +122,26 @@ const rows = [
 
 		<script is:inline>
 			const report = () => {
-				document.querySelectorAll('[data-computed]').forEach((cell) => {
-					const selector = cell.getAttribute('data-computed');
+				document.querySelectorAll("[data-computed]").forEach((cell) => {
+					const selector = cell.getAttribute("data-computed");
 					const sample = document.querySelector(`main > ${selector}`);
 					if (!sample) return;
 					const px = getComputedStyle(sample).fontSize;
 					const rem = parseFloat(px) / 16;
 					cell.textContent = `${px} (${rem.toFixed(3)}rem)`;
 				});
-				const width = document.querySelector('[data-viewport-width]');
+				const width = document.querySelector("[data-viewport-width]");
 				if (width) width.textContent = `${window.innerWidth}px`;
 
 				const bodyStyle = getComputedStyle(document.body);
-				const family = document.querySelector('[data-computed-font-family]');
+				const family = document.querySelector("[data-computed-font-family]");
 				if (family) family.textContent = bodyStyle.fontFamily;
-				const weight = document.querySelector('[data-computed-font-weight]');
+				const weight = document.querySelector("[data-computed-font-weight]");
 				if (weight) weight.textContent = bodyStyle.fontWeight;
 			};
 
 			report();
-			window.addEventListener('resize', report, { passive: true });
+			window.addEventListener("resize", report, { passive: true });
 		</script>
 	</body>
 </html>

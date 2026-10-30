@@ -15,15 +15,15 @@ import 'astro-nosferatu/styles/index.css';
 
 It includes, in order:
 
-| File | What it contains |
-|---|---|
-| `tokens.css` | `--nf-*` custom properties on `:root` (spacing, fonts, radius) |
-| `colors/index.css` | The color palette, which is a folder: it imports the two files below and declares nothing itself |
-| `colors/colors-dark.css` | Every `-d-` token on `:root` — the dark-mode scale, opaque and 25% opacity |
-| `colors/colors-light.css` | Every `-l-` token on `:root` — the light-mode scale, opaque and 25% opacity |
-| `shadows.css` | `--nf-shadow-*` box-shadow values on `:root`, one per palette color, plus `--nf-shadow-depth` |
-| `reset.css` | box-sizing, margin reset, `color-scheme`, `100dvh` body container, media and form-control defaults, text wrapping |
-| `typography.css` | `--nf-typography-*` and `--nf-font-*` custom properties on `:root`, a fluid `font-size` on `h1`, `h2`, `h3` and `p`, and the font family and weight of `body` |
+| File                      | What it contains                                                                                                                                              |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tokens.css`              | `--nf-*` custom properties on `:root` (spacing, fonts, radius)                                                                                                |
+| `colors/index.css`        | The color palette, which is a folder: it imports the two files below and declares nothing itself                                                              |
+| `colors/colors-dark.css`  | Every `-d-` token on `:root` — the dark-mode scale, opaque and 25% opacity                                                                                    |
+| `colors/colors-light.css` | Every `-l-` token on `:root` — the light-mode scale, opaque and 25% opacity                                                                                   |
+| `shadows.css`             | `--nf-shadow-*` box-shadow values on `:root`, one per palette color, plus `--nf-shadow-depth`                                                                 |
+| `reset.css`               | box-sizing, margin reset, `color-scheme`, `100dvh` body container, media and form-control defaults, text wrapping                                             |
+| `typography.css`          | `--nf-typography-*` and `--nf-font-*` custom properties on `:root`, a fluid `font-size` on `h1`, `h2`, `h3` and `p`, and the font family and weight of `body` |
 
 `typography.css` is the only file besides the reset that touches your own elements: loading `index.css` sizes your `h1`, `h2`, `h3` and `p`, and sets the font family and weight of your `body`, which everything else inherits. It sizes nothing else — `a`, `h4`–`h6`, lists, blockquotes and code keep the browser's own sizes — and it sets no color, line-height or margin on anything. See [Typography](#typography) for the full property list, [Fonts](#fonts) for the three typefaces, and both for how to opt out.
 
@@ -90,14 +90,14 @@ No token was renamed or revalued, so nothing else in your CSS changes. If you lo
 
 Every value the library uses is a custom property prefixed with `--nf-`:
 
-| Group | Tokens |
-|---|---|
-| Spacing | `--nf-space-1` (0.25rem), `--nf-space-2`, `--nf-space-3`, `--nf-space-4`, `--nf-space-6`, `--nf-space-8` (2rem) |
+| Group       | Tokens                                                                                                                                |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Spacing     | `--nf-space-1` (0.25rem), `--nf-space-2`, `--nf-space-3`, `--nf-space-4`, `--nf-space-6`, `--nf-space-8` (2rem)                       |
 | Font family | `--nf-font-body`, `--nf-font-heading`, `--nf-font-mono` — each defers to a [base font](#fonts), with the system stack as its fallback |
-| Font size | `--nf-font-size-sm`, `-md`, `-lg`, `-xl`, `-2xl`, `-3xl` |
-| Font weight | `--nf-font-weight-normal`, `-medium`, `-bold` |
-| Line height | `--nf-line-height-body`, `--nf-line-height-heading` |
-| Radius | `--nf-radius-sm`, `--nf-radius-md`, `--nf-radius-full` |
+| Font size   | `--nf-font-size-sm`, `-md`, `-lg`, `-xl`, `-2xl`, `-3xl`                                                                              |
+| Font weight | `--nf-font-weight-normal`, `-medium`, `-bold`                                                                                         |
+| Line height | `--nf-line-height-body`, `--nf-line-height-heading`                                                                                   |
+| Radius      | `--nf-radius-sm`, `--nf-radius-md`, `--nf-radius-full`                                                                                |
 
 ## Colors
 
@@ -122,13 +122,13 @@ Every one of those tokens has a translucent sibling with the same color at 25% a
 
 The library styles currently use the light (`-l-`) scale:
 
-| Role | Token |
-|---|---|
-| Headings, body copy | inherited from the page — the library sets no `body` color |
-| Muted text (`small`) | `--nf-blue-l-80` |
-| Surface (`code`, `pre`) | `--nf-blue-l-10` |
-| Links | `--nf-red-l-80` (hover `--nf-red-l-90`) |
-| Components | their own `--nf-<component>-*` properties, resolved from the palette |
+| Role                    | Token                                                                |
+| ----------------------- | -------------------------------------------------------------------- |
+| Headings, body copy     | inherited from the page — the library sets no `body` color           |
+| Muted text (`small`)    | `--nf-blue-l-80`                                                     |
+| Surface (`code`, `pre`) | `--nf-blue-l-10`                                                     |
+| Links                   | `--nf-red-l-80` (hover `--nf-red-l-90`)                              |
+| Components              | their own `--nf-<component>-*` properties, resolved from the palette |
 
 ### Grey
 
@@ -182,28 +182,28 @@ Both scales are bounded by the same two anchors: `#f9f9f9` at the light end and 
 	<figure><div style="background: var(--nf-grey-l-200)"></div><figcaption><code>l-200</code></figcaption></figure>
 </div>
 
-| Step | `grey-d` lightness | `grey-l` lightness | Chroma |
-|---|---|---|---|
-| 10 | `0.98` — `#f9f9f9` | `0.92` | `0` |
-| 20 | `0.93` | `0.85` | `0.002` |
-| 30 | `0.88` | `0.78` | `0.004` |
-| 40 | `0.83` | `0.71` | `0.007` |
-| 50 | `0.78` | `0.64` | `0.009` |
-| 60 | `0.7` | `0.57` | `0.011` |
-| 70 | `0.61` | `0.5` | `0.013` |
-| 80 | `0.51` | `0.43` | `0.016` |
-| 90 | `0.4` | `0.36` | `0.018` |
-| 100 | `0.29` — `#282A36` | `0.29` — `#282A36` | `0.02` |
-| 110 | `0.27` | `0.27` | `0.019` |
-| 120 | `0.25` | `0.25` | `0.018` |
-| 130 | `0.23` | `0.23` | `0.017` |
-| 140 | `0.21` | `0.21` | `0.016` |
-| 150 | `0.19` | `0.19` | `0.015` |
-| 160 | `0.17` | `0.17` | `0.014` |
-| 170 | `0.15` | `0.15` | `0.013` |
-| 180 | `0.13` | `0.13` | `0.012` |
-| 190 | `0.11` | `0.11` | `0.011` |
-| 200 | `0.09` | `0.09` | `0.01` |
+| Step | `grey-d` lightness | `grey-l` lightness | Chroma  |
+| ---- | ------------------ | ------------------ | ------- |
+| 10   | `0.98` — `#f9f9f9` | `0.92`             | `0`     |
+| 20   | `0.93`             | `0.85`             | `0.002` |
+| 30   | `0.88`             | `0.78`             | `0.004` |
+| 40   | `0.83`             | `0.71`             | `0.007` |
+| 50   | `0.78`             | `0.64`             | `0.009` |
+| 60   | `0.7`              | `0.57`             | `0.011` |
+| 70   | `0.61`             | `0.5`              | `0.013` |
+| 80   | `0.51`             | `0.43`             | `0.016` |
+| 90   | `0.4`              | `0.36`             | `0.018` |
+| 100  | `0.29` — `#282A36` | `0.29` — `#282A36` | `0.02`  |
+| 110  | `0.27`             | `0.27`             | `0.019` |
+| 120  | `0.25`             | `0.25`             | `0.018` |
+| 130  | `0.23`             | `0.23`             | `0.017` |
+| 140  | `0.21`             | `0.21`             | `0.016` |
+| 150  | `0.19`             | `0.19`             | `0.015` |
+| 160  | `0.17`             | `0.17`             | `0.014` |
+| 170  | `0.15`             | `0.15`             | `0.013` |
+| 180  | `0.13`             | `0.13`             | `0.012` |
+| 190  | `0.11`             | `0.11`             | `0.011` |
+| 200  | `0.09`             | `0.09`             | `0.01`  |
 
 The hue angle is `277.5` on every step — the cast measured off `#282A36`. Chroma climbs from `0` to `0.02` with the step, so the pale greys are exactly neutral and only the dark end carries a trace of blue.
 
@@ -246,7 +246,7 @@ One more token holds the offsets on their own:
 }
 ```
 
-Use `--nf-shadow-depth` when the shadow's color is decided somewhere else — in particular when it has to follow the color scheme. `light-dark()` resolves *colors*, not whole values, so it cannot pick between two complete shadow tokens; it can pick the color you hand to `--nf-shadow-depth`. That is exactly how `Callout` draws its shadow.
+Use `--nf-shadow-depth` when the shadow's color is decided somewhere else — in particular when it has to follow the color scheme. `light-dark()` resolves _colors_, not whole values, so it cannot pick between two complete shadow tokens; it can pick the color you hand to `--nf-shadow-depth`. That is exactly how `Callout` draws its shadow.
 
 :::note
 These are plain custom properties, not a function: the color is baked into the name. When CSS custom functions are available everywhere, this file collapses into one function without changing a single call site.
@@ -270,23 +270,23 @@ It is the one library stylesheet besides the reset that styles your own markup. 
 
 Every input is a custom property on `:root`, so you retune the scale by overriding one:
 
-| Property | Default |
-|---|---|
-| `--nf-typography-viewport-min` | `560px` |
-| `--nf-typography-viewport-max` | `1088px` |
-| `--nf-typography-viewport-progress` | `progress(100svw, …-min, …-max)` |
-| `--nf-typography-font-size-h1-min` | `3rem` |
-| `--nf-typography-font-size-h1-max` | `3.5rem` |
-| `--nf-typography-font-size-h1` | interpolated between the two above |
-| `--nf-typography-font-size-h2-min` | `2.5rem` |
-| `--nf-typography-font-size-h2-max` | `3rem` |
-| `--nf-typography-font-size-h2` | interpolated between the two above |
-| `--nf-typography-font-size-h3-min` | `2rem` |
-| `--nf-typography-font-size-h3-max` | `2.5rem` |
-| `--nf-typography-font-size-h3` | interpolated between the two above |
-| `--nf-typography-font-size-p-min` | `1rem` |
-| `--nf-typography-font-size-p-max` | `1.125rem` |
-| `--nf-typography-font-size-p` | interpolated between the two above |
+| Property                            | Default                            |
+| ----------------------------------- | ---------------------------------- |
+| `--nf-typography-viewport-min`      | `560px`                            |
+| `--nf-typography-viewport-max`      | `1088px`                           |
+| `--nf-typography-viewport-progress` | `progress(100svw, …-min, …-max)`   |
+| `--nf-typography-font-size-h1-min`  | `3rem`                             |
+| `--nf-typography-font-size-h1-max`  | `3.5rem`                           |
+| `--nf-typography-font-size-h1`      | interpolated between the two above |
+| `--nf-typography-font-size-h2-min`  | `2.5rem`                           |
+| `--nf-typography-font-size-h2-max`  | `3rem`                             |
+| `--nf-typography-font-size-h2`      | interpolated between the two above |
+| `--nf-typography-font-size-h3-min`  | `2rem`                             |
+| `--nf-typography-font-size-h3-max`  | `2.5rem`                           |
+| `--nf-typography-font-size-h3`      | interpolated between the two above |
+| `--nf-typography-font-size-p-min`   | `1rem`                             |
+| `--nf-typography-font-size-p-max`   | `1.125rem`                         |
+| `--nf-typography-font-size-p`       | interpolated between the two above |
 
 ```css
 /* your stylesheet, unlayered */
@@ -308,11 +308,11 @@ h1 {
 
 Each element reaches its minimum at `--nf-typography-viewport-min` and its maximum at `--nf-typography-viewport-max`, and **holds** there outside that range — `progress()` clamps its own result to `0`–`1`, so the library wraps it in nothing:
 
-| Viewport | `h1` | `p` |
-|---|---|---|
-| `320px` | 48px (`3rem`) | 16px (`1rem`) |
-| `560px` | 48px (`3rem`) | 16px (`1rem`) |
-| `800px` | 51.64px | 16.91px |
+| Viewport | `h1`            | `p`               |
+| -------- | --------------- | ----------------- |
+| `320px`  | 48px (`3rem`)   | 16px (`1rem`)     |
+| `560px`  | 48px (`3rem`)   | 16px (`1rem`)     |
+| `800px`  | 51.64px         | 16.91px           |
 | `1088px` | 56px (`3.5rem`) | 18px (`1.125rem`) |
 | `2560px` | 56px (`3.5rem`) | 18px (`1.125rem`) |
 
@@ -344,19 +344,19 @@ It relies on the CSS [`progress()`](https://developer.mozilla.org/en-US/docs/Web
 :::
 
 :::note[Why the headings on this page are not fluid]
-These docs are a Starlight site, and Starlight declares its own cascade layers *after* importing the library. Later-declared layers win, so Starlight's heading rules outrank `nosferatu.typography` here — only the paragraphs on this page are sized by the scale. That is ordinary layer precedence rather than a defect, and it is why the demo lives on [its own page](/examples/typography/). The same happens in your project if you declare layers after loading `index.css`.
+These docs are a Starlight site, and Starlight declares its own cascade layers _after_ importing the library. Later-declared layers win, so Starlight's heading rules outrank `nosferatu.typography` here — only the paragraphs on this page are sized by the scale. That is ordinary layer precedence rather than a defect, and it is why the demo lives on [its own page](/examples/typography/). The same happens in your project if you declare layers after loading `index.css`.
 :::
 
 ## Fonts
 
 The library uses three typefaces, each with a job:
 
-| Property | Default | Where it applies |
-|---|---|---|
-| `--nf-font-family` | `'Outfit Variable', 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif` | `body` — the whole page, by inheritance |
-| `--nf-font-family-blog-post` | `'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif` | `p`, `strong`, `span` and `a` inside [BlogArticle](/layouts/blog-article/) |
-| `--nf-font-family-code-blog-post` | `'Geist Mono Variable', 'Geist Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace` | `code` and `pre` inside [BlogArticle](/layouts/blog-article/) |
-| `--nf-font-weight` | `400` | `body`, and `BlogArticle`'s paragraphs |
+| Property                          | Default                                                                                                       | Where it applies                                                           |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `--nf-font-family`                | `'Outfit Variable', 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif`                       | `body` — the whole page, by inheritance                                    |
+| `--nf-font-family-blog-post`      | `'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif` | `p`, `strong`, `span` and `a` inside [BlogArticle](/layouts/blog-article/) |
+| `--nf-font-family-code-blog-post` | `'Geist Mono Variable', 'Geist Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace`                    | `code` and `pre` inside [BlogArticle](/layouts/blog-article/)              |
+| `--nf-font-weight`                | `400`                                                                                                         | `body`, and `BlogArticle`'s paragraphs                                     |
 
 All four are declared on `:root` by `typography.css`.
 
