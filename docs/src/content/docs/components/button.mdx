@@ -1,42 +1,36 @@
 ---
 title: Button
-description: A raised button whose palette hue is chosen with the color prop and driven by --nf-button-* custom properties.
+description: A raised button in any palette hue, customized through --nf-button-* custom properties.
 ---
 
 import Button from 'astro-nosferatu/components/Button.astro';
+import DarkModeSwitch from '@/components/DarkModeSwitch.astro';
 
-```astro
+A raised button built on the native `<button>` element. It sinks when hovered and presses flat when clicked.
+
+Every component is built for both light and dark color schemes. Switch the site's theme to see this one in each:
+
+<DarkModeSwitch />
+
+## Usage
+
+```astro title=".astro" frame="terminal"
 ---
 import Button from 'astro-nosferatu/components/Button.astro';
 ---
+
+<Button>Button</Button>
 ```
 
 <div class="not-content demo">
 	<Button>Button</Button>
 </div>
 
-```astro
-<Button>Button</Button>
-```
+## Color variants
 
-## Colors
+You can change the color theme of the component with the `color` prop. If you don't pass it the fallback will be the default grey palette.
 
-`color` is optional and accepts any hue in the palette. Leave it out and the button is grey and its element carries **no** `data-ui-color` attribute: the grey is a fallback in the component's own CSS, not a value written into your markup. `color="grey"` looks exactly the same but renders `data-ui-color="grey"`. Any other value is rendered on the element as `data-ui-color`.
-
-<div class="not-content demo demo--grid">
-	<figure><Button>Button</Button><figcaption>default</figcaption></figure>
-	<figure><Button color="blue">Button</Button><figcaption><code>blue</code></figcaption></figure>
-	<figure><Button color="cyan">Button</Button><figcaption><code>cyan</code></figcaption></figure>
-	<figure><Button color="green">Button</Button><figcaption><code>green</code></figcaption></figure>
-	<figure><Button color="grey">Button</Button><figcaption><code>grey</code></figcaption></figure>
-	<figure><Button color="orange">Button</Button><figcaption><code>orange</code></figcaption></figure>
-	<figure><Button color="pink">Button</Button><figcaption><code>pink</code></figcaption></figure>
-	<figure><Button color="purple">Button</Button><figcaption><code>purple</code></figcaption></figure>
-	<figure><Button color="red">Button</Button><figcaption><code>red</code></figcaption></figure>
-	<figure><Button color="yellow">Button</Button><figcaption><code>yellow</code></figcaption></figure>
-</div>
-
-```astro
+```astro title=".astro" frame="terminal"
 <Button>Button</Button>
 <Button color="blue">Button</Button>
 <Button color="cyan">Button</Button>
@@ -49,119 +43,71 @@ import Button from 'astro-nosferatu/components/Button.astro';
 <Button color="yellow">Button</Button>
 ```
 
-Any other value is a type error: in an `.astro` file, `astro check` rejects `<Button color="teal">` outright. These documentation pages are `.mdx`, which `astro check` does not type-check, so a typo on this page would only show up as an unstyled button.
+<div class="not-content demo">
+	<Button>Button</Button>
+	<Button color="blue">Button</Button>
+	<Button color="cyan">Button</Button>
+	<Button color="green">Button</Button>
+	<Button color="grey">Button</Button>
+	<Button color="orange">Button</Button>
+	<Button color="pink">Button</Button>
+	<Button color="purple">Button</Button>
+	<Button color="red">Button</Button>
+	<Button color="yellow">Button</Button>
+</div>
 
 ## States
 
-The button has no border: it sits 4px above its own solid shadow, drawn in the same hue as its text. Its label is semibold. In light mode the two are the same step; in dark mode the shadow is one step lighter than the label, so the raised edge reads as depth rather than as a second line of text. Hover moves it 2px down and shortens the shadow to 2px; holding it down moves it 4px down and removes the shadow entirely, so it presses flat against the spot the shadow occupied. The travel and the shadow always add up to 4px, so its bottom edge never moves. Everything that changes between the three states animates over `0.15s ease-in-out`.
+### Disabled
 
-The cursor is a pointer while the button is enabled.
+The native `disabled` attribute fades the button and stops it from moving.
 
-Readers who ask their system for reduced motion get the same three states and the same feedback, applied instantly — the button still sinks and flattens, it just does not animate on the way.
-
-A `disabled` button does neither — it keeps its resting height and shadow, drops to 50% opacity and takes a `not-allowed` cursor. The fade is not animated; only the movement, the shadow and the colors are.
-
-<div class="not-content demo">
-	<Button color="green">Hover and hold me</Button>
-	<Button color="green" disabled>Disabled</Button>
-</div>
-
-```astro
-<Button color="green">Hover and hold me</Button>
+```astro title=".astro" frame="terminal"
 <Button color="green" disabled>Disabled</Button>
 ```
 
-Focus does both: the button sinks the way it does on hover, and keyboard focus adds a 2px outline in its accent color, inset by its own width so it reads as a border on the button rather than a ring around it. Because the outline is inset, it changes neither the button's size nor its position. Clicking the button sinks it without drawing the outline — the outline is bound to `:focus-visible`.
-
-## Light and dark
-
-Each hue is declared once with `light-dark()`. In light that is `--nf-<hue>-l-40` for the fill and `--nf-<hue>-l-80` for both the text and the shadow; in dark it is `--nf-<hue>-d-50` for the fill, `--nf-<hue>-d-90` for the text and `--nf-<hue>-d-80` for the shadow. `reset.css` sets `color-scheme: light dark` on `:root`, so the buttons follow the reader's preferred scheme with no extra work — flip this site's theme toggle and watch them change.
-
-To pin a scheme, set `color-scheme` yourself in unlayered CSS; it wins over the library's reset without any extra specificity:
-
-```css
-:root {
-	color-scheme: only light;
-}
-```
-
-It works per subtree too, which is how the pair below renders both branches side by side on one page:
-
 <div class="not-content demo">
-	<span style="color-scheme: only light"><Button color="pink">Light</Button></span>
-	<span style="color-scheme: only dark"><Button color="pink">Dark</Button></span>
+	<Button color="green" disabled>Disabled</Button>
 </div>
-
-```astro
-<span style="color-scheme: only light"><Button color="pink">Light</Button></span>
-<span style="color-scheme: only dark"><Button color="pink">Dark</Button></span>
-```
 
 ## Props
 
-| Prop    | Type                                                                                           | Default      | Notes                                                                                                                 |
-| ------- | ---------------------------------------------------------------------------------------------- | ------------ | --------------------------------------------------------------------------------------------------------------------- |
-| `color` | `'blue' \| 'cyan' \| 'green' \| 'grey' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | grey (unset) | Rendered as `data-ui-color` on the element when passed. Omitted, the element has no `data-ui-color` and renders grey. |
-| `type`  | `'button' \| 'submit' \| 'reset'`                                                              | `'button'`   | Set `type="submit"` inside forms.                                                                                     |
+| Prop    | Type                                                                                           | Required | Default      |
+| ------- | ---------------------------------------------------------------------------------------------- | -------- | ------------ |
+| `color` | `'blue' \| 'cyan' \| 'green' \| 'grey' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | No       | grey (unset) |
+| `type`  | `'button' \| 'submit' \| 'reset'`                                                              | No       | `'button'`   |
 
-Every other `<button>` attribute (`disabled`, `name`, `aria-*`, `class`, event attributes...) is passed through to the element.
+Every other `<button>` attribute passes through to the element. The default slot is the button's label.
 
-## Theming
+## CSS Variables
 
-The button reads its colors from exactly three custom properties — `--nf-button-color` for the background, `--nf-button-accent-color` for the text and the focus outline, and `--nf-button-shadow-color` for the shadow. The shadow has its own property so it can sit a step away from the label instead of copying it; set only `--nf-button-shadow-color` and the label stays where it was. On a button with no `color`, set them on an ancestor to theme it without touching any other:
+| Variable                          | Description                               |
+| --------------------------------- | ----------------------------------------- |
+| `--nf-button-color`               | Background color                          |
+| `--nf-button-accent-color`        | Text and focus outline color              |
+| `--nf-button-shadow-color`        | Color of the shadow under the button      |
+| `--nf-button-border-width`        | Width of the focus outline                |
+| `--nf-button-transition-duration` | Duration of the hover and press animation |
 
-<div class="not-content demo" style="--nf-button-color: var(--nf-green-l-20); --nf-button-accent-color: var(--nf-blue-l-90); --nf-button-shadow-color: var(--nf-blue-l-70);">
-	<Button>Themed</Button>
-</div>
+### Theming
 
-```astro
-<div style="--nf-button-color: var(--nf-green-l-20); --nf-button-accent-color: var(--nf-blue-l-90); --nf-button-shadow-color: var(--nf-blue-l-70);">
-	<Button>Themed</Button>
-</div>
+Set the variables in a class from a global stylesheet and pass it to the component. Leave `color` out: a `color` sets its own values, which win over the class.
+
+```css title=".css" frame="terminal"
+.themed-button {
+	--nf-button-color: var(--nf-green-l-20);
+	--nf-button-accent-color: var(--nf-blue-l-90);
+	--nf-button-shadow-color: var(--nf-blue-l-70);
+}
 ```
 
-A button that has a `color` ignores those inherited values: its `[data-ui-color="…"]` rule declares all three properties on the button itself, and a declaration on an element always beats a value inherited into it. A plain class on the button loses too, on specificity. Set them through the button's own `style` instead:
+```astro title=".astro" frame="terminal"
+<Button class="themed-button">Themed</Button>
+```
 
 <div class="not-content demo">
-	<Button color="red" style="--nf-button-color: var(--nf-green-l-20); --nf-button-accent-color: var(--nf-blue-l-90); --nf-button-shadow-color: var(--nf-blue-l-70);">Themed</Button>
+	<Button class="themed-button">Themed</Button>
 </div>
-
-```astro
-<Button
-	color="red"
-	style="--nf-button-color: var(--nf-green-l-20); --nf-button-accent-color: var(--nf-blue-l-90); --nf-button-shadow-color: var(--nf-blue-l-70);"
->
-	Themed
-</Button>
-```
-
-Overriding a palette token instead re-themes every button using that hue:
-
-<div class="not-content demo" style="--nf-red-l-40: var(--nf-yellow-l-40); --nf-red-l-80: var(--nf-yellow-l-80);">
-	<Button color="red">Still color="red"</Button>
-</div>
-
-```astro
-<div style="--nf-red-l-40: var(--nf-yellow-l-40); --nf-red-l-80: var(--nf-yellow-l-80);">
-	<Button color="red">Still color="red"</Button>
-</div>
-```
-
-## Scoped styles
-
-The button's styles only apply to the button itself. A plain `<button>` next to it is left alone — even one carrying the same `data-ui-color` attribute:
-
-<div class="not-content demo">
-	<Button>Component</Button>
-	<button type="button">Plain button</button>
-	<button type="button" data-ui-color="green">Plain button with data-ui-color</button>
-</div>
-
-```astro
-<Button>Component</Button>
-<button type="button">Plain button</button>
-<button type="button" data-ui-color="green">Plain button with data-ui-color</button>
-```
 
 <style>{`
 	.demo {
@@ -175,21 +121,9 @@ The button's styles only apply to the button itself. A plain `<button>` next to 
 		border-radius: 0.5rem;
 	}
 
-	.demo--grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-		gap: 1.25rem;
-	}
-
-	.demo figure {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 0.5rem;
-		margin: 0;
-	}
-
-	.demo figcaption {
-		font-size: 0.875rem;
+	.themed-button {
+		--nf-button-color: var(--nf-green-l-20);
+		--nf-button-accent-color: var(--nf-blue-l-90);
+		--nf-button-shadow-color: var(--nf-blue-l-70);
 	}
 `}</style>
