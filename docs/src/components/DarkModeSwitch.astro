@@ -1,0 +1,42 @@
+---
+/*
+ * Docs-only: flips Starlight's theme to the opposite scheme, so readers can watch
+ * the library's light-dark() colors change next to the demos. It does what
+ * Starlight's own theme picker does, so the picker and the stored choice stay in sync.
+ */
+import Button from "astro-nosferatu/components/Button.astro";
+---
+
+<div class="not-content dark-mode-switch">
+	<Button color="purple" data-dark-mode-switch>
+		Toggle dark/light mode
+	</Button>
+</div>
+
+<script>
+	declare global {
+		interface Window {
+			StarlightThemeProvider?: { updatePickers(theme?: string): void };
+		}
+	}
+
+	for (const button of document.querySelectorAll("[data-dark-mode-switch]")) {
+		button.addEventListener("click", () => {
+			const root = document.documentElement;
+			const next = root.dataset.theme === "light" ? "dark" : "light";
+			root.dataset.theme = next;
+			try {
+				localStorage.setItem("starlight-theme", next);
+			} catch {
+				// Storage blocked: the switch still works for this page view
+			}
+			window.StarlightThemeProvider?.updatePickers(next);
+		});
+	}
+</script>
+
+<style>
+	.dark-mode-switch {
+		margin-block: 1rem;
+	}
+</style>

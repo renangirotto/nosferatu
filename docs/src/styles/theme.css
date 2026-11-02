@@ -9,6 +9,19 @@
 	--ec-uiFontFml: var(--sl-font-system);
 }
 
+/*
+ * The library's reset sets `color-scheme: light dark`, which follows the OS.
+ * Pin it to Starlight's chosen theme so the components' light-dark() colors
+ * follow the site toggle — unlayered, so it wins without extra specificity.
+ */
+:root[data-theme="light"] {
+	color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+	color-scheme: dark;
+}
+
 :root[data-theme="dark"] {
 	--sl-color-bg: var(--nf-grey-d-100);
 	--sl-color-bg-nav: var(--nf-grey-d-100);
