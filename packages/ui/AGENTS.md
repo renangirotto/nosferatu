@@ -8,8 +8,10 @@ The published package. Everything here ends up in consumers' projects as **sourc
 src/components/   .astro components, one file per component, PascalCase
 src/layouts/      .astro page layouts, one file per layout, PascalCase
 src/styles/       index.css tokens.css colors/ shadows.css spacings.css borders.css reset.css typography.css
-src/types/        shared prop types (ColorPalette), published but not exported
+src/types/        shared prop types (ColorPalette, IconComponent), published but not exported
 ```
+
+`iconoir` is the library's one dependency, for internal use: a component imports an icon by its literal path (`iconoir/icons/regular/plus.svg`), which resolves from the package under any package manager. A path built from a variable does not — Vite cannot bundle it. Iconoir is not part of the public API.
 
 `index.css` only declares the layer order and `@import`s `tokens.css`, `reset.css` and `typography.css` into their layers; `tokens.css` is itself only `@import`s, pulling in `colors/index.css`, `shadows.css`, `spacings.css` and `borders.css`. Put real declarations in the specific stylesheet, never in `index.css` or `tokens.css`.
 
@@ -36,7 +38,7 @@ The `component-build` skill in [.agents/skills/component-build](../../.agents/sk
 
 ## Exports
 
-`exports` in [package.json](package.json) deliberately exposes only `./components/*`, `./layouts/*`, `./styles/*` and `./package.json`. Adding a file under those directories publishes it automatically; anything else stays unreachable by design. Do not widen `exports`, add `dependencies`, loosen the `astro` peer range, or extend `files` beyond `src` without an approved change.
+`exports` in [package.json](package.json) deliberately exposes only `./components/*`, `./layouts/*`, `./styles/*` and `./package.json`. Adding a file under those directories publishes it automatically; anything else stays unreachable by design. Do not widen `exports`, add `dependencies` beyond `iconoir`, loosen the `astro` peer range, or extend `files` beyond `src` without an approved change.
 
 ## Checks
 

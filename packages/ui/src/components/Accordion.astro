@@ -1,15 +1,27 @@
 ---
 import type { HTMLAttributes } from "astro/types";
-import type { ColorPalette } from "../types/components";
+import type { ColorPalette, IconComponent } from "../types/components";
+/*
+ * Iconoir is a dependency of this package, so these resolve from here under
+ * any package manager and the consumer installs nothing for the defaults.
+ */
+import Plus from "iconoir/icons/regular/plus.svg";
+import Minus from "iconoir/icons/regular/minus.svg";
 
 interface Props extends HTMLAttributes<"details"> {
 	summary: string;
 	color?: ColorPalette;
+	/* Shown while closed, in place of the plus */
+	iconCollapsed?: IconComponent;
+	/* Shown while open, in place of the minus */
+	iconExpanded?: IconComponent;
 }
 
 const {
 	summary,
 	color,
+	iconCollapsed: Collapsed,
+	iconExpanded: Expanded,
 	class: className,
 	"data-ui-color": _controlled,
 	...attrs
@@ -21,7 +33,18 @@ const {
 	data-ui-color={color}
 	class:list={["nf-accordion", className]}
 >
-	<summary class="nf-accordion-summary">{summary}</summary>
+	<summary class="nf-accordion-summary">
+		<span class="nf-accordion-label">{summary}</span>
+		{/* The summary already exposes the expanded state, so both icons are decorative */}
+		<span class="nf-accordion-icon" aria-hidden="true">
+			<span class="nf-accordion-icon-collapsed">
+				{Collapsed ? <Collapsed /> : <Plus width="1em" height="1em" />}
+			</span>
+			<span class="nf-accordion-icon-expanded">
+				{Expanded ? <Expanded /> : <Minus width="1em" height="1em" />}
+			</span>
+		</span>
+	</summary>
 	<div class="nf-accordion-content">
 		<slot />
 	</div>
@@ -32,8 +55,18 @@ const {
 		--nf-accordion-depth: 4px;
 		--nf-accordion-lift: 0px;
 		--nf-accordion-border-width: 2px;
+		/* 24px against the 1rem summary, at the default root size */
+		--nf-accordion-icon-size: 1.5rem;
 		--nf-accordion-transition-duration: 0.15s;
 		--nf-accordion-disclosure-duration: 0.3s;
+
+		/* The depth belongs to the whole panel, so it shows closed and open alike */
+		border-radius: var(--nf-border-radius-base);
+		box-shadow: 0px var(--nf-accordion-depth) 0px
+			var(
+				--nf-accordion-shadow-color,
+				light-dark(var(--nf-grey-l-80), var(--nf-grey-d-80))
+			);
 
 		&[data-ui-color="blue"] {
 			--nf-accordion-color: light-dark(
@@ -47,6 +80,10 @@ const {
 			--nf-accordion-shadow-color: light-dark(
 				var(--nf-blue-l-80),
 				var(--nf-blue-d-80)
+			);
+			--nf-accordion-rule-color: light-dark(
+				var(--nf-blue-l-60-25),
+				var(--nf-blue-d-70-25)
 			);
 		}
 
@@ -63,6 +100,10 @@ const {
 				var(--nf-cyan-l-80),
 				var(--nf-cyan-d-80)
 			);
+			--nf-accordion-rule-color: light-dark(
+				var(--nf-cyan-l-60-25),
+				var(--nf-cyan-d-70-25)
+			);
 		}
 
 		&[data-ui-color="green"] {
@@ -77,6 +118,10 @@ const {
 			--nf-accordion-shadow-color: light-dark(
 				var(--nf-green-l-80),
 				var(--nf-green-d-80)
+			);
+			--nf-accordion-rule-color: light-dark(
+				var(--nf-green-l-60-25),
+				var(--nf-green-d-70-25)
 			);
 		}
 
@@ -93,6 +138,10 @@ const {
 				var(--nf-grey-l-80),
 				var(--nf-grey-d-80)
 			);
+			--nf-accordion-rule-color: light-dark(
+				var(--nf-grey-l-60-25),
+				var(--nf-grey-d-70-25)
+			);
 		}
 
 		&[data-ui-color="orange"] {
@@ -107,6 +156,10 @@ const {
 			--nf-accordion-shadow-color: light-dark(
 				var(--nf-orange-l-80),
 				var(--nf-orange-d-80)
+			);
+			--nf-accordion-rule-color: light-dark(
+				var(--nf-orange-l-60-25),
+				var(--nf-orange-d-70-25)
 			);
 		}
 
@@ -123,6 +176,10 @@ const {
 				var(--nf-pink-l-80),
 				var(--nf-pink-d-80)
 			);
+			--nf-accordion-rule-color: light-dark(
+				var(--nf-pink-l-60-25),
+				var(--nf-pink-d-70-25)
+			);
 		}
 
 		&[data-ui-color="purple"] {
@@ -138,6 +195,10 @@ const {
 				var(--nf-purple-l-80),
 				var(--nf-purple-d-80)
 			);
+			--nf-accordion-rule-color: light-dark(
+				var(--nf-purple-l-60-25),
+				var(--nf-purple-d-70-25)
+			);
 		}
 
 		&[data-ui-color="red"] {
@@ -149,6 +210,10 @@ const {
 			--nf-accordion-shadow-color: light-dark(
 				var(--nf-red-l-80),
 				var(--nf-red-d-80)
+			);
+			--nf-accordion-rule-color: light-dark(
+				var(--nf-red-l-60-25),
+				var(--nf-red-d-70-25)
 			);
 		}
 
@@ -165,15 +230,35 @@ const {
 				var(--nf-yellow-l-80),
 				var(--nf-yellow-d-80)
 			);
+			--nf-accordion-rule-color: light-dark(
+				var(--nf-yellow-l-60-25),
+				var(--nf-yellow-d-70-25)
+			);
 		}
 	}
 
-	/* The raised control, built exactly like Button, with the native marker kept */
+	/*
+	 * The raised control: the text at the start, the icon at the end. It has no
+	 * shadow of its own — it slides down over the panel's shadow to read as pressed.
+	 */
 	.nf-accordion-summary {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: var(--nf-spacing-base-low-2);
+		border: none;
+		/*
+		 * Always 2px, so opening never changes the summary's height: invisible
+		 * against the fill while closed, the rule color while open.
+		 */
+		border-block-end: var(--nf-accordion-border-width) solid
+			var(
+				--nf-accordion-color,
+				light-dark(var(--nf-grey-l-40), var(--nf-grey-d-50))
+			);
+		border-radius: var(--nf-border-radius-base);
 		padding-block: var(--nf-spacing-base-low-2);
 		padding-inline: var(--nf-spacing-base);
-		border: none;
-		border-radius: var(--nf-border-radius-base);
 		color: var(
 			--nf-accordion-accent-color,
 			light-dark(var(--nf-grey-l-80), var(--nf-grey-d-90))
@@ -183,29 +268,28 @@ const {
 			--nf-accordion-color,
 			light-dark(var(--nf-grey-l-40), var(--nf-grey-d-50))
 		);
-		box-shadow: 0px var(--nf-accordion-depth) 0px
-			var(
-				--nf-accordion-shadow-color,
-				light-dark(var(--nf-grey-l-80), var(--nf-grey-d-80))
-			);
+		list-style: none;
 		translate: 0 var(--nf-accordion-lift);
 		cursor: pointer;
-		transition-property: translate, box-shadow, background-color, color;
+		transition-property: translate, background-color, color, border-color;
 		transition-duration: var(--nf-accordion-transition-duration);
 		transition-timing-function: ease-in-out;
 
+		/* Safari still paints the marker without this */
+		&::-webkit-details-marker {
+			display: none;
+		}
+
 		&:hover,
 		&:focus-within {
-			--nf-accordion-depth: 3px;
 			--nf-accordion-lift: 1px;
 		}
 
 		&:active {
-			--nf-accordion-depth: 0px;
 			--nf-accordion-lift: 4px;
 		}
 
-		/* The summary has no border, so the focus ring is drawn inside its edge as one */
+		/* Drawn inside the summary's edge, so it reads as a border on it */
 		&:focus-visible {
 			outline: var(--nf-accordion-border-width) solid
 				var(
@@ -217,13 +301,49 @@ const {
 	}
 
 	/*
-		 * After the hover and active rules on purpose: an open panel keeps its
-		 * summary pressed whatever the pointer is doing, and the two selectors
-		 * weigh the same, so source order is what decides it.
-		 */
+	 * After the hover and active rules on purpose: an open summary stays put
+	 * whatever the pointer is doing, sitting on its rule with square bottom
+	 * corners against the content below.
+	 */
 	.nf-accordion[open] .nf-accordion-summary {
-		--nf-accordion-depth: 0px;
-		--nf-accordion-lift: 4px;
+		--nf-accordion-lift: 0px;
+
+		border-block-end-color: var(
+			--nf-accordion-rule-color,
+			light-dark(var(--nf-grey-l-60-25), var(--nf-grey-d-70-25))
+		);
+		border-end-start-radius: 0;
+		border-end-end-radius: 0;
+	}
+
+	/*
+	 * One line of the summary tall, at the summary's own font size, so the icon
+	 * centres on the first line when the text wraps. The icon parts carry the
+	 * icon size, so content sized in em follows --nf-accordion-icon-size.
+	 */
+	.nf-accordion-icon {
+		display: flex;
+		flex: none;
+		align-items: center;
+		block-size: 1lh;
+	}
+
+	.nf-accordion-icon-collapsed,
+	.nf-accordion-icon-expanded {
+		display: flex;
+		font-size: var(--nf-accordion-icon-size);
+	}
+
+	.nf-accordion-icon-expanded {
+		display: none;
+	}
+
+	.nf-accordion[open] .nf-accordion-icon-collapsed {
+		display: none;
+	}
+
+	.nf-accordion[open] .nf-accordion-icon-expanded {
+		display: flex;
 	}
 
 	/* The inside of the control: same fill, same accent, no shadow of its own */
@@ -286,6 +406,33 @@ const {
 				/* A travel distance, not spacing: literal rather than tokenised */
 				translate: 0 -8px;
 			}
+		}
+
+		/*
+		 * Closing drops [open] at once, but the panel takes the disclosure
+		 * duration to shrink: the summary keeps its square corners and its rule
+		 * until then, and switches in one step when the panel is gone. A
+		 * transition takes its timing from the state being entered, so opening —
+		 * which enters [open], where the delay is zero — switches immediately.
+		 * Inside @supports on purpose: without the animation the panel closes
+		 * instantly, and so must the corners.
+		 */
+		.nf-accordion-summary {
+			transition-property:
+				translate, background-color, color, border-color,
+				border-end-start-radius, border-end-end-radius;
+			transition-duration:
+				var(--nf-accordion-transition-duration),
+				var(--nf-accordion-transition-duration),
+				var(--nf-accordion-transition-duration), 0s, 0s, 0s;
+			transition-delay:
+				0s, 0s, 0s, var(--nf-accordion-disclosure-duration),
+				var(--nf-accordion-disclosure-duration),
+				var(--nf-accordion-disclosure-duration);
+		}
+
+		.nf-accordion[open] .nf-accordion-summary {
+			transition-delay: 0s;
 		}
 	}
 

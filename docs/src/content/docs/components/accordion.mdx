@@ -4,10 +4,18 @@ description: A native details/summary disclosure whose summary is a raised butto
 ---
 
 import Accordion from 'astro-nosferatu/components/Accordion.astro';
+import ArrowDown from 'iconoir/icons/nav-arrow-down.svg';
+import ArrowUp from 'iconoir/icons/nav-arrow-up.svg';
+
+export const em = (Icon) => (props) => <Icon width="1em" height="1em" {...props} />;
 
 ```astro
 ---
 import Accordion from 'astro-nosferatu/components/Accordion.astro';
+import ArrowDown from 'iconoir/icons/nav-arrow-down.svg';
+import ArrowUp from 'iconoir/icons/nav-arrow-up.svg';
+
+export const em = (Icon) => (props) => <Icon width="1em" height="1em" {...props} />;
 ---
 ```
 
@@ -95,27 +103,58 @@ The component declares no props for opening, closing or grouping. All of that is
 
 ## States
 
-The summary is a `Button` in every respect but the element. It has no border: it sits 4px above its own solid shadow, drawn in the same hue as its text — the same step in light mode, one step lighter in dark mode, so the raised edge reads as depth rather than as a second line of text. Its label is semibold. Hover moves it 2px down and shortens the shadow to 2px; holding it down moves it 4px down and removes the shadow, so it presses flat against the spot the shadow occupied. The travel and the shadow always add up to 4px, so the summary's bottom edge never moves. The cursor is a pointer.
+The whole accordion sits 4px above a solid shadow, drawn in the same hue as its text — the same step in light mode, one step lighter in dark mode, so the raised edge reads as depth rather than as a second line of text. The shadow belongs to the `<details>`, not the summary, so it stays under the whole panel whether the accordion is closed or open. The summary's label is semibold and the cursor is a pointer.
 
-While the accordion is **open**, the summary holds that pressed appearance — down 4px, no shadow — whatever the pointer is doing, so an open panel reads as a button somebody is still holding down, sunk into the panel it opened. Moving the pointer over an open summary does not lift it back to the hover depth, and closing the accordion returns it to the raised resting state.
+Only the summary moves, and only while the accordion is **closed**. Hover nudges it 1px down; holding it down moves it 4px, sliding it over the shadow so it reads as pressed. The shadow itself never changes.
 
-Focus does both: the summary sinks the way it does on hover, and keyboard focus adds a 2px outline in the accent color, inset by its own width so it reads as a border rather than a ring. Because the outline is inset, it changes neither the summary's size nor its position. Clicking sinks the summary without drawing the outline — the outline is bound to `:focus-visible`.
+While the accordion is **open**, the summary stays where it is, whatever the pointer is doing. Its bottom corners turn square and a 2px rule in `--nf-accordion-rule-color` separates it from the content below. The rule is there while closed too, painted in the fill so you cannot see it, which is why opening never makes the summary 2px taller.
+
+Focus does both: the closed summary nudges the way it does on hover, and keyboard focus adds a 2px outline in the accent color, inset by its own width so it reads as a border rather than a ring. Because the outline is inset, it changes neither the summary's size nor its position. Clicking moves the summary without drawing the outline — the outline is bound to `:focus-visible`.
 
 Everything that changes between those states animates over `0.15s ease-in-out`.
 
 <div class="not-content demo demo--stack">
 	<Accordion summary="Hover me, hold me, tab to me" color="orange">
-		Open me too, and watch the summary stay pressed.
+		Open me too, and watch the summary settle on its rule.
 	</Accordion>
 </div>
 
 ```astro
 <Accordion summary="Hover me, hold me, tab to me" color="orange">
-	Open me too, and watch the summary stay pressed.
+	Open me too, and watch the summary settle on its rule.
 </Accordion>
 ```
 
-The disclosure triangle is the browser's own marker, painted in the summary's color. The component draws no icon of its own, so the marker stays exactly as accessible as the browser makes it.
+## Icons
+
+The browser's own disclosure triangle is hidden. In its place the summary ends with an icon of the component's own: Iconoir's `plus` while the accordion is closed, `minus` while it is open. The two are swapped in CSS on the `[open]` state, with no script.
+
+The plus and minus come with the library: Iconoir is one of its dependencies, so you install nothing for them.
+
+`iconCollapsed` and `iconExpanded` replace them. Each takes **a component**, the same way `Callout`'s `icon` does — an imported `.svg`, an `.astro` file, a framework component. The accordion renders it with no props, so size it in `em` where you define it:
+
+<div class="not-content demo demo--stack">
+	<Accordion summary="Arrows, as components" iconCollapsed={em(ArrowDown)} iconExpanded={em(ArrowUp)} color="purple">
+		Any component works: an imported .svg, an .astro file, a framework component.
+	</Accordion>
+</div>
+
+```astro
+---
+// Any icon set works; to use Iconoir here, install it in your own project
+import ArrowDown from 'iconoir/icons/nav-arrow-down.svg';
+import ArrowUp from 'iconoir/icons/nav-arrow-up.svg';
+
+const Down = (props) => <ArrowDown width="1em" height="1em" {...props} />;
+const Up = (props) => <ArrowUp width="1em" height="1em" {...props} />;
+---
+
+<Accordion summary="Arrows, as components" iconCollapsed={Down} iconExpanded={Up} color="purple">
+	Any component works: an imported .svg, an .astro file, a framework component.
+</Accordion>
+```
+
+The icon sits at the end of the summary row, centred on its first line, in the accent color, at `--nf-accordion-icon-size` — `1.5rem`, or 24px at the default root size. A long summary wraps beside it without overlapping. Both icons are decorative: their box is `aria-hidden`, because the `<summary>` already tells assistive technology whether the panel is expanded.
 
 ## Animation
 
@@ -151,7 +190,7 @@ Readers who ask their system for reduced motion get the same instant disclosure,
 
 ## Light and dark
 
-Each hue is declared once with `light-dark()`. In light that is `--nf-<hue>-l-40` for the fill and `--nf-<hue>-l-80` for both the text and the shadow; in dark it is `--nf-<hue>-d-50` for the fill, `--nf-<hue>-d-90` for the text and `--nf-<hue>-d-80` for the shadow — the same pairing `Button` uses. `reset.css` sets `color-scheme: light dark` on `:root`, so an accordion follows the reader's preferred scheme with no extra work; flip this site's theme toggle and watch it change.
+Each hue is declared once with `light-dark()`. In light that is `--nf-<hue>-l-40` for the fill and `--nf-<hue>-l-80` for both the text and the shadow; in dark it is `--nf-<hue>-d-50` for the fill, `--nf-<hue>-d-90` for the text and `--nf-<hue>-d-80` for the shadow — the same pairing `Button` uses. The rule under an open summary takes the palette's 25% tier: `--nf-<hue>-l-60-25` in light, `--nf-<hue>-d-70-25` in dark. `reset.css` sets `color-scheme: light dark` on `:root`, so an accordion follows the reader's preferred scheme with no extra work; flip this site's theme toggle and watch it change.
 
 To pin a scheme, set `color-scheme` yourself in unlayered CSS; it wins over the library's reset without any extra specificity, and it works per subtree:
 
@@ -169,10 +208,12 @@ The animation does not depend on `reset.css` at all: the component writes `calc-
 
 ## Props
 
-| Prop      | Type                                                                                           | Default      | Notes                                                                                                                 |
-| --------- | ---------------------------------------------------------------------------------------------- | ------------ | --------------------------------------------------------------------------------------------------------------------- |
-| `summary` | `string`                                                                                       | —            | **Required.** The summary line's text. It is not forwarded to the element, so it produces no tooltip.                 |
-| `color`   | `'blue' \| 'cyan' \| 'green' \| 'grey' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | grey (unset) | Rendered as `data-ui-color` on the element when passed. Omitted, the element has no `data-ui-color` and renders grey. |
+| Prop            | Type                                                                                           | Default         | Notes                                                                                                                 |
+| --------------- | ---------------------------------------------------------------------------------------------- | --------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `summary`       | `string`                                                                                       | —               | **Required.** The summary line's text. It is not forwarded to the element, so it produces no tooltip.                 |
+| `color`         | `'blue' \| 'cyan' \| 'green' \| 'grey' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | grey (unset)    | Rendered as `data-ui-color` on the element when passed. Omitted, the element has no `data-ui-color` and renders grey. |
+| `iconCollapsed` | component                                                                                      | Iconoir `plus`  | Shown while closed. Rendered with no props. Not forwarded as an attribute.                                            |
+| `iconExpanded`  | component                                                                                      | Iconoir `minus` | Shown while open. Same rules as `iconCollapsed`.                                                                      |
 
 | Slot    | Optional | Notes                                                                                                                          |
 | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------ |
@@ -182,7 +223,7 @@ Every other `<details>` attribute (`open`, `name`, `id`, `aria-*`, `class`, even
 
 ## Theming
 
-The accordion reads its colors from exactly three custom properties — `--nf-accordion-color` for the fill of both the summary and the panel, `--nf-accordion-accent-color` for the text, the marker and the focus outline, and `--nf-accordion-shadow-color` for the summary's shadow. The shadow has its own property so it can sit a step away from the label instead of copying it. Set them **on the component itself**:
+The accordion reads its colors from exactly four custom properties — `--nf-accordion-color` for the fill of both the summary and the panel, `--nf-accordion-accent-color` for the text, the icon and the focus outline, `--nf-accordion-shadow-color` for the shadow under the whole accordion, and `--nf-accordion-rule-color` for the rule under an open summary. The shadow and the rule have their own properties so they can sit a step away from the label instead of copying it. A fifth, `--nf-accordion-icon-size` (`1.5rem`), sizes the icon. Set them **on the component itself**:
 
 <div class="not-content demo demo--stack">
 	<Accordion summary="Themed" style="--nf-accordion-color: var(--nf-green-l-20); --nf-accordion-accent-color: var(--nf-blue-l-90); --nf-accordion-shadow-color: var(--nf-blue-l-70);">

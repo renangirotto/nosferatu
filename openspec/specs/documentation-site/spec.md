@@ -86,7 +86,7 @@ The documentation site SHALL document `Callout` on its own page, rendering it li
 
 ### Requirement: Accordion page
 
-The documentation site SHALL document `Accordion` on its own page, rendering it live for every value of its `color` prop. The page SHALL state that `summary` is required and is not rendered as a native attribute, SHALL document the default slot, and SHALL show live examples of a closed accordion, one rendered with the native `open` attribute, and a group of accordions sharing a native `name` so that opening one closes the others — each with the code that produces it. The page SHALL describe the summary's resting, hover, active, focus and `[open]` appearances in prose beside a demo the reader can actually operate, SHALL list the `--nf-accordion-*` custom properties a consumer can override together with a live theming demo and its exact code, and SHALL end with a demo placing the component beside a plain `<details>` element to show the component's styles do not leak. Because the open and close animation is progressive enhancement, the page SHALL state what the animation depends on, what a browser without that support does instead, and that reduced motion turns it off.
+The documentation site SHALL document `Accordion` on its own page, rendering it live for every value of its `color` prop. The page SHALL state that `summary` is required and is not rendered as a native attribute, SHALL document the default slot, and SHALL show live examples of a closed accordion, one rendered with the native `open` attribute, and a group of accordions sharing a native `name` so that opening one closes the others — each with the code that produces it. The page SHALL document `iconCollapsed` and `iconExpanded`, show their plus and minus defaults live and state that the library supplies them, and show live one accordion whose icons are replaced by components, with its code. The page SHALL describe the summary's resting, hover, active, focus and `[open]` appearances in prose beside a demo the reader can actually operate, SHALL list the `--nf-accordion-*` custom properties a consumer can override, `--nf-accordion-icon-size` and `--nf-accordion-rule-color` included, together with a live theming demo and its exact code, and SHALL end with a demo placing the component beside a plain `<details>` element to show the component's styles do not leak. Because the open and close animation is progressive enhancement, the page SHALL state what the animation depends on, what a browser without that support does instead, and that reduced motion turns it off.
 
 #### Scenario: Accordion page renders the component
 
@@ -97,6 +97,11 @@ The documentation site SHALL document `Accordion` on its own page, rendering it 
 
 - **WHEN** a reader opens the Accordion page
 - **THEN** they see a live `Accordion` for each of `blue`, `cyan`, `green`, `grey`, `orange`, `pink`, `purple`, `red` and `yellow`, each labelled with the value that produces it
+
+#### Scenario: The icons are demonstrable
+
+- **WHEN** a reader looks at the Accordion page's icon section and opens its demos
+- **THEN** they see the default plus turning into a minus and an accordion using two components of its own, each with the code that produces it, and the page states that the native marker is hidden, that the defaults need nothing installed, and that the icons are decorative
 
 #### Scenario: The animation is demonstrable
 
@@ -111,7 +116,7 @@ The documentation site SHALL document `Accordion` on its own page, rendering it 
 #### Scenario: Interaction states are documented
 
 - **WHEN** a reader hovers, presses, tabs to and opens an `Accordion` in a demo
-- **THEN** the summary visibly sinks, flattens, shows its inset focus outline and stays pressed while open, and the page describes each of those states in prose
+- **THEN** while closed the summary visibly nudges down on hover and sinks into the shadow on press, it shows its inset focus outline, while open it sits still with square bottom corners over a hue rule, and the shadow stays under the whole panel in every state, and the page describes each of those states in prose
 
 #### Scenario: Theming is documented with runnable code
 
@@ -122,7 +127,7 @@ The documentation site SHALL document `Accordion` on its own page, rendering it 
 #### Scenario: The slot is documented
 
 - **WHEN** a reader looks at the Accordion page's props and slots tables
-- **THEN** `summary` is listed as a required `string` that is not forwarded as an attribute, `color` as an optional palette hue whose default is grey with no `data-ui-color` attribute rendered, the default slot is described as the disclosed content, and the page states that all other native `<details>` attributes pass through
+- **THEN** `summary` is listed as a required `string` that is not forwarded as an attribute, `color` as an optional palette hue whose default is grey with no `data-ui-color` attribute rendered, `iconCollapsed` and `iconExpanded` as optional components defaulting to Iconoir's plus and minus, the default slot is described as the disclosed content, and the page states that all other native `<details>` attributes pass through
 
 ### Requirement: Layout pages document markup, props, slots and styling
 

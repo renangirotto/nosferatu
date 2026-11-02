@@ -1,12 +1,6 @@
 ---
 import type { HTMLAttributes } from "astro/types";
-import type { ColorPalette } from "../types/components";
-
-/*
- * Any component: an .astro file, an imported .svg, a framework component.
- * The callout renders it, it is never told what an icon is.
- */
-type IconComponent = (props: Record<string, any>) => any;
+import type { ColorPalette, IconComponent } from "../types/components";
 
 interface Props extends HTMLAttributes<"div"> {
 	title: string;
