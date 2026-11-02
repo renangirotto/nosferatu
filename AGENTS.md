@@ -55,7 +55,7 @@ These are spec requirements, not preferences. Breaking one is a bug:
 4. **Each stylesheet is independently importable**, and `index.css` includes all of them.
 5. **Components are self-styled through tokens**: scoped `<style>` only, design values exclusively via `var(--nf-*)`, and never a selector that reaches outside the component's own markup.
 6. **Public import paths only**: `astro-nosferatu/components/<Name>.astro`, `astro-nosferatu/layouts/<Name>.astro` and `astro-nosferatu/styles/<name>.css`. Docs must import through the package name, never by relative path into `packages/ui/src`.
-7. **The library ships sources**, has no runtime dependencies, and declares `astro` `^7.0.0` as its only peer dependency. The published tarball contains only `src/components`, `src/layouts`, `src/types`, `src/styles`, `package.json`, `README.md`, `LICENSE`.
+7. **The library ships sources**, has exactly one runtime dependency, `iconoir` (SVG files library components import internally and render at build time; consumers never import it), and declares `astro` `^7.0.0` as its only required peer dependency. The published tarball contains only `src/components`, `src/layouts`, `src/types`, `src/styles`, `package.json`, `README.md`, `LICENSE`.
 8. **`docs` stays private** and never becomes a dependency of the library.
 
 ## Conventions

@@ -28,6 +28,9 @@
   "files": [
     "src"
   ],
+  "dependencies": {
+    "iconoir": "^7.12.1"
+  },
   "peerDependencies": {
     "@fontsource-variable/geist-mono": "^5.3.0",
     "@fontsource-variable/outfit": "^5.3.0",

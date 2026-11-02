@@ -18,3 +18,10 @@ export type ColorPalette =
 	| "purple"
 	| "red"
 	| "yellow";
+
+/**
+ * Any component a prop renders as an icon: an `.astro` file, an imported
+ * `.svg`, a framework component. The receiving component renders it with no
+ * props and is never told what an icon is.
+ */
+export type IconComponent = (props: Record<string, any>) => any;

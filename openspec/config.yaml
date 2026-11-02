@@ -8,7 +8,8 @@ context: |
   If pnpm/node/openspec are missing from PATH, they live in /usr/local/bin.
 
   Tech stack: Astro 7 (peer `astro` ^7.0.0), plain CSS, TypeScript only for Astro
-  component prop types. No framework runtime, no runtime dependencies.
+  component prop types. No framework runtime; one runtime dependency, `iconoir`,
+  imported internally by components (SVG sources, no JavaScript).
 
   Distribution model: the library ships SOURCE. `.astro` and `.css` files are
   published as-is and compiled by the consumer's Astro build. There is no build
