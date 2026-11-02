@@ -1,0 +1,7 @@
+/*
+ * General-purpose layout values, not tied to any one component: container
+ * widths a layout or component can share, so one override moves them all.
+ */
+:root {
+	--nf-container-small-size: 856px;
+}
