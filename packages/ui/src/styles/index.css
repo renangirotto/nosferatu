@@ -1,5 +1,6 @@
 @layer nosferatu.tokens, nosferatu.reset, nosferatu.typography;
 
 @import "./tokens.css" layer(nosferatu.tokens);
+@import "./generic.css" layer(nosferatu.tokens);
 @import "./reset.css" layer(nosferatu.reset);
 @import "./typography.css" layer(nosferatu.typography);

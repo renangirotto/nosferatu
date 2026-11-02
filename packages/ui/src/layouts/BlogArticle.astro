@@ -24,7 +24,7 @@ const { title, description, lang = "en", imageSocialMedia } = Astro.props;
 		imageSocialMedia={imageSocialMedia}
 	/>
 	<main class="nf-layout-blog-article">
-		<article>
+		<article class="nf-layout-blog-article-content">
 			<h1>{title}</h1>
 			<p>{description}</p>
 			<slot />
@@ -34,50 +34,6 @@ const { title, description, lang = "en", imageSocialMedia } = Astro.props;
 
 <style>
 	.nf-layout-blog-article {
-		--nf-layout-blog-article-viewport-min: 560px;
-		--nf-layout-blog-article-viewport-max: 1088px;
-
-		--nf-layout-blog-article-viewport-progress: progress(
-			100svw,
-			var(--nf-layout-blog-article-viewport-min),
-			var(--nf-layout-blog-article-viewport-max)
-		);
-
-		--nf-layout-blog-article-font-size-base: calc(
-			1rem + var(--nf-layout-blog-article-viewport-progress) * 0.125rem
-		);
-
-		--nf-layout-blog-article-type-scale-min: 1.2;
-		--nf-layout-blog-article-type-scale-max: 1.414;
-		--nf-layout-blog-article-type-scale: calc(
-			var(--nf-layout-blog-article-type-scale-min) +
-				var(--nf-layout-blog-article-viewport-progress) *
-				(
-					var(--nf-layout-blog-article-type-scale-max) -
-						var(--nf-layout-blog-article-type-scale-min)
-				)
-		);
-
-		--nf-layout-blog-article-font-size-h1: calc(
-			var(--nf-layout-blog-article-font-size-base) *
-				pow(var(--nf-layout-blog-article-type-scale), 3)
-		);
-		--nf-layout-blog-article-font-size-h2: calc(
-			var(--nf-layout-blog-article-font-size-base) *
-				pow(var(--nf-layout-blog-article-type-scale), 2.5)
-		);
-		--nf-layout-blog-article-font-size-h3: calc(
-			var(--nf-layout-blog-article-font-size-base) *
-				pow(var(--nf-layout-blog-article-type-scale), 2)
-		);
-		--nf-layout-blog-article-font-size-h4: calc(
-			var(--nf-layout-blog-article-font-size-base) *
-				pow(var(--nf-layout-blog-article-type-scale), 1.5)
-		);
-		--nf-layout-blog-article-font-size-p: var(
-			--nf-layout-blog-article-font-size-base
-		);
-
 		/*
 	   * The article's own fonts, defaulting to the library's. Going through a
 	   * layout-scoped property is what lets a consumer re-tune one article
@@ -89,24 +45,16 @@ const { title, description, lang = "en", imageSocialMedia } = Astro.props;
 		);
 		--nf-layout-blog-article-font-weight: var(--nf-font-weight);
 
-		h1 {
-			font-size: var(--nf-layout-blog-article-font-size-h1);
-		}
-
-		h2 {
-			font-size: var(--nf-layout-blog-article-font-size-h2);
-		}
-
-		h3 {
-			font-size: var(--nf-layout-blog-article-font-size-h3);
-		}
-
-		h4 {
-			font-size: var(--nf-layout-blog-article-font-size-h4);
+		.nf-layout-blog-article-content {
+			margin-inline: auto;
+			inline-size: 100%;
+			max-inline-size: var(
+				--nf-layout-blog-article-max-inline-size,
+				var(--nf-container-small-size)
+			);
 		}
 
 		p {
-			font-size: var(--nf-layout-blog-article-font-size-p);
 			font-family: var(--nf-layout-blog-article-font-family);
 			font-weight: var(--nf-layout-blog-article-font-weight);
 		}

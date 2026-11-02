@@ -24,10 +24,11 @@ It includes, in order:
 | `shadows.css`             | `--nf-shadow-*` box-shadow values on `:root`, one per palette color, plus `--nf-shadow-depth`                                                                 |
 | `spacings.css`            | `--nf-spacing-*` on `:root` — the spacing scale, in `px`                                                                                                      |
 | `borders.css`             | `--nf-border-radius-*` on `:root` — the corner radii, in `px`                                                                                                 |
+| `generic.css`             | `--nf-container-*` on `:root` — general-purpose container widths, in `px`                                                                                     |
 | `reset.css`               | box-sizing, margin reset, `color-scheme`, `100dvh` body container, media and form-control defaults, text wrapping                                             |
 | `typography.css`          | `--nf-typography-*` and `--nf-font-*` custom properties on `:root`, a fluid `font-size` on `h1`, `h2`, `h3` and `p`, and the font family and weight of `body` |
 
-`tokens.css` is the aggregate: importing it is the same as importing `colors/index.css`, `shadows.css`, `spacings.css` and `borders.css`, and it declares no property of its own. The typographic properties are **not** part of it — `--nf-font-family`, `--nf-font-weight` and the `--nf-typography-*` scale come with `typography.css`, which also owns the element rules that use them.
+`tokens.css` is the aggregate: importing it is the same as importing `colors/index.css`, `shadows.css`, `spacings.css` and `borders.css`, and it declares no property of its own. The typographic properties are **not** part of it — `--nf-font-family`, `--nf-font-weight` and the `--nf-typography-*` scale come with `typography.css`, which also owns the element rules that use them. Nor is `generic.css`: `index.css` imports it separately, into the same `nosferatu.tokens` layer.
 
 `typography.css` is the only file besides the reset that touches your own elements: loading `index.css` sizes your `h1`, `h2`, `h3` and `p`, and sets the font family and weight of your `body`, which everything else inherits. It sizes nothing else — `a`, `h4`–`h6`, lists, blockquotes and code keep the browser's own sizes — and it sets no color, line-height or margin on anything. See [Typography](#typography) for the full property list, [Fonts](#fonts) for the three typefaces, and both for how to opt out.
 
@@ -75,8 +76,11 @@ import 'astro-nosferatu/styles/colors/index.css';
 import 'astro-nosferatu/styles/shadows.css';
 import 'astro-nosferatu/styles/spacings.css';
 import 'astro-nosferatu/styles/borders.css';
+import 'astro-nosferatu/styles/generic.css';
 ---
 ```
+
+`generic.css` is not part of `tokens.css`, so take it explicitly if you want the container widths without `index.css`.
 
 The palette is split by scale, so you can take one and leave the other — useful if your project pins a single `color-scheme`:
 
@@ -136,6 +140,7 @@ Every value the library uses is a custom property prefixed with `--nf-`, and eve
 | ------------- | ------------------ | --------------------------------------------------------------------------------------------------------------- |
 | Spacing       | `spacings.css`     | `--nf-spacing-*`, [below](#spacing)                                                                             |
 | Border radius | `borders.css`      | `--nf-border-radius-*`, [below](#border-radius)                                                                 |
+| Container     | `generic.css`      | `--nf-container-*`, [below](#container)                                                                         |
 | Color         | `colors/index.css` | `--nf-<hue>-<d\|l>-<step>`, see [Colors](#colors)                                                               |
 | Shadow        | `shadows.css`      | `--nf-shadow-*`, see [Shadows](#shadows)                                                                        |
 | Typography    | `typography.css`   | `--nf-font-family*`, `--nf-font-weight`, `--nf-typography-*`, see [Typography](#typography) and [Fonts](#fonts) |
@@ -172,6 +177,22 @@ Both scales are absolute `px`, not `rem`. They are geometry, so they stay put wh
 ```css
 :root {
 	--nf-spacing-base: 1.25rem;
+}
+```
+
+### Container
+
+General-purpose container widths, shared by any layout or component that needs a readable measure — [BlogArticle](/layouts/blog-article/) caps its article at this one:
+
+| Token                       | Value   |
+| --------------------------- | ------- |
+| `--nf-container-small-size` | `856px` |
+
+Override it on `:root` in unlayered CSS to move every container that uses it at once:
+
+```css
+:root {
+	--nf-container-small-size: 720px;
 }
 ```
 
