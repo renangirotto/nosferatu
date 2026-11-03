@@ -7,6 +7,7 @@
 	--sl-font: var(--nf-font-family);
 	--sl-font-mono: var(--nf-font-family-code-blog-post);
 	--ec-uiFontFml: var(--sl-font-system);
+	--ec-brdRad: 8px;
 }
 
 /*
@@ -31,16 +32,37 @@
 	--sl-color-text-accent: var(--nf-purple-d-50);
 	--sl-color-text-invert: var(--nf-grey-d-100);
 	--sl-color-hairline-shade: transparent;
-	--ec-brdRad: 8px;
 	--ec-brdCol: var(--nf-grey-d-80-25);
 }
 
-:root[data-theme="dark"] starlight-toc a:hover {
+:root[data-theme="light"] {
+	--sl-color-bg: var(--nf-grey-l-10);
+	--sl-color-bg-nav: var(--nf-grey-l-10);
+	--sl-color-bg-sidebar: var(--nf-grey-l-10);
+	--sl-color-bg-inline-code: var(--nf-grey-l-20);
+	--sl-color-text: var(--nf-grey-l-100);
+	--sl-color-white: var(--nf-grey-l-100);
+	--sl-color-text-accent: var(--nf-purple-l-50);
+	--sl-color-text-invert: var(--nf-grey-l-10);
+	--sl-color-hairline-shade: var(--nf-grey-l-10);
+}
+
+/* Expressive Code sets its light border on the code block itself, not :root. */
+:root[data-theme="light"] .expressive-code {
+	--ec-brdCol: var(--nf-grey-l-40-25);
+}
+
+starlight-toc a:hover {
 	color: var(--sl-color-text-accent);
 }
 
 :root[data-theme="dark"] .sl-markdown-content :not(pre) > code {
 	color: var(--nf-green-d-50);
+	font-weight: 600;
+}
+
+:root[data-theme="light"] .sl-markdown-content :not(pre) > code {
+	color: var(--nf-green-l-50);
 	font-weight: 600;
 }
 
@@ -53,6 +75,24 @@
 	border-color: transparent;
 }
 
+:root[data-theme="light"]
+	:is(
+		.right-sidebar,
+		mobile-starlight-toc nav,
+		mobile-starlight-toc .dropdown
+	) {
+	border-color: var(--nf-grey-l-10);
+}
+
+/* The line between a page's title and its content blends into the background. */
+:root[data-theme="dark"] .content-panel + .content-panel {
+	border-top-color: var(--nf-grey-d-100);
+}
+
+:root[data-theme="light"] .content-panel + .content-panel {
+	border-top-color: var(--nf-grey-l-10);
+}
+
 :root[data-theme="dark"] mobile-starlight-toc :is(.toggle, .dropdown) {
 	background-color: var(--nf-grey-d-110);
 }
@@ -61,9 +101,22 @@
 	border-color: var(--nf-grey-d-80-25);
 }
 
+:root[data-theme="light"] mobile-starlight-toc :is(.toggle, .dropdown) {
+	background-color: var(--nf-grey-l-20);
+}
+
+:root[data-theme="light"] mobile-starlight-toc .toggle {
+	border-color: var(--nf-grey-l-10-25);
+}
+
 @media (min-width: 50rem) {
 	:root[data-theme="dark"] site-search button[data-open-modal] {
 		border-color: var(--nf-grey-d-80-25);
 		background-color: var(--nf-grey-d-110);
+	}
+
+	:root[data-theme="light"] site-search button[data-open-modal] {
+		border-color: var(--nf-grey-l-10-25);
+		background-color: var(--nf-grey-l-20);
 	}
 }
