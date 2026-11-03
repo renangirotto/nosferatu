@@ -404,12 +404,12 @@ Prop types used by more than one component SHALL live in `src/types/`, exported 
 
 ### Requirement: Button color resolution
 
-`Button`'s color SHALL be resolved through exactly three component-scoped custom properties: `--nf-button-color`, which supplies the background, `--nf-button-accent-color`, which supplies the text color and the focus outline color, and `--nf-button-shadow-color`, which supplies the box-shadow color alone. Each `data-ui-color` value SHALL set all three from the palette with `light-dark()`, using `--nf-<hue>-l-40` (light) and `--nf-<hue>-d-50` (dark) for `--nf-button-color`, `--nf-<hue>-l-80` (light) and `--nf-<hue>-d-90` (dark) for `--nf-button-accent-color`, and `--nf-<hue>-l-80` (light) and `--nf-<hue>-d-80` (dark) for `--nf-button-shadow-color`. Where a property is not defined for the element — no `data-ui-color` and no value inherited from an ancestor — every use of it SHALL fall back to the grey token of the same step in the same scheme (`--nf-grey-l-40`/`--nf-grey-d-50`, `--nf-grey-l-80`/`--nf-grey-d-90` and `--nf-grey-l-80`/`--nf-grey-d-80`). The accent and the shadow SHALL therefore resolve to the same value under the light scheme and to different values under the dark scheme, where the shadow is one step lighter than the text. No other palette token SHALL be referenced for the button's own colors, and no semantic color token SHALL be introduced.
+`Button`'s color SHALL be resolved through exactly three component-scoped custom properties: `--nf-button-color`, which supplies the background, `--nf-button-accent-color`, which supplies the text color and the focus outline color, and `--nf-button-shadow-color`, which supplies the box-shadow color alone. Each `data-ui-color` value SHALL set all three from the palette with `light-dark()`, using `--nf-<hue>-l-40` (light) and `--nf-<hue>-d-50` (dark) for `--nf-button-color`, `--nf-<hue>-l-80` (light) and `--nf-<hue>-d-90` (dark) for `--nf-button-accent-color`, and `--nf-<hue>-l-70` (light) and `--nf-<hue>-d-80` (dark) for `--nf-button-shadow-color`. Where a property is not defined for the element — no `data-ui-color` and no value inherited from an ancestor — every use of it SHALL fall back to the grey token of the same step in the same scheme (`--nf-grey-l-40`/`--nf-grey-d-50`, `--nf-grey-l-80`/`--nf-grey-d-90` and `--nf-grey-l-70`/`--nf-grey-d-80`). The shadow SHALL therefore be one step lighter than the text in both schemes: `l-70` against `l-80` in light, and `d-80` against `d-90` in dark. No other palette token SHALL be referenced for the button's own colors, and no semantic color token SHALL be introduced.
 
 #### Scenario: Light appearance
 
 - **WHEN** the page resolves to a light color scheme and a `Button` with `color="purple"` is inspected
-- **THEN** its computed background equals the value of `--nf-purple-l-40`, and its computed color and box-shadow color both equal the value of `--nf-purple-l-80`
+- **THEN** its computed background equals the value of `--nf-purple-l-40`, its computed color equals the value of `--nf-purple-l-80`, and its box-shadow color equals `--nf-purple-l-70`, which is a visibly lighter purple than the text
 
 #### Scenario: Dark appearance
 
@@ -419,7 +419,7 @@ Prop types used by more than one component SHALL live in `src/types/`, exported 
 #### Scenario: Default appearance
 
 - **WHEN** a `Button` with no `color` is inspected in a light and then a dark color scheme
-- **THEN** its background equals `--nf-grey-l-40` and its color and box-shadow color both `--nf-grey-l-80` in light, and `--nf-grey-d-50`, `--nf-grey-d-90` and `--nf-grey-d-80` respectively in dark
+- **THEN** its background equals `--nf-grey-l-40` and its color `--nf-grey-l-80` and its box-shadow color `--nf-grey-l-70` in light, and `--nf-grey-d-50`, `--nf-grey-d-90` and `--nf-grey-d-80` respectively in dark
 
 #### Scenario: The shadow is independent of the text
 
@@ -450,7 +450,7 @@ Prop types used by more than one component SHALL live in `src/types/`, exported 
 #### Scenario: Resting state is raised
 
 - **WHEN** a reader looks at a `Button` that is neither hovered, focused nor pressed
-- **THEN** it shows no border and a 4px-deep solid shadow directly beneath it, in the hue of its text but one step lighter than the text under the dark scheme, and in the same color as the text under the light scheme
+- **THEN** it shows no border and a 4px-deep solid shadow directly beneath it, in the hue of its text but one step lighter than the text under both the light and the dark scheme
 
 #### Scenario: The label is semibold
 
@@ -731,12 +731,12 @@ When `color` is passed it SHALL be exposed on the rendered `<details>` as `data-
 
 ### Requirement: Accordion color resolution
 
-`Accordion`'s color SHALL be resolved through exactly four component-scoped custom properties: `--nf-accordion-color`, which fills both the summary and the content panel, `--nf-accordion-accent-color`, which supplies the summary's text and disclosure icon, the content's text and the summary's focus outline, `--nf-accordion-shadow-color`, which supplies the color of the `<details>`' box-shadow alone, and `--nf-accordion-rule-color`, which supplies the rule under the summary of an open accordion alone. Each `data-ui-color` value SHALL set all four from the palette with `light-dark()`, using `--nf-<hue>-l-40` (light) and `--nf-<hue>-d-50` (dark) for `--nf-accordion-color`, `--nf-<hue>-l-80` (light) and `--nf-<hue>-d-90` (dark) for `--nf-accordion-accent-color`, `--nf-<hue>-l-80` (light) and `--nf-<hue>-d-80` (dark) for `--nf-accordion-shadow-color`, and the 25%-opacity tier `--nf-<hue>-l-60-25` (light) and `--nf-<hue>-d-70-25` (dark) for `--nf-accordion-rule-color`. Where a property is not defined for the element — no `data-ui-color` and no value inherited from an ancestor — every use of it SHALL fall back to the grey token of the same step and tier in the same scheme. The accent and the shadow SHALL therefore resolve to the same value under the light scheme and to different values under the dark scheme, where the shadow is one step lighter than the text. No other palette token SHALL be referenced for the accordion's own colors, and no semantic color token SHALL be introduced.
+`Accordion`'s color SHALL be resolved through exactly four component-scoped custom properties: `--nf-accordion-color`, which fills both the summary and the content panel, `--nf-accordion-accent-color`, which supplies the summary's text and disclosure icon, the content's text and the summary's focus outline, `--nf-accordion-shadow-color`, which supplies the color of the `<details>`' box-shadow alone, and `--nf-accordion-rule-color`, which supplies the rule under the summary of an open accordion alone. Each `data-ui-color` value SHALL set all four from the palette with `light-dark()`, using `--nf-<hue>-l-40` (light) and `--nf-<hue>-d-50` (dark) for `--nf-accordion-color`, `--nf-<hue>-l-80` (light) and `--nf-<hue>-d-90` (dark) for `--nf-accordion-accent-color`, `--nf-<hue>-l-70` (light) and `--nf-<hue>-d-80` (dark) for `--nf-accordion-shadow-color`, and the 25%-opacity tier `--nf-<hue>-l-60-25` (light) and `--nf-<hue>-d-70-25` (dark) for `--nf-accordion-rule-color`. Where a property is not defined for the element — no `data-ui-color` and no value inherited from an ancestor — every use of it SHALL fall back to the grey token of the same step and tier in the same scheme. The shadow SHALL therefore be one step lighter than the text in both schemes: `l-70` against `l-80` in light, and `d-80` against `d-90` in dark. No other palette token SHALL be referenced for the accordion's own colors, and no semantic color token SHALL be introduced.
 
 #### Scenario: Light appearance
 
 - **WHEN** the page resolves to a light color scheme and an open `Accordion` with `color="purple"` is inspected
-- **THEN** the computed background of both its summary and its content equals the value of `--nf-purple-l-40`, their computed color, together with the accordion's box-shadow color, equals the value of `--nf-purple-l-80`, and the summary's bottom rule equals `--nf-purple-l-60-25`
+- **THEN** the computed background of both its summary and its content equals the value of `--nf-purple-l-40`, their computed color equals the value of `--nf-purple-l-80`, the accordion's box-shadow color equals `--nf-purple-l-70`, which is a visibly lighter purple than the text, and the summary's bottom rule equals `--nf-purple-l-60-25`
 
 #### Scenario: Dark appearance
 
@@ -746,7 +746,7 @@ When `color` is passed it SHALL be exposed on the rendered `<details>` as `data-
 #### Scenario: Default appearance
 
 - **WHEN** an open `Accordion` with no `color` is inspected in a light and then a dark color scheme
-- **THEN** both backgrounds equal `--nf-grey-l-40`, the text and box-shadow color `--nf-grey-l-80` and the rule `--nf-grey-l-60-25` in light, and `--nf-grey-d-50`, `--nf-grey-d-90`, `--nf-grey-d-80` and `--nf-grey-d-70-25` respectively in dark
+- **THEN** both backgrounds equal `--nf-grey-l-40`, the text `--nf-grey-l-80`, the box-shadow color `--nf-grey-l-70` and the rule `--nf-grey-l-60-25` in light, and `--nf-grey-d-50`, `--nf-grey-d-90`, `--nf-grey-d-80` and `--nf-grey-d-70-25` respectively in dark
 
 #### Scenario: The shadow is independent of the text
 
