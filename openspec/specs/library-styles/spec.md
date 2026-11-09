@@ -8,21 +8,33 @@ Defines the global stylesheets the library exports, how their tokens are named, 
 
 ### Requirement: Stylesheet exports
 
-The library SHALL export the stylesheets `tokens.css`, `spacings.css`, `borders.css`, `shadows.css`, `reset.css`, `typography.css` and `index.css`, and the palette as the folder `colors/`, holding `colors/index.css`, `colors/colors-dark.css` and `colors/colors-light.css`. Each SHALL be importable on its own, and `index.css` SHALL include all of them.
+The library SHALL export the stylesheets `tokens.css`, `spacings.css`, `borders.css`, `shadows.css`, `generic.css`, `reset.css`, `typography.css` and `index.css`, and the palette as the folder `colors/`, holding `colors/index.css`, `colors/colors-dark.css` and `colors/colors-light.css`. Each SHALL be importable on its own, and `index.css` SHALL include all of them.
 
-`tokens.css` SHALL be the library's single entry point for tokens and SHALL declare no custom property of its own: it SHALL be exactly the aggregate of the token stylesheets — the palette, the shadows, the spacing scale and the border radii — so that a consumer who imports it gets every token the library publishes except the typographic ones, which `typography.css` owns because it also owns the element rules that use them. A consumer who wants one group on its own SHALL still be able to import that file directly instead.
+`tokens.css` SHALL be the library's single entry point for tokens and SHALL declare no custom property of its own: it SHALL be exactly the aggregate of the token stylesheets — the palette, the shadows, the spacing scale and the border radii — so that a consumer who imports it gets every token the library publishes except the typographic ones, which `typography.css` owns because it also owns the element rules that use them, and the general-purpose layout values, which `generic.css` owns. A consumer who wants one group on its own SHALL still be able to import that file directly instead.
 
 The library SHALL NOT publish a stylesheet at `styles/colors.css`. `typography.css` SHALL be the only library stylesheet other than `reset.css` that applies rules to a consumer's own elements, and it SHALL set text size, font family and font weight only: the library still sets no line-height, margin or color on headings, paragraphs, lists, links or code, and sets a family and a weight on `body` alone, never on an individual element.
 
 #### Scenario: Import everything
 
 - **WHEN** a consumer imports `astro-nosferatu/styles/index.css`
-- **THEN** the tokens — palette, shadows, spacing and border radii alike — together with the reset and the typography styles are all applied
+- **THEN** the tokens — palette, shadows, spacing and border radii alike — and `--nf-container-small-size`, together with the reset and the typography styles are all applied
+
+`generic.css` SHALL declare the general-purpose layout values the library publishes on `:root`, and nothing else: no selector other than `:root` and no layer. It SHALL declare `--nf-container-small-size` with the value `856px`, a container width meant for reuse by any layout or component that needs a narrow, readable measure.
+
+#### Scenario: Import generic only
+
+- **WHEN** a consumer imports only `astro-nosferatu/styles/generic.css`
+- **THEN** `--nf-container-small-size` computes to `856px` on `:root`, no palette, shadow, spacing, border-radius or typographic property is defined, and no element selectors are applied
+
+#### Scenario: The container size is overridable
+
+- **WHEN** a consumer imports `index.css` and sets `--nf-container-small-size: 720px` on `:root` in unlayered CSS
+- **THEN** every value the library derives from it, such as the `BlogArticle` measure, uses `720px`
 
 #### Scenario: Import tokens only
 
 - **WHEN** a consumer imports only `astro-nosferatu/styles/tokens.css`
-- **THEN** the palette, shadow, spacing and border-radius custom properties are all defined, no `--nf-typography-*`, `--nf-font-family*` or `--nf-font-weight` property is defined, and no element selectors from the reset are applied
+- **THEN** the palette, shadow, spacing and border-radius custom properties are all defined, no `--nf-container-*`, `--nf-typography-*`, `--nf-font-family*` or `--nf-font-weight` property is defined, and no element selectors from the reset are applied
 
 #### Scenario: Tokens define nothing themselves
 
@@ -135,7 +147,7 @@ Every corner the library rounds SHALL come from this scale. The library SHALL pu
 
 When loaded through `index.css`, the tokens, reset and typography styles SHALL be placed in the cascade layers `nosferatu.tokens`, `nosferatu.reset` and `nosferatu.typography`, declared in that order, so later layers win over earlier ones and any unlayered consumer CSS wins over all of them. `nosferatu.typography` SHALL be the last library layer, so the type scale wins over the reset where the two touch the same property.
 
-`nosferatu.tokens` SHALL be the only layer holding custom properties: the palette, the shadows, the spacing scale and the border radii all arrive in it through the single layered import of `tokens.css`. No `nosferatu.colors`, `nosferatu.shadows` or `nosferatu.base` layer SHALL be declared. None of the token stylesheets — `tokens.css`, `colors/index.css`, `colors/colors-dark.css`, `colors/colors-light.css`, `shadows.css`, `spacings.css` or `borders.css` — SHALL introduce or name a layer of its own: they inherit `nosferatu.tokens` from that one import, and a consumer importing any of them directly gets unlayered tokens.
+`nosferatu.tokens` SHALL be the only layer holding custom properties: the palette, the shadows, the spacing scale and the border radii all arrive in it through the layered import of `tokens.css`, and the general-purpose layout values arrive in it through a second import of `generic.css` into the same layer. No `nosferatu.colors`, `nosferatu.shadows` or `nosferatu.base` layer SHALL be declared. None of the token stylesheets — `tokens.css`, `colors/index.css`, `colors/colors-dark.css`, `colors/colors-light.css`, `shadows.css`, `spacings.css`, `borders.css` or `generic.css` — SHALL introduce or name a layer of its own: they inherit `nosferatu.tokens` from that one import, and a consumer importing any of them directly gets unlayered tokens.
 
 #### Scenario: Typography is the last library layer
 
@@ -172,6 +184,11 @@ When loaded through `index.css`, the tokens, reset and typography styles SHALL b
 - **WHEN** a consumer sets `--nf-typography-font-size-h1-max` on `:root` in unlayered CSS loaded before `index.css`
 - **THEN** the consumer's value applies
 
+#### Scenario: The container size sits in the tokens layer
+
+- **WHEN** a consumer imports `index.css` and inspects where `--nf-container-small-size` is declared
+- **THEN** it is declared inside `nosferatu.tokens`, and an unlayered `:root { --nf-container-small-size: … }` loaded before or after `index.css` wins
+
 #### Scenario: No base layer is declared
 
 - **WHEN** the `@layer` statement in `index.css` is read
@@ -184,7 +201,7 @@ When loaded through `index.css`, the tokens, reset and typography styles SHALL b
 
 #### Scenario: No token stylesheet declares a layer
 
-- **WHEN** `tokens.css`, `colors/index.css`, `colors/colors-dark.css`, `colors/colors-light.css`, `shadows.css`, `spacings.css` and `borders.css` are searched for `@layer`
+- **WHEN** `tokens.css`, `colors/index.css`, `colors/colors-dark.css`, `colors/colors-light.css`, `shadows.css`, `spacings.css`, `borders.css` and `generic.css` are searched for `@layer`
 - **THEN** none of them contains one, and a consumer importing any of them directly gets unlayered tokens
 
 #### Scenario: The palette folder declares no layer
