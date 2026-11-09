@@ -24,7 +24,7 @@ It includes, in order:
 | `shadows.css`             | `--nf-shadow-*` box-shadow values on `:root`, one per palette color, plus `--nf-shadow-depth`                                                                 |
 | `spacings.css`            | `--nf-spacing-*` on `:root` — the spacing scale, in `px`                                                                                                      |
 | `borders.css`             | `--nf-border-radius-*` on `:root` — the corner radii, in `px`                                                                                                 |
-| `generic.css`             | `--nf-container-*` on `:root` — general-purpose container widths, in `px`                                                                                     |
+| `generic.css`             | `--nf-container-*-size` on `:root` — general-purpose container widths, in `px`                                                                                |
 | `reset.css`               | box-sizing, margin reset, `color-scheme`, `100dvh` body container, media and form-control defaults, text wrapping                                             |
 | `typography.css`          | `--nf-typography-*` and `--nf-font-*` custom properties on `:root`, a fluid `font-size` on `h1`, `h2`, `h3` and `p`, and the font family and weight of `body` |
 
@@ -182,13 +182,16 @@ Both scales are absolute `px`, not `rem`. They are geometry, so they stay put wh
 
 ### Container
 
-General-purpose container widths, shared by any layout or component that needs a readable measure — [BlogArticle](/layouts/blog-article/) caps its article at this one:
+General-purpose container widths, shared by any layout or component that needs a measure — [Container](/components/container/) defaults to the large one, and [BlogArticle](/layouts/blog-article/) caps its article at the small one:
 
-| Token                       | Value   |
-| --------------------------- | ------- |
-| `--nf-container-small-size` | `856px` |
+| Token                       | Value    |
+| --------------------------- | -------- |
+| `--nf-container-small-size` | `856px`  |
+| `--nf-container-large-size` | `1088px` |
 
-Override it on `:root` in unlayered CSS to move every container that uses it at once:
+`--nf-container-max-inline-size` is not one of these tokens: it is the [Container](/components/container/) component's own variable for setting one container's width.
+
+Override a token on `:root` in unlayered CSS to move every container that uses it at once:
 
 ```css
 :root {
