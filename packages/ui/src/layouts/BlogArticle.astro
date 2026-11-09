@@ -5,6 +5,7 @@
  */
 import BaseHtml from "../html/BaseHtml.astro";
 import BaseHead from "../html/BaseHead.astro";
+import Container from "../components/Container.astro";
 
 interface Props {
 	title: string;
@@ -24,11 +25,13 @@ const { title, description, lang = "en", imageSocialMedia } = Astro.props;
 		imageSocialMedia={imageSocialMedia}
 	/>
 	<main class="nf-layout-blog-article">
-		<article class="nf-layout-blog-article-content">
-			<h1>{title}</h1>
-			<p>{description}</p>
-			<slot />
-		</article>
+		<Container>
+			<article class="nf-layout-blog-article-content">
+				<h1>{title}</h1>
+				<p>{description}</p>
+				<slot />
+			</article>
+		</Container>
 	</main>
 </BaseHtml>
 
@@ -44,15 +47,8 @@ const { title, description, lang = "en", imageSocialMedia } = Astro.props;
 			--nf-font-family-code-blog-post
 		);
 		--nf-layout-blog-article-font-weight: var(--nf-font-weight);
-
-		.nf-layout-blog-article-content {
-			margin-inline: auto;
-			inline-size: 100%;
-			max-inline-size: var(
-				--nf-layout-blog-article-max-inline-size,
-				var(--nf-container-small-size)
-			);
-		}
+		/* Inherited by the Container around the article: the narrow measure. */
+		--nf-container-max-inline-size: var(--nf-container-small-size);
 
 		p {
 			font-family: var(--nf-layout-blog-article-font-family);

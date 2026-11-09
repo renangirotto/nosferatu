@@ -1,0 +1,82 @@
+---
+title: Container
+description: A centred wrapper that caps its width, customized through --nf-container-max-inline-size.
+---
+
+import Container from 'astro-nosferatu/components/Container.astro';
+import DarkModeSwitch from '@/components/DarkModeSwitch.astro';
+
+A `<div>` that centres itself and stops growing at `1088px`. Below that it fills its parent.
+
+Every component is built for both light and dark color schemes. Switch the site's theme to see this one in each:
+
+<DarkModeSwitch />
+
+## Usage
+
+```astro title=".astro" frame="terminal"
+---
+import Container from 'astro-nosferatu/components/Container.astro';
+---
+
+<Container>
+	<p>Page content</p>
+</Container>
+```
+
+<div class="not-content demo">
+	<Container>
+		<p class="demo-content">Page content</p>
+	</Container>
+</div>
+
+Every `<div>` attribute passes through to the element. The default slot is the container's content.
+
+## CSS Variables
+
+| Variable                         | Description                                                                            |
+| -------------------------------- | -------------------------------------------------------------------------------------- |
+| `--nf-container-max-inline-size` | Maximum width. Defaults to [`--nf-container-large-size`](/styles/#container), `1088px` |
+
+The container never sets this variable itself, so you can set it on the container or on any element around it.
+
+### Theming
+
+Set the variable in a class from a global stylesheet and pass it to the component.
+
+```css title=".css" frame="terminal"
+.narrow-container {
+	--nf-container-max-inline-size: 320px;
+}
+```
+
+```astro title=".astro" frame="terminal"
+<Container class="narrow-container">
+	<p>Page content</p>
+</Container>
+```
+
+<div class="not-content demo">
+	<Container class="narrow-container">
+		<p class="demo-content">Page content</p>
+	</Container>
+</div>
+
+<style>{`
+	.demo {
+		padding: 1.5rem;
+		margin-block: 1rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 0.5rem;
+	}
+
+	.demo-content {
+		padding: 1rem;
+		background-color: var(--sl-color-gray-6);
+		text-align: center;
+	}
+
+	.narrow-container {
+		--nf-container-max-inline-size: 320px;
+	}
+`}</style>

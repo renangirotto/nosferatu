@@ -48,7 +48,7 @@ Every page has these parts, in this order. Headings are verbatim:
 | Color variants          | `## Color variants` | only if the component has `color`      |
 | States                  | `## States`         | only if the component has states       |
 | Icons                   | `## Icons`          | only if the component has an icon prop |
-| Props                   | `## Props`          | always                                 |
+| Props                   | `## Props`          | only if the component has its own prop |
 | CSS Variables           | `## CSS Variables`  | always                                 |
 | Theming                 | `### Theming`       | always, inside `CSS Variables`         |
 
@@ -142,6 +142,8 @@ After the table, one line naming the native element whose attributes pass throug
 ```mdx
 Every other `<button>` attribute passes through to the element. The default slot is the button's label.
 ```
+
+**No props of its own, no `## Props`.** A component that only forwards native attributes (`Container`) gets no Props heading and no empty table — never a row of dashes. A native attribute whose default the component sets (`type` on `Button`) does count as a prop. Without the section, the pass-through/slot line closes `## Usage` instead, right after the demo.
 
 ### `## CSS Variables`
 

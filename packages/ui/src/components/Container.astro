@@ -1,0 +1,27 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"div"> {}
+
+const { class: className, ...attrs } = Astro.props;
+---
+
+<div {...attrs} class:list={["nf-container", className]}>
+	<slot />
+</div>
+
+<style>
+	/*
+	 * --nf-container-max-inline-size is deliberately never declared here, only
+	 * read with a fallback: declaring it would put it on the element, and an
+	 * ancestor (a layout, a consumer's wrapper) could no longer set it.
+	 */
+	.nf-container {
+		margin-inline: auto;
+		inline-size: 100%;
+		max-inline-size: var(
+			--nf-container-max-inline-size,
+			var(--nf-container-large-size)
+		);
+	}
+</style>
