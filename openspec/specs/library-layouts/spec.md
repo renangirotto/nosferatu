@@ -36,12 +36,12 @@ A layout SHALL obtain its document skeleton and its head metadata from the libra
 
 ### Requirement: BlogArticle renders a titled, described article document
 
-The library SHALL publish a `BlogArticle` layout that takes a required `title` string, a required `description` string, an optional `lang` string defaulting to `en`, and an optional `imageSocialMedia` string, and renders a complete HTML document. Within the document body it SHALL render a `main` element carrying the class `nf-layout-blog-article`, containing an `article` element carrying the class `nf-layout-blog-article-content`, which contains — in order — an `h1` holding the `title`, a `p` holding the `description`, and then the layout's default slot. The `h1` and the `p` SHALL carry no class authored by the library; the scoping class or attribute Astro generates for a component that declares a `<style>` block is outside the library's control and SHALL NOT count as one. The `lang` value SHALL become the `lang` attribute of the `<html>` element. The document head SHALL be the full metadata set the library's `BaseHead` renders, with `title` as the document title, `description` as the page's description metadata, and `imageSocialMedia`, when supplied, as the social-media image. The layout SHALL render no other content around them.
+The library SHALL publish a `BlogArticle` layout that takes a required `title` string, a required `description` string, an optional `lang` string defaulting to `en`, and an optional `imageSocialMedia` string, and renders a complete HTML document. Within the document body it SHALL render a `main` element carrying the class `nf-layout-blog-article`, containing a `Container` (a `div` carrying the class `nf-container`), containing an `article` element carrying the class `nf-layout-blog-article-content`, which contains — in order — an `h1` holding the `title`, a `p` holding the `description`, and then the layout's default slot. The `h1` and the `p` SHALL carry no class authored by the library; the scoping class or attribute Astro generates for a component that declares a `<style>` block is outside the library's control and SHALL NOT count as one. The `lang` value SHALL become the `lang` attribute of the `<html>` element. The document head SHALL be the full metadata set the library's `BaseHead` renders, with `title` as the document title, `description` as the page's description metadata, and `imageSocialMedia`, when supplied, as the social-media image. The layout SHALL render no other content around them.
 
 #### Scenario: The article structure is rendered
 
 - **WHEN** a reader opens a page built from `BlogArticle` with a title, a description and slot content, and inspects the document
-- **THEN** the body contains `main.nf-layout-blog-article` > `article.nf-layout-blog-article-content`, whose children in document order are an `h1` with the title text, a `p` with the description text, and the content passed into the layout
+- **THEN** the body contains `main.nf-layout-blog-article` > `div.nf-container` > `article.nf-layout-blog-article-content`, whose children in document order are an `h1` with the title text, a `p` with the description text, and the content passed into the layout
 - **AND** neither the `h1` nor the `p` carries a library-authored class — the only class or attribute on them is the style scope Astro generates
 
 #### Scenario: The title and description reach the document head
@@ -109,7 +109,7 @@ A layout MAY declare visual styles, under the same constraints a component obeys
 
 ### Requirement: BlogArticle centres the article at a capped measure
 
-`BlogArticle` SHALL centre its `article` element horizontally within `main`, let it fill the available inline size, and cap that inline size at `--nf-layout-blog-article-max-inline-size` when a consumer sets it, falling back to `--nf-container-small-size` (`856px` by default) otherwise. The layout SHALL NOT declare `--nf-layout-blog-article-max-inline-size` itself, so a consumer may set it on `.nf-layout-blog-article`, on the article or on any ancestor, `:root` included. Apart from this measure and the font family and weight it sets on its prose and code, the layout SHALL style no other property — no font size, spacing, padding or color.
+`BlogArticle` SHALL wrap its `article` element in the library's `Container` component, so the article is centred horizontally within `main`, fills the available inline size, and is capped by the container. The layout SHALL set `--nf-container-max-inline-size` to `var(--nf-container-small-size)` on its `nf-layout-blog-article` root, so the article caps at `856px` by default rather than at the container's own `1088px` default. The layout SHALL NOT declare a width property of its own: a consumer re-tunes one article's width by setting `--nf-container-max-inline-size`, and every article's width by setting `--nf-container-small-size`. Apart from this measure and the font family and weight it sets on its prose and code, the layout SHALL style no other property — no font size, spacing, padding or color.
 
 #### Scenario: The article is capped and centred on a wide viewport
 
@@ -123,13 +123,18 @@ A layout MAY declare visual styles, under the same constraints a component obeys
 
 #### Scenario: One article re-tuned
 
-- **WHEN** a consumer sets `--nf-layout-blog-article-max-inline-size: 640px` in an unlayered rule on `.nf-layout-blog-article`
+- **WHEN** a consumer sets `--nf-container-max-inline-size: 640px` in an unlayered rule on the article's `.nf-container`
 - **THEN** that article's width caps at `640px`, and `--nf-container-small-size` is unchanged for everything else
 
 #### Scenario: The shared container size moves the article
 
-- **WHEN** a consumer sets `--nf-container-small-size: 720px` on `:root` in unlayered CSS and does not set the layout's own property
+- **WHEN** a consumer sets `--nf-container-small-size: 720px` on `:root` in unlayered CSS
 - **THEN** the article's width caps at `720px`
+
+#### Scenario: The old layout property has no effect
+
+- **WHEN** a consumer sets `--nf-layout-blog-article-max-inline-size: 640px` on `.nf-layout-blog-article`
+- **THEN** the article's width is unchanged, because the layout no longer reads that property
 
 #### Scenario: Text size comes from the global scale
 
