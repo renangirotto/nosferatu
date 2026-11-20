@@ -1,0 +1,152 @@
+---
+title: ReadingProgress
+description: A bar fixed to the top of the viewport that fills as the page, or one element on it, is scrolled through.
+---
+
+import ReadingProgress from 'astro-nosferatu/components/ReadingProgress.astro';
+import DarkModeSwitch from '@/components/DarkModeSwitch.astro';
+
+A thin bar fixed to the top of the viewport. It fills from left to right as the reader scrolls, tracking the whole page or a single element you point it at.
+
+Every component is built for both light and dark color schemes. Switch the site's theme to see this one in each:
+
+<DarkModeSwitch />
+
+:::caution[Browser support]
+The bar is driven by CSS scroll-driven animations (`animation-timeline`). There is no polyfill: in a browser without that support the bar stays empty and the page is otherwise unaffected.
+:::
+
+## Usage
+
+```astro title=".astro" frame="terminal"
+---
+import ReadingProgress from 'astro-nosferatu/components/ReadingProgress.astro';
+---
+
+<ReadingProgress />
+```
+
+<div class="not-content demo">
+	<ReadingProgress class="reading-progress-static" />
+</div>
+
+### Tracking an element
+
+Pass the `id` of an element as `target` and the bar tracks that element instead of the page. It is empty until the element's top reaches the top of the viewport, or the bottom of a sticky header when the page sets `scroll-padding-top`, and full once its bottom reaches the bottom. The `id` must start with a letter and contain only letters, digits, `-` and `_`; anything else fails the build. Use one targeted bar per page.
+
+The bar is fixed, but it still stacks inside its nearest stacking context: if an ancestor sets `isolation`, `z-index` or a `transform`, a fixed header outside that ancestor can paint over it. Render it outside such ancestors, or move it below the header with `--nf-reading-progress-inset-block-start`, as this page does.
+
+```astro title=".astro" frame="terminal"
+<ReadingProgress target="reading-progress-demo" color="purple" />
+
+<article id="reading-progress-demo">…</article>
+```
+
+<div class="not-content demo demo-target" id="reading-progress-demo">
+	<ReadingProgress target="reading-progress-demo" color="purple" />
+	<p>The purple bar under this site's header tracks this block. Scroll through it.</p>
+</div>
+
+## Color variants
+
+You can change the color theme of the component with the `color` prop. If you don't pass it the fallback will be the default grey palette.
+
+```astro title=".astro" frame="terminal"
+<ReadingProgress />
+<ReadingProgress color="blue" />
+<ReadingProgress color="cyan" />
+<ReadingProgress color="green" />
+<ReadingProgress color="grey" />
+<ReadingProgress color="orange" />
+<ReadingProgress color="pink" />
+<ReadingProgress color="purple" />
+<ReadingProgress color="red" />
+<ReadingProgress color="yellow" />
+```
+
+<div class="not-content demo demo-bars">
+	<ReadingProgress class="reading-progress-static" />
+	<ReadingProgress color="blue" class="reading-progress-static" />
+	<ReadingProgress color="cyan" class="reading-progress-static" />
+	<ReadingProgress color="green" class="reading-progress-static" />
+	<ReadingProgress color="grey" class="reading-progress-static" />
+	<ReadingProgress color="orange" class="reading-progress-static" />
+	<ReadingProgress color="pink" class="reading-progress-static" />
+	<ReadingProgress color="purple" class="reading-progress-static" />
+	<ReadingProgress color="red" class="reading-progress-static" />
+	<ReadingProgress color="yellow" class="reading-progress-static" />
+</div>
+
+## Props
+
+| Prop     | Type                                                                                           | Required | Default      |
+| -------- | ---------------------------------------------------------------------------------------------- | -------- | ------------ |
+| `color`  | `'blue' \| 'cyan' \| 'green' \| 'grey' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | No       | grey (unset) |
+| `target` | `string`                                                                                       | No       | the page     |
+
+Every other `<div>` attribute passes through to the element. The component renders no slot.
+
+## CSS Variables
+
+| Variable                                  | Description                                                                           |
+| ----------------------------------------- | ------------------------------------------------------------------------------------- |
+| `--nf-reading-progress-color`             | Fill color                                                                            |
+| `--nf-reading-progress-block-size`        | Bar height                                                                            |
+| `--nf-reading-progress-inset-block-start` | Distance from the top of the viewport, to sit below a fixed navbar. Defaults to `0px` |
+
+### Theming
+
+Set the variables in a class from a global stylesheet and pass it to the component. Leave `color` out: a `color` sets its own values, which win over the class.
+
+```css title=".css" frame="terminal"
+.themed-reading-progress {
+	--nf-reading-progress-color: var(--nf-green-l-20);
+	--nf-reading-progress-block-size: 12px;
+}
+```
+
+```astro title=".astro" frame="terminal"
+<ReadingProgress class="themed-reading-progress" />
+```
+
+<div class="not-content demo demo-bars">
+	<ReadingProgress class="themed-reading-progress reading-progress-static" />
+</div>
+
+<style>{`
+	.demo {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 1.5rem;
+		margin-block: 1rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 0.5rem;
+	}
+
+	.demo-bars {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	/* Starlight's fixed header would cover the bar: sit it below, set from this ancestor */
+	.demo-target {
+		--nf-reading-progress-inset-block-start: var(--sl-nav-height);
+
+		min-block-size: 150vh;
+		align-items: flex-start;
+	}
+
+	/* Docs-only: show the fixed bar inline and full, so its color is visible */
+	.demo .reading-progress-static {
+		position: static;
+		scale: 1 1;
+		animation: none;
+	}
+
+	.themed-reading-progress {
+		--nf-reading-progress-color: var(--nf-green-l-20);
+		--nf-reading-progress-block-size: 12px;
+	}
+`}</style>
