@@ -1,0 +1,166 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import type { ColorPalette } from "../types/components";
+
+interface Props extends HTMLAttributes<"div"> {
+	color?: ColorPalette;
+	/** The `id` of the element whose scroll progress the bar shows. */
+	target?: string;
+}
+
+const {
+	color,
+	target,
+	class: className,
+	"data-ui-color": _color,
+	"data-ui-target": _target,
+	...attrs
+} = Astro.props;
+
+/*
+ * `target` is interpolated into raw CSS below, so it must be a plain
+ * identifier: that keeps it from breaking out of the selector or the
+ * <style> element, and makes `--nf-reading-progress-<target>` a valid name.
+ */
+const TARGET_PATTERN = /^[A-Za-z][A-Za-z0-9_-]*$/;
+
+if (target !== undefined && !TARGET_PATTERN.test(target)) {
+	throw new Error(
+		`ReadingProgress: target ${JSON.stringify(target)} is not a valid id; it must match ${TARGET_PATTERN}.`,
+	);
+}
+
+/*
+ * The one place a component reaches outside its markup (library-styles,
+ * "Components are self-styled through tokens"): the tracked element declares
+ * the view timeline, and :root scopes it so the fixed bar can see it.
+ */
+const timeline = `--nf-reading-progress-${target}`;
+const targetCss = target
+	? `@supports (animation-timeline: scroll()) {
+	:root { timeline-scope: ${timeline}; }
+	#${target} { view-timeline: ${timeline} block; }
+	.nf-reading-progress[data-ui-target="${target}"] {
+		animation-timeline: ${timeline};
+		animation-range: contain 0% contain 100%;
+	}
+}`
+	: undefined;
+---
+
+{targetCss && <style is:inline set:html={targetCss} />}
+<div
+	{...attrs}
+	aria-hidden="true"
+	data-ui-color={color}
+	data-ui-target={target}
+	class:list={["nf-reading-progress", className]}
+></div>
+
+<style>
+	.nf-reading-progress {
+		--nf-reading-progress-block-size: 6px;
+
+		position: fixed;
+		/* Read with a fallback, never declared, so an ancestor (a layout, :root) can set it */
+		inset-block-start: var(--nf-reading-progress-inset-block-start, 0px);
+		inset-inline: 0;
+		z-index: 100;
+		block-size: var(--nf-reading-progress-block-size);
+		background-color: var(
+			--nf-reading-progress-color,
+			light-dark(var(--nf-grey-l-40), var(--nf-grey-d-50))
+		);
+		/* The bar is its own fill: the uncovered part is the transparent track */
+		scale: 0 1;
+		transform-origin: 0 50%;
+		pointer-events: none;
+
+		&[data-ui-color="blue"] {
+			--nf-reading-progress-color: light-dark(
+				var(--nf-blue-l-40),
+				var(--nf-blue-d-50)
+			);
+		}
+
+		&[data-ui-color="cyan"] {
+			--nf-reading-progress-color: light-dark(
+				var(--nf-cyan-l-40),
+				var(--nf-cyan-d-50)
+			);
+		}
+
+		&[data-ui-color="green"] {
+			--nf-reading-progress-color: light-dark(
+				var(--nf-green-l-40),
+				var(--nf-green-d-50)
+			);
+		}
+
+		&[data-ui-color="grey"] {
+			--nf-reading-progress-color: light-dark(
+				var(--nf-grey-l-40),
+				var(--nf-grey-d-50)
+			);
+		}
+
+		&[data-ui-color="orange"] {
+			--nf-reading-progress-color: light-dark(
+				var(--nf-orange-l-40),
+				var(--nf-orange-d-50)
+			);
+		}
+
+		&[data-ui-color="pink"] {
+			--nf-reading-progress-color: light-dark(
+				var(--nf-pink-l-40),
+				var(--nf-pink-d-50)
+			);
+		}
+
+		&[data-ui-color="purple"] {
+			--nf-reading-progress-color: light-dark(
+				var(--nf-purple-l-40),
+				var(--nf-purple-d-50)
+			);
+		}
+
+		&[data-ui-color="red"] {
+			--nf-reading-progress-color: light-dark(
+				var(--nf-red-l-40),
+				var(--nf-red-d-50)
+			);
+		}
+
+		&[data-ui-color="yellow"] {
+			--nf-reading-progress-color: light-dark(
+				var(--nf-yellow-l-40),
+				var(--nf-yellow-d-50)
+			);
+		}
+	}
+
+	@keyframes nf-reading-progress-fill {
+		from {
+			scale: 0 1;
+		}
+
+		to {
+			scale: 1 1;
+		}
+	}
+
+	/*
+	 * Longhands only: the `animation` shorthand resets animation-timeline.
+	 * Unsupported browsers skip this block and keep the empty bar.
+	 */
+	@supports (animation-timeline: scroll()) {
+		.nf-reading-progress {
+			animation-name: nf-reading-progress-fill;
+			animation-duration: auto;
+			animation-timing-function: linear;
+			animation-fill-mode: both;
+			animation-timeline: scroll(root block);
+		}
+	}
+</style>
