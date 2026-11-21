@@ -479,7 +479,7 @@ In both its light and dark themes, the documentation site SHALL set its body and
 
 ### Requirement: Color-variant pages document the unset default
 
-On the page of every component that accepts a `color` prop, the documentation site SHALL list the prop's default in the props table as grey (unset) rather than as a hue the component writes into its markup, and the `Color variants` render SHALL begin with an instance rendered with no `color`. The one exception is the Navbar page: `Navbar`'s `color` colors only the current item and falls back to purple, so its props table SHALL give the default as purple (unset) and its `Color variants` section SHALL say that leaving `color` out renders purple.
+On the page of every component that accepts a `color` prop, the documentation site SHALL list the prop's default in the props table as grey (unset) rather than as a hue the component writes into its markup, and the `Color variants` render SHALL begin with an instance rendered with no `color`. The exceptions are the TableOfContent and Navbar pages: `TableOfContent`'s `color` colors only the active link and `Navbar`'s only the current item, and both fall back to purple, so their props tables SHALL give the default as purple (unset) and their `Color variants` sections SHALL say that leaving `color` out renders purple.
 
 #### Scenario: Default stated in prose and table
 
@@ -595,6 +595,20 @@ The ReadingProgress page SHALL follow the component page structure and SHALL sho
 
 - **WHEN** a reader in a supporting browser scrolls through the page's target demo block
 - **THEN** a bar driven by that block fills from empty to full as the block is scrolled through, independently of the page's overall scroll position
+
+### Requirement: TableOfContent page documents the active-link contract
+
+The TableOfContent page SHALL follow the component page structure. Before its `Usage` section it SHALL explain that the active link comes from two sources: native scroll-spy where `scroll-target-group` is supported, and `aria-current="location"` set by the page. It SHALL show a page-level script that sets `aria-current="location"` on the link for the section in view, runs only when `scroll-target-group` is unsupported, and is not part of the library. The page's live demo SHALL link to the page's own sections, so that scrolling the page moves the active link.
+
+#### Scenario: Contract is visible
+
+- **WHEN** a reader opens the TableOfContent page
+- **THEN** a note above `Usage` names `scroll-target-group` and `aria-current="location"`, and the page shows the fallback script as a code block
+
+#### Scenario: Demo follows the page scroll
+
+- **WHEN** a reader scrolls through the TableOfContent page in Chrome, and then in a browser without `scroll-target-group`
+- **THEN** in both browsers the demo's active link follows the section in view: natively in Chrome, and through the page's fallback script in the other browser
 
 ### Requirement: Navbar page documents the component set
 
