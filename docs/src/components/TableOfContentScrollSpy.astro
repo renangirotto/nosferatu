@@ -1,0 +1,30 @@
+---
+/* Docs-only: the page-level fallback shown on the TableOfContent page. Not part of the library. */
+---
+
+<script>
+	if (!CSS.supports("scroll-target-group: auto")) {
+		const links = [
+			...document.querySelectorAll<HTMLAnchorElement>(".nf-table-of-content a"),
+		];
+		const targets = [...new Set(links.map((link) => link.hash))]
+			.map((hash) => document.getElementById(decodeURIComponent(hash.slice(1))))
+			.filter((target) => target !== null);
+
+		const update = () => {
+			// The last section whose top has passed the upper third of the viewport
+			const line = innerHeight / 3;
+			const current = targets
+				.filter((t) => t.getBoundingClientRect().top <= line)
+				.at(-1);
+			for (const link of links) {
+				if (link.hash === `#${current?.id}`)
+					link.setAttribute("aria-current", "location");
+				else link.removeAttribute("aria-current");
+			}
+		};
+
+		addEventListener("scroll", update, { passive: true });
+		update();
+	}
+</script>

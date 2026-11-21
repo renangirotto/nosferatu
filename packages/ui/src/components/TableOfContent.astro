@@ -1,0 +1,221 @@
+---
+import type { MarkdownHeading } from "astro";
+import type { HTMLAttributes } from "astro/types";
+import type { ColorPalette } from "../types/components";
+
+interface Props extends HTMLAttributes<"nav"> {
+	/** The page's headings; depth 2 become main links, depth 3 their sub-links. */
+	headings: MarkdownHeading[];
+	title?: string;
+	color?: ColorPalette;
+}
+
+const {
+	headings,
+	title = "Table of contents",
+	color,
+	class: className,
+	"data-ui-color": _color,
+	...attrs
+} = Astro.props;
+
+type Item = MarkdownHeading & { children: MarkdownHeading[] };
+
+const items: Item[] = [];
+
+for (const heading of headings) {
+	if (heading.depth === 2 || (heading.depth === 3 && items.length === 0)) {
+		items.push({ ...heading, children: [] });
+	} else if (heading.depth === 3) {
+		items[items.length - 1].children.push(heading);
+	}
+}
+---
+
+{items.length > 0 && (
+	<nav
+		{...attrs}
+		aria-label={title}
+		data-ui-color={color}
+		class:list={["nf-table-of-content", className]}
+	>
+		<p class="nf-table-of-content-title">{title}</p>
+		<ol class="nf-table-of-content-list">
+			{items.map((item) => (
+				<li class="nf-table-of-content-item">
+					<a class="nf-table-of-content-link" href={`#${item.slug}`}>
+						{item.text}
+					</a>
+					{item.children.length > 0 && (
+						<ol class="nf-table-of-content-sublist">
+							{item.children.map((child) => (
+								<li class="nf-table-of-content-subitem">
+									<a
+										class="nf-table-of-content-sublink"
+										href={`#${child.slug}`}
+									>
+										{child.text}
+									</a>
+								</li>
+							))}
+						</ol>
+					)}
+				</li>
+			))}
+		</ol>
+	</nav>
+)}
+
+<style>
+	.nf-table-of-content {
+		--nf-table-of-content-small-font-size: 0.875rem;
+
+		font-family: var(--nf-font-family);
+
+		&[data-ui-color="blue"] {
+			--nf-table-of-content-active-color: light-dark(
+				var(--nf-blue-l-40),
+				var(--nf-blue-d-50)
+			);
+		}
+
+		&[data-ui-color="cyan"] {
+			--nf-table-of-content-active-color: light-dark(
+				var(--nf-cyan-l-40),
+				var(--nf-cyan-d-50)
+			);
+		}
+
+		&[data-ui-color="green"] {
+			--nf-table-of-content-active-color: light-dark(
+				var(--nf-green-l-40),
+				var(--nf-green-d-50)
+			);
+		}
+
+		&[data-ui-color="grey"] {
+			--nf-table-of-content-active-color: light-dark(
+				var(--nf-grey-l-40),
+				var(--nf-grey-d-50)
+			);
+		}
+
+		&[data-ui-color="orange"] {
+			--nf-table-of-content-active-color: light-dark(
+				var(--nf-orange-l-40),
+				var(--nf-orange-d-50)
+			);
+		}
+
+		&[data-ui-color="pink"] {
+			--nf-table-of-content-active-color: light-dark(
+				var(--nf-pink-l-40),
+				var(--nf-pink-d-50)
+			);
+		}
+
+		&[data-ui-color="purple"] {
+			--nf-table-of-content-active-color: light-dark(
+				var(--nf-purple-l-40),
+				var(--nf-purple-d-50)
+			);
+		}
+
+		&[data-ui-color="red"] {
+			--nf-table-of-content-active-color: light-dark(
+				var(--nf-red-l-40),
+				var(--nf-red-d-50)
+			);
+		}
+
+		&[data-ui-color="yellow"] {
+			--nf-table-of-content-active-color: light-dark(
+				var(--nf-yellow-l-40),
+				var(--nf-yellow-d-50)
+			);
+		}
+	}
+
+	.nf-table-of-content-title {
+		margin-block: 0 var(--nf-spacing-base);
+		color: inherit;
+		font-size: var(--nf-table-of-content-small-font-size);
+		font-weight: 600;
+		letter-spacing: 1px;
+		text-transform: uppercase;
+	}
+
+	.nf-table-of-content-list,
+	.nf-table-of-content-sublist {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.nf-table-of-content-item:not(:last-child) {
+		margin-block-end: var(--nf-spacing-base-low-1);
+	}
+
+	.nf-table-of-content-sublist {
+		margin-block-start: var(--nf-spacing-base-low-3);
+		padding-inline-start: var(--nf-spacing-base-low-2);
+	}
+
+	.nf-table-of-content-subitem:not(:last-child) {
+		margin-block-end: var(--nf-spacing-base-low-3);
+	}
+
+	.nf-table-of-content-link,
+	.nf-table-of-content-sublink {
+		--nf-table-of-content-transition-duration: 0.25s;
+
+		color: inherit;
+		text-decoration: none;
+		transition-property: color;
+		transition-duration: var(--nf-table-of-content-transition-duration);
+		transition-timing-function: ease-in-out;
+
+		&:focus-visible {
+			outline: 2px solid currentColor;
+			outline-offset: 2px;
+		}
+
+		&:hover,
+		&[aria-current="location"] {
+			color: var(
+				--nf-table-of-content-active-color,
+				light-dark(var(--nf-purple-l-40), var(--nf-purple-d-50))
+			);
+		}
+	}
+
+	.nf-table-of-content-link {
+		font-size: 1rem;
+	}
+
+	.nf-table-of-content-sublink {
+		font-size: var(--nf-table-of-content-small-font-size);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.nf-table-of-content-link,
+		.nf-table-of-content-sublink {
+			--nf-table-of-content-transition-duration: 0s;
+		}
+	}
+
+	/* Native scroll-spy: the browser marks the link whose section is in view */
+	@supports (scroll-target-group: auto) {
+		.nf-table-of-content-list {
+			scroll-target-group: auto;
+		}
+
+		.nf-table-of-content-link:target-current,
+		.nf-table-of-content-sublink:target-current {
+			color: var(
+				--nf-table-of-content-active-color,
+				light-dark(var(--nf-purple-l-40), var(--nf-purple-d-50))
+			);
+		}
+	}
+</style>
