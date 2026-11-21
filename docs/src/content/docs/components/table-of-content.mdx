@@ -1,0 +1,167 @@
+---
+title: TableOfContent
+description: A two-level list of links to the sections of the current page, highlighting the one in view.
+---
+
+import TableOfContent from 'astro-nosferatu/components/TableOfContent.astro';
+import DarkModeSwitch from '@/components/DarkModeSwitch.astro';
+import TableOfContentScrollSpy from '@/components/TableOfContentScrollSpy.astro';
+
+export const headings = [
+	{ depth: 2, slug: 'usage', text: 'Usage' },
+	{ depth: 2, slug: 'color-variants', text: 'Color variants' },
+	{ depth: 2, slug: 'props', text: 'Props' },
+	{ depth: 2, slug: 'css-variables', text: 'CSS Variables' },
+	{ depth: 3, slug: 'theming', text: 'Theming' },
+	{ depth: 2, slug: 'scroll-spy-fallback', text: 'Scroll-spy fallback' },
+];
+
+export const shortHeadings = headings.slice(0, 3);
+
+A `<nav>` of anchor links to the page's sections and their sub-sections, built from the headings Astro gives every Markdown page.
+
+Every component is built for both light and dark color schemes. Switch the site's theme to see this one in each:
+
+<DarkModeSwitch />
+
+:::note[Active link]
+A link turns the active color in two cases. In browsers that support `scroll-target-group`, currently Chromium only, the link for the section in view is highlighted with no JavaScript. In every browser, a link carrying `aria-current="location"` is highlighted, so the page can set it from its own script. The component never sets it, see [Scroll-spy fallback](#scroll-spy-fallback).
+:::
+
+## Usage
+
+Depth-2 headings become links and depth-3 headings become sub-links under them; other depths are ignored. Nothing renders when no heading is left.
+
+```astro title=".astro" frame="terminal"
+---
+import { getEntry, render } from 'astro:content';
+import TableOfContent from 'astro-nosferatu/components/TableOfContent.astro';
+
+const entry = await getEntry('blog', 'my-post');
+const { Content, headings } = await render(entry);
+---
+
+<TableOfContent headings={headings} />
+<Content />
+```
+
+The demo lists this page's own sections. Scroll and the active link follows.
+
+<div class="not-content demo">
+	<TableOfContent headings={headings} />
+</div>
+
+## Color variants
+
+You can change the color of the active link with the `color` prop. If you don't pass it the fallback is purple.
+
+```astro title=".astro" frame="terminal"
+<TableOfContent headings={headings} />
+<TableOfContent headings={headings} color="blue" />
+<TableOfContent headings={headings} color="cyan" />
+<TableOfContent headings={headings} color="green" />
+<TableOfContent headings={headings} color="grey" />
+<TableOfContent headings={headings} color="orange" />
+<TableOfContent headings={headings} color="pink" />
+<TableOfContent headings={headings} color="purple" />
+<TableOfContent headings={headings} color="red" />
+<TableOfContent headings={headings} color="yellow" />
+```
+
+<div class="not-content demo">
+	<TableOfContent headings={shortHeadings} />
+	<TableOfContent headings={shortHeadings} color="blue" />
+	<TableOfContent headings={shortHeadings} color="cyan" />
+	<TableOfContent headings={shortHeadings} color="green" />
+	<TableOfContent headings={shortHeadings} color="grey" />
+	<TableOfContent headings={shortHeadings} color="orange" />
+	<TableOfContent headings={shortHeadings} color="pink" />
+	<TableOfContent headings={shortHeadings} color="purple" />
+	<TableOfContent headings={shortHeadings} color="red" />
+	<TableOfContent headings={shortHeadings} color="yellow" />
+</div>
+
+## Props
+
+| Prop       | Type                                                                                           | Required | Default               |
+| ---------- | ---------------------------------------------------------------------------------------------- | -------- | --------------------- |
+| `headings` | `MarkdownHeading[]`                                                                            | Yes      | —                     |
+| `title`    | `string`                                                                                       | No       | `'Table of contents'` |
+| `color`    | `'blue' \| 'cyan' \| 'green' \| 'grey' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | No       | purple (unset)        |
+
+Every other `<nav>` attribute passes through to the element. The title is always shown uppercase and is also the `<nav>`'s accessible name. The component renders no slot.
+
+## CSS Variables
+
+| Variable                                    | Description                       |
+| ------------------------------------------- | --------------------------------- |
+| `--nf-table-of-content-active-color`        | Color of the active link          |
+| `--nf-table-of-content-small-font-size`     | Type size of title and sub-links  |
+| `--nf-table-of-content-transition-duration` | Duration of the link color change |
+
+### Theming
+
+Set the variables in a class from a global stylesheet and pass it to the component. Leave `color` out: a `color` sets its own values, which win over the class.
+
+```css title=".css" frame="terminal"
+.themed-table-of-content {
+	--nf-table-of-content-active-color: var(--nf-orange-l-60);
+	--nf-table-of-content-small-font-size: 0.75rem;
+}
+```
+
+```astro title=".astro" frame="terminal"
+<TableOfContent headings={headings} class="themed-table-of-content" />
+```
+
+<div class="not-content demo">
+	<TableOfContent headings={headings} class="themed-table-of-content" />
+</div>
+
+## Scroll-spy fallback
+
+For browsers without `scroll-target-group`, set `aria-current="location"` from the page. This script is not part of the library; this page runs it. It skips itself where the native scroll-spy works, so two links are never active at once.
+
+```astro title=".astro" frame="terminal"
+<script>
+	if (!CSS.supports('scroll-target-group: auto')) {
+		const links = [...document.querySelectorAll('.nf-table-of-content a')];
+		const targets = [...new Set(links.map((link) => link.hash))]
+			.map((hash) => document.getElementById(decodeURIComponent(hash.slice(1))))
+			.filter((target) => target !== null);
+
+		const update = () => {
+			// The last section whose top has passed the upper third of the viewport
+			const line = innerHeight / 3;
+			const current = targets.filter((t) => t.getBoundingClientRect().top <= line).at(-1);
+			for (const link of links) {
+				if (link.hash === `#${current?.id}`) link.setAttribute('aria-current', 'location');
+				else link.removeAttribute('aria-current');
+			}
+		};
+
+		addEventListener('scroll', update, { passive: true });
+		update();
+	}
+</script>
+```
+
+<TableOfContentScrollSpy />
+
+<style>{`
+	.demo {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-start;
+		gap: 1.5rem;
+		padding: 1.5rem;
+		margin-block: 1rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 0.5rem;
+	}
+
+	.themed-table-of-content {
+		--nf-table-of-content-active-color: var(--nf-orange-l-60);
+		--nf-table-of-content-small-font-size: 0.75rem;
+	}
+`}</style>
