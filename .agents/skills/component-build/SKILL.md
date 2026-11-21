@@ -111,6 +111,7 @@ A component with a `color` prop has no default hue in its markup. Every **use** 
 - The fallback must equal the component's grey rule exactly, so `<X>` and `<X color="grey">` render identically; keep the grey rule too, so explicit grey behaves like every other hue.
 - Do **not** declare the grey values on the root class instead. That declares them on the element, and an ancestor could no longer theme an uncolored instance.
 - Consequence to document: an uncolored instance nested inside a colored instance of the same component inherits the outer hue.
+- **One exception to grey:** `TableOfContent`'s active-link color falls back to purple (`light-dark(var(--nf-purple-l-40), var(--nf-purple-d-50))`). Its mechanics are the same — fallback on every use site, no root declaration, a matching `[data-ui-color='purple']` rule — only the hue differs.
 
 Reach for a second class only when the variation changes the component's _structure or role_ rather than selecting a value — and name it like any other part (below), never as a BEM modifier.
 
