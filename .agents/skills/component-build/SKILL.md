@@ -111,6 +111,8 @@ A component with a `color` prop has no default hue in its markup. Every **use** 
 - The fallback must equal the component's grey rule exactly, so `<X>` and `<X color="grey">` render identically; keep the grey rule too, so explicit grey behaves like every other hue.
 - Do **not** declare the grey values on the root class instead. That declares them on the element, and an ancestor could no longer theme an uncolored instance.
 - Consequence to document: an uncolored instance nested inside a colored instance of the same component inherits the outer hue.
+- **`Navbar`'s `color` is the one `color` prop whose fallback is not grey: it falls back to purple**, because it colors only the current item, and a grey current item does not stand out from the others. The bar's own surface, text and border stay grey whatever `color` is. It follows every other rule here: a `[data-ui-color='purple']` rule equal to the fallback, and the fallback on every use site.
+- **A set of components may share color properties by inheritance.** `NavItemsDesktop` and `NavItemsMobile` read `--nf-navbar-active-color`, which an enclosing `Navbar` sets, and `--nf-navbar-border-color`, which a consumer may set on it. They read them with the same fallbacks `Navbar` uses, so a list rendered on its own looks like one inside an uncolored `Navbar`. Reading an inherited property is not reaching outside the component's markup; never select into another component's elements to get the same effect.
 
 Reach for a second class only when the variation changes the component's _structure or role_ rather than selecting a value — and name it like any other part (below), never as a BEM modifier.
 

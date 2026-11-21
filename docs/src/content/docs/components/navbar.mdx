@@ -1,0 +1,299 @@
+---
+title: Navbar
+description: A sticky, 80px navigation bar assembled from Navbar, NavLogo, NavItemsDesktop, NavItemsMobile and NavSocial through named slots.
+---
+
+import Navbar from 'astro-nosferatu/components/Navbar.astro';
+import NavLogo from 'astro-nosferatu/components/NavLogo.astro';
+import NavItemsDesktop from 'astro-nosferatu/components/NavItemsDesktop.astro';
+import NavItemsMobile from 'astro-nosferatu/components/NavItemsMobile.astro';
+import NavSocial from 'astro-nosferatu/components/NavSocial.astro';
+import DarkModeSwitch from '@/components/DarkModeSwitch.astro';
+import Github from 'iconoir/icons/github.svg';
+import Linkedin from 'iconoir/icons/linkedin.svg';
+import Youtube from 'iconoir/icons/youtube.svg';
+import Home from 'iconoir/icons/home.svg';
+import Journal from 'iconoir/icons/journal.svg';
+import Mail from 'iconoir/icons/mail.svg';
+
+export const items = [
+	{ text: 'Home', href: '#', current: true },
+	{ text: 'Blog', href: '#' },
+	{ text: 'Contact', href: '#' },
+];
+
+export const social = [
+	{ icon: Github, href: '#', label: 'GitHub' },
+	{ icon: Linkedin, href: '#', label: 'LinkedIn' },
+	{ icon: Youtube, href: '#', label: 'YouTube' },
+];
+
+export const iconItems = [
+	{ text: 'Home', href: '#', icon: Home, current: true },
+	{ text: 'Blog', href: '#', icon: Journal },
+	{ text: 'Contact', href: '#', icon: Mail },
+];
+
+A navigation bar made of five components. `Navbar` is the wrapper and places the others through named slots. It is `80px` tall and sticks to the top of the page. Below `856px` of navbar width, the desktop links give way to a burger that opens the menu as a native popover, below the bar. The same button closes it, with no JavaScript.
+
+Every component is built for both light and dark color schemes. Switch the site's theme to see this one in each:
+
+<DarkModeSwitch />
+
+:::caution
+The navbar is `position: sticky`. Place it directly in the page flow, for example as a child of `body`. Inside a wrapper only as tall as the navbar, it stops sticking.
+:::
+
+## Usage
+
+```astro title=".astro" frame="terminal"
+---
+import Navbar from 'astro-nosferatu/components/Navbar.astro';
+import NavLogo from 'astro-nosferatu/components/NavLogo.astro';
+import NavItemsDesktop from 'astro-nosferatu/components/NavItemsDesktop.astro';
+import NavItemsMobile from 'astro-nosferatu/components/NavItemsMobile.astro';
+import NavSocial from 'astro-nosferatu/components/NavSocial.astro';
+import Github from 'iconoir/icons/github.svg';
+import Linkedin from 'iconoir/icons/linkedin.svg';
+import Youtube from 'iconoir/icons/youtube.svg';
+
+const items = [
+	{ text: 'Home', href: '/', current: true },
+	{ text: 'Blog', href: '/blog' },
+	{ text: 'Contact', href: '/contact' },
+];
+
+const social = [
+	{ icon: Github, href: 'https://github.com', label: 'GitHub' },
+	{ icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
+	{ icon: Youtube, href: 'https://youtube.com', label: 'YouTube' },
+];
+---
+
+<Navbar>
+	<NavLogo slot="nav-logo" text="Nosferatu" />
+	<NavItemsDesktop slot="nav-items-desktop" items={items} />
+	<NavSocial slot="nav-social" items={social} />
+	<NavItemsMobile slot="nav-items-mobile" items={items} />
+</Navbar>
+```
+
+<div class="not-content demo demo--stack">
+	<Navbar>
+		<NavLogo slot="nav-logo" text="Nosferatu" />
+		<NavItemsDesktop slot="nav-items-desktop" items={items} />
+		<NavSocial slot="nav-social" items={social} />
+		<NavItemsMobile slot="nav-items-mobile" items={items} />
+	</Navbar>
+</div>
+
+This column is narrower than `856px`, so the demo shows the mobile layout. [**See it at full width →**](/examples/navbar/) on a standalone page, where it also sticks to the top as you scroll.
+
+## Color variants
+
+You can change the color of the current item with the `color` prop. If you don't pass it the fallback will be purple, because a grey current item would not stand out. The bar itself always uses the grey surface.
+
+```astro title=".astro" frame="terminal"
+<Navbar>…</Navbar>
+<Navbar color="blue">…</Navbar>
+<Navbar color="cyan">…</Navbar>
+<Navbar color="green">…</Navbar>
+<Navbar color="grey">…</Navbar>
+<Navbar color="orange">…</Navbar>
+<Navbar color="pink">…</Navbar>
+<Navbar color="purple">…</Navbar>
+<Navbar color="red">…</Navbar>
+<Navbar color="yellow">…</Navbar>
+```
+
+<div class="not-content demo demo--stack demo--scroll">
+	<Navbar class="demo-wide-navbar"><NavLogo slot="nav-logo" text="Nosferatu" /><NavItemsDesktop slot="nav-items-desktop" items={items} /></Navbar>
+	<Navbar color="blue" class="demo-wide-navbar"><NavLogo slot="nav-logo" text="Nosferatu" /><NavItemsDesktop slot="nav-items-desktop" items={items} /></Navbar>
+	<Navbar color="cyan" class="demo-wide-navbar"><NavLogo slot="nav-logo" text="Nosferatu" /><NavItemsDesktop slot="nav-items-desktop" items={items} /></Navbar>
+	<Navbar color="green" class="demo-wide-navbar"><NavLogo slot="nav-logo" text="Nosferatu" /><NavItemsDesktop slot="nav-items-desktop" items={items} /></Navbar>
+	<Navbar color="grey" class="demo-wide-navbar"><NavLogo slot="nav-logo" text="Nosferatu" /><NavItemsDesktop slot="nav-items-desktop" items={items} /></Navbar>
+	<Navbar color="orange" class="demo-wide-navbar"><NavLogo slot="nav-logo" text="Nosferatu" /><NavItemsDesktop slot="nav-items-desktop" items={items} /></Navbar>
+	<Navbar color="pink" class="demo-wide-navbar"><NavLogo slot="nav-logo" text="Nosferatu" /><NavItemsDesktop slot="nav-items-desktop" items={items} /></Navbar>
+	<Navbar color="purple" class="demo-wide-navbar"><NavLogo slot="nav-logo" text="Nosferatu" /><NavItemsDesktop slot="nav-items-desktop" items={items} /></Navbar>
+	<Navbar color="red" class="demo-wide-navbar"><NavLogo slot="nav-logo" text="Nosferatu" /><NavItemsDesktop slot="nav-items-desktop" items={items} /></Navbar>
+	<Navbar color="yellow" class="demo-wide-navbar"><NavLogo slot="nav-logo" text="Nosferatu" /><NavItemsDesktop slot="nav-items-desktop" items={items} /></Navbar>
+</div>
+
+## States
+
+### Open
+
+Activate the burger to open the menu, and again to close it. Esc or a click outside the panel closes it too. The menu opens just below a bar sitting at the top of the window, so in these mid-page demos it covers the burger: close it with Esc or a click outside, or try the burger on the [example page](/examples/navbar/).
+
+```astro title=".astro" frame="terminal"
+<Navbar color="purple">
+	<NavLogo slot="nav-logo" text="Nosferatu" />
+	<NavSocial slot="nav-social" items={social} />
+	<NavItemsMobile slot="nav-items-mobile" items={items} />
+</Navbar>
+```
+
+<div class="not-content demo demo--stack">
+	<Navbar color="purple">
+		<NavLogo slot="nav-logo" text="Nosferatu" />
+		<NavSocial slot="nav-social" items={social} />
+		<NavItemsMobile slot="nav-items-mobile" items={items} />
+	</Navbar>
+</div>
+
+## Icons
+
+An item's `icon` renders before its text, in either list. `NavSocial` items are icon-only, so their `label` is required: it is the link's accessible name. The library ships no icon set for these; the docs' icons come from `iconoir`, which the site installs. The desktop and mobile lists are independent, so their items, order and icons can differ.
+
+```astro title=".astro" frame="terminal"
+---
+import NavItemsDesktop from 'astro-nosferatu/components/NavItemsDesktop.astro';
+import NavItemsMobile from 'astro-nosferatu/components/NavItemsMobile.astro';
+import Home from 'iconoir/icons/home.svg';
+import Journal from 'iconoir/icons/journal.svg';
+import Mail from 'iconoir/icons/mail.svg';
+
+const items = [
+	{ text: 'Home', href: '/', icon: Home, current: true },
+	{ text: 'Blog', href: '/blog', icon: Journal },
+	{ text: 'Contact', href: '/contact', icon: Mail },
+];
+---
+
+<NavItemsDesktop items={items} />
+<NavItemsMobile items={items} />
+```
+
+<div class="not-content demo demo--stack">
+	<NavItemsDesktop items={iconItems} />
+	<NavItemsMobile items={iconItems} />
+</div>
+
+## Props
+
+Each item list takes an array of `NavItem`:
+
+```ts title=".ts" frame="terminal"
+type NavItem = {
+	text: string;
+	href: string;
+	icon?: component;
+	current?: boolean;
+};
+```
+
+### Navbar
+
+| Prop        | Type                                                                                           | Required | Default        |
+| ----------- | ---------------------------------------------------------------------------------------------- | -------- | -------------- |
+| `color`     | `'blue' \| 'cyan' \| 'green' \| 'grey' \| 'orange' \| 'pink' \| 'purple' \| 'red' \| 'yellow'` | No       | purple (unset) |
+| `label`     | `string`                                                                                       | No       | `'Main'`       |
+| `menuLabel` | `string`                                                                                       | No       | `'Menu'`       |
+
+Every other `<header>` attribute passes through to the element. The slots are `nav-logo`, `nav-items-desktop`, `nav-social` and `nav-items-mobile`; the burger and the menu render only when `nav-items-mobile` is filled.
+
+### NavLogo
+
+| Prop   | Type     | Required           | Default |
+| ------ | -------- | ------------------ | ------- |
+| `text` | `string` | Yes, unless `src`  | —       |
+| `src`  | `string` | Yes, unless `text` | —       |
+| `alt`  | `string` | With `src`         | —       |
+| `href` | `string` | No                 | `'/'`   |
+
+Every other `<a>` attribute passes through to the element.
+
+### NavItemsDesktop
+
+| Prop    | Type        | Required | Default |
+| ------- | ----------- | -------- | ------- |
+| `items` | `NavItem[]` | Yes      | —       |
+
+Every other `<ul>` attribute passes through to the element.
+
+### NavItemsMobile
+
+| Prop    | Type        | Required | Default |
+| ------- | ----------- | -------- | ------- |
+| `items` | `NavItem[]` | Yes      | —       |
+
+Every other `<ul>` attribute passes through to the element.
+
+### NavSocial
+
+| Prop    | Type                                                 | Required | Default |
+| ------- | ---------------------------------------------------- | -------- | ------- |
+| `items` | `{ icon: component; href: string; label: string }[]` | Yes      | —       |
+
+Every other `<ul>` attribute passes through to the element.
+
+## CSS Variables
+
+| Variable                          | Description                                             |
+| --------------------------------- | ------------------------------------------------------- |
+| `--nf-navbar-text-color`          | Text and icon color of the bar and the menu             |
+| `--nf-navbar-surface-color`       | Background of the bar and the menu panel                |
+| `--nf-navbar-border-color`        | Line under each menu item                               |
+| `--nf-navbar-active-color`        | Color of the current item                               |
+| `--nf-navbar-block-size`          | Height of the bar, and the menu's distance from the top |
+| `--nf-navbar-max-inline-size`     | Maximum width of the bar's content                      |
+| `--nf-navbar-z-index`             | Stacking order of the sticky bar                        |
+| `--nf-navbar-transition-duration` | Duration of the menu's slide                            |
+| `--nf-nav-logo-block-size`        | Height of an image logo                                 |
+
+### Theming
+
+Set the variables in a class from a global stylesheet and pass it to the component. Leave `color` out: it sets its own current-item color, which wins over the class.
+
+```css title=".css" frame="terminal"
+.themed-navbar {
+	--nf-navbar-text-color: var(--nf-green-l-80);
+	--nf-navbar-surface-color: var(--nf-green-l-20);
+	--nf-navbar-active-color: var(--nf-orange-l-70);
+}
+```
+
+```astro title=".astro" frame="terminal"
+<Navbar class="themed-navbar">…</Navbar>
+```
+
+<div class="not-content demo demo--stack">
+	<Navbar class="themed-navbar">
+		<NavLogo slot="nav-logo" text="Themed" />
+		<NavSocial slot="nav-social" items={social} />
+		<NavItemsMobile slot="nav-items-mobile" items={items} />
+	</Navbar>
+</div>
+
+<style>{`
+	.demo {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 1.5rem;
+		margin-block: 1rem;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 0.5rem;
+	}
+
+	.demo--stack {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	/* Wider than the 856px breakpoint, so the bars show the desktop links */
+	.demo--scroll {
+		overflow-x: auto;
+	}
+
+	.demo-wide-navbar {
+		min-inline-size: 900px;
+	}
+
+	.themed-navbar {
+		--nf-navbar-text-color: var(--nf-green-l-80);
+		--nf-navbar-surface-color: var(--nf-green-l-20);
+		--nf-navbar-active-color: var(--nf-orange-l-70);
+	}
+`}</style>

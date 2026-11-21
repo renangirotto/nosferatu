@@ -1,0 +1,77 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import type { NavItem } from "../types/components";
+
+interface Props extends HTMLAttributes<"ul"> {
+	items: NavItem[];
+}
+
+const { items, class: className, ...attrs } = Astro.props;
+---
+
+<ul {...attrs} class:list={["nf-nav-items-desktop", className]}>
+	{items.map(({ text, href, icon: Icon, current }) => (
+		<li>
+			<a
+				class="nf-nav-items-desktop-link"
+				href={href}
+				aria-current={current ? "page" : undefined}
+			>
+				{Icon && (
+					<span class="nf-nav-items-desktop-icon" aria-hidden="true">
+						<Icon width="1em" height="1em" stroke-width="2" />
+					</span>
+				)}
+				{text}
+			</a>
+		</li>
+	))}
+</ul>
+
+<style>
+	.nf-nav-items-desktop {
+		display: flex;
+		margin: var(--nf-spacing-none);
+		padding: var(--nf-spacing-none);
+		list-style: none;
+	}
+
+	.nf-nav-items-desktop-link {
+		/* 14px: no spacing step has it, so it is built from two that do */
+		--nf-nav-items-desktop-link-padding-block: calc(
+			var(--nf-spacing-base-low-1) + var(--nf-spacing-base-low-4)
+		);
+
+		display: flex;
+		align-items: center;
+		gap: var(--nf-spacing-base-low-2);
+		padding-block: var(--nf-nav-items-desktop-link-padding-block);
+		padding-inline: var(--nf-spacing-base);
+		color: inherit;
+		font-size: 1rem;
+		text-decoration: none;
+
+		&:focus-visible {
+			outline: 2px solid currentColor;
+			outline-offset: -2px;
+		}
+
+		/*
+		 * The active color is set by an enclosing Navbar; on its own the list
+		 * falls back to the same purple an uncolored Navbar uses.
+		 */
+		&[aria-current="page"] {
+			color: var(
+				--nf-navbar-active-color,
+				light-dark(var(--nf-purple-l-70), var(--nf-purple-d-30))
+			);
+		}
+	}
+
+	/* Never squashed: in a tight row, the text gives way instead */
+	.nf-nav-items-desktop-icon {
+		display: flex;
+		flex: none;
+		font-size: 22px;
+	}
+</style>

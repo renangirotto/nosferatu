@@ -1,0 +1,311 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import type { ColorPalette } from "../types/components";
+/*
+ * Iconoir is a dependency of this package, so these resolve from here under
+ * any package manager and the consumer installs nothing.
+ */
+import Menu from "iconoir/icons/regular/menu.svg";
+import Xmark from "iconoir/icons/regular/xmark.svg";
+
+interface Props extends HTMLAttributes<"header"> {
+	/* The current item's color. Falls back to purple, not grey: a grey current item would not stand out */
+	color?: ColorPalette;
+	/** Accessible name of the desktop nav and the mobile menu */
+	label?: string;
+	/** Accessible name of the burger, which both opens and closes the menu */
+	menuLabel?: string;
+}
+
+const {
+	color,
+	label = "Main",
+	menuLabel = "Menu",
+	class: className,
+	"data-ui-color": _color,
+	...attrs
+} = Astro.props;
+
+const hasDesktopItems = Astro.slots.has("nav-items-desktop");
+const hasMobileItems = Astro.slots.has("nav-items-mobile");
+
+/* Frontmatter runs per render, so a random suffix keeps each navbar's menu id unique */
+const menuId = `nf-navbar-menu-${crypto.randomUUID().slice(0, 8)}`;
+---
+
+<header {...attrs} data-ui-color={color} class:list={["nf-navbar", className]}>
+	<div class="nf-navbar-container">
+		<div class="nf-navbar-logo">
+			<slot name="nav-logo" />
+		</div>
+		{hasDesktopItems && (
+			<nav class="nf-navbar-items-desktop" aria-label={label}>
+				<slot name="nav-items-desktop" />
+			</nav>
+		)}
+		<div class="nf-navbar-social">
+			<slot name="nav-social" />
+		</div>
+		{hasMobileItems && (
+			<button
+				class="nf-navbar-burger"
+				type="button"
+				popovertarget={menuId}
+				aria-label={menuLabel}
+			>
+				<span class="nf-navbar-burger-open" aria-hidden="true">
+					<Menu width="1em" height="1em" stroke-width="2" />
+				</span>
+				<span class="nf-navbar-burger-close" aria-hidden="true">
+					<Xmark width="1em" height="1em" stroke-width="2" />
+				</span>
+			</button>
+		)}
+	</div>
+	{hasMobileItems && (
+		<nav id={menuId} class="nf-navbar-menu" popover aria-label={label}>
+			<slot name="nav-items-mobile" />
+		</nav>
+	)}
+</header>
+
+<style>
+	/*
+	 * Every color property is read with a fallback, never declared on the root:
+	 * the slotted lists and the menu inherit them, and an ancestor can set them.
+	 */
+	.nf-navbar {
+		--nf-navbar-max-inline-size: 1036px;
+		--nf-navbar-block-size: 80px;
+		--nf-navbar-z-index: 100;
+		--nf-navbar-transition-duration: 0.25s;
+
+		container: nf-navbar / inline-size;
+		position: sticky;
+		inset-block-start: 0;
+		z-index: var(--nf-navbar-z-index);
+		block-size: var(--nf-navbar-block-size);
+		padding-inline: var(--nf-spacing-base);
+		color: var(
+			--nf-navbar-text-color,
+			light-dark(var(--nf-grey-l-100), var(--nf-grey-d-10))
+		);
+		background-color: var(
+			--nf-navbar-surface-color,
+			light-dark(var(--nf-grey-l-10), var(--nf-grey-d-100))
+		);
+
+		&[data-ui-color="blue"] {
+			--nf-navbar-active-color: light-dark(
+				var(--nf-blue-l-70),
+				var(--nf-blue-d-30)
+			);
+		}
+
+		&[data-ui-color="cyan"] {
+			--nf-navbar-active-color: light-dark(
+				var(--nf-cyan-l-70),
+				var(--nf-cyan-d-30)
+			);
+		}
+
+		&[data-ui-color="green"] {
+			--nf-navbar-active-color: light-dark(
+				var(--nf-green-l-70),
+				var(--nf-green-d-30)
+			);
+		}
+
+		&[data-ui-color="grey"] {
+			--nf-navbar-active-color: light-dark(
+				var(--nf-grey-l-70),
+				var(--nf-grey-d-30)
+			);
+		}
+
+		&[data-ui-color="orange"] {
+			--nf-navbar-active-color: light-dark(
+				var(--nf-orange-l-70),
+				var(--nf-orange-d-30)
+			);
+		}
+
+		&[data-ui-color="pink"] {
+			--nf-navbar-active-color: light-dark(
+				var(--nf-pink-l-70),
+				var(--nf-pink-d-30)
+			);
+		}
+
+		&[data-ui-color="purple"] {
+			--nf-navbar-active-color: light-dark(
+				var(--nf-purple-l-70),
+				var(--nf-purple-d-30)
+			);
+		}
+
+		&[data-ui-color="red"] {
+			--nf-navbar-active-color: light-dark(
+				var(--nf-red-l-70),
+				var(--nf-red-d-30)
+			);
+		}
+
+		&[data-ui-color="yellow"] {
+			--nf-navbar-active-color: light-dark(
+				var(--nf-yellow-l-70),
+				var(--nf-yellow-d-30)
+			);
+		}
+	}
+
+	.nf-navbar-container {
+		/* 64px between the logo and the desktop list: two of the largest step */
+		--nf-navbar-logo-gap: calc(2 * var(--nf-spacing-base-up-4));
+		--nf-navbar-gap: var(--nf-spacing-base-up-2);
+
+		display: flex;
+		align-items: center;
+		column-gap: var(--nf-navbar-gap);
+		block-size: 100%;
+		margin-inline: auto;
+		max-inline-size: var(--nf-navbar-max-inline-size);
+	}
+
+	/* Pushes everything after the logo to the inline end */
+	.nf-navbar-logo {
+		margin-inline-end: auto;
+	}
+
+	.nf-navbar-items-desktop {
+		display: none;
+	}
+
+	/* Sized to their content: in a tight bar, the logo gives way instead */
+	.nf-navbar-social {
+		display: flex;
+		flex: none;
+	}
+
+	.nf-navbar-burger {
+		display: flex;
+		flex: none;
+		/* The icons are 1em, so this is their size */
+		font-size: 22px;
+		padding: var(--nf-spacing-base-low-3);
+		border: none;
+		border-radius: var(--nf-border-radius-base-low-1);
+		color: inherit;
+		background: none;
+		cursor: pointer;
+
+		&:focus-visible {
+			outline: 2px solid currentColor;
+			outline-offset: -2px;
+		}
+	}
+
+	.nf-navbar-burger-open {
+		display: flex;
+	}
+
+	/* The burger turns into the close button while the menu is open */
+	.nf-navbar-burger-close {
+		display: none;
+	}
+
+	.nf-navbar:has(.nf-navbar-menu:popover-open) {
+		.nf-navbar-burger-open {
+			display: none;
+		}
+
+		.nf-navbar-burger-close {
+			display: flex;
+		}
+	}
+
+	/*
+	 * 856px mirrors --nf-container-small-size: a container-query condition
+	 * cannot read a custom property, so keep the two in step by hand. The
+	 * query measures this navbar (the named container), never the viewport.
+	 */
+	@container nf-navbar (width >= 856px) {
+		.nf-navbar-container {
+			--nf-navbar-gap: var(--nf-navbar-logo-gap);
+		}
+
+		/* Growing, it takes the free space the logo's auto margin would */
+		.nf-navbar-items-desktop {
+			display: block;
+			flex: 1;
+		}
+
+		.nf-navbar-burger {
+			display: none;
+		}
+	}
+
+	/*
+	 * A popover, not a modal dialog: it opens 4px below the bar, so the burger stays
+	 * reachable and closes it. Esc and a click outside close it too.
+	 */
+	.nf-navbar-menu {
+		/* Off the inline end, by the panel's width plus the gap beside it */
+		--nf-navbar-menu-offset: calc(100% + var(--nf-spacing-base-low-2));
+
+		position: fixed;
+		/* Just below the bar, with a 4px gap */
+		inset-block: calc(
+				var(--nf-navbar-block-size) + var(--nf-spacing-base-low-3)
+			)
+			var(--nf-spacing-base-low-2);
+		inset-inline: var(--nf-spacing-base-low-2);
+		inline-size: auto;
+		block-size: auto;
+		margin: var(--nf-spacing-none);
+		padding: var(--nf-spacing-none);
+		border: none;
+		border-radius: var(--nf-border-radius-base);
+		color: var(
+			--nf-navbar-text-color,
+			light-dark(var(--nf-grey-l-100), var(--nf-grey-d-10))
+		);
+		background-color: var(
+			--nf-navbar-surface-color,
+			light-dark(var(--nf-grey-l-10), var(--nf-grey-d-100))
+		);
+		translate: var(--nf-navbar-menu-offset) 0;
+		transition-property: translate, display, overlay;
+		transition-duration: var(--nf-navbar-transition-duration);
+		transition-timing-function: ease-out;
+		transition-behavior: allow-discrete;
+
+		/* translate is physical, so in right-to-left text it comes from the left */
+		&:dir(rtl) {
+			--nf-navbar-menu-offset: calc(-100% - var(--nf-spacing-base-low-2));
+		}
+
+		&:popover-open {
+			translate: 0 0;
+
+			@starting-style {
+				translate: var(--nf-navbar-menu-offset) 0;
+			}
+		}
+
+		/* Starts below the bar, so the bar and its burger stay undimmed */
+		&::backdrop {
+			inset-block-start: var(--nf-navbar-block-size);
+			background-color: light-dark(
+				var(--nf-grey-l-100-25),
+				var(--nf-grey-d-200-25)
+			);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.nf-navbar {
+			--nf-navbar-transition-duration: 0s;
+		}
+	}
+</style>
