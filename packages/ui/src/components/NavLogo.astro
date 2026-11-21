@@ -1,0 +1,40 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+/* Either a text logo or an image logo, never both and never neither */
+type Props = HTMLAttributes<"a"> &
+	(
+		| { text: string; src?: never; alt?: never }
+		| { src: string; alt: string; text?: never }
+	);
+
+const { text, src, alt, href = "/", class: className, ...attrs } = Astro.props;
+---
+
+<a {...attrs} href={href} class:list={["nf-nav-logo", className]}>
+	{src ? <img class="nf-nav-logo-image" src={src} alt={alt} /> : text}
+</a>
+
+<style>
+	.nf-nav-logo {
+		--nf-nav-logo-block-size: 32px;
+
+		display: inline-flex;
+		align-items: center;
+		color: inherit;
+		font-size: 1.5rem;
+		font-weight: 700;
+		line-height: 1;
+		text-decoration: none;
+
+		&:focus-visible {
+			outline: 2px solid currentColor;
+			outline-offset: 2px;
+		}
+	}
+
+	.nf-nav-logo-image {
+		block-size: var(--nf-nav-logo-block-size);
+		inline-size: auto;
+	}
+</style>

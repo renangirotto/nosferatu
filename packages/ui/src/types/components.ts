@@ -21,7 +21,22 @@ export type ColorPalette =
 
 /**
  * Any component a prop renders as an icon: an `.astro` file, an imported
- * `.svg`, a framework component. The receiving component renders it with no
- * props and is never told what an icon is.
+ * `.svg`, a framework component. The receiving component is never told what
+ * an icon is: it renders it with no props, or, where it fixes the icon's look
+ * (the navbar parts), with `width` and `height` of `1em` and a `stroke-width`
+ * of `2`, which an imported `.svg` honours and any other component may ignore.
  */
 export type IconComponent = (props: Record<string, any>) => any;
+
+/**
+ * One link in a navigation list. `NavItemsDesktop` and `NavItemsMobile` both
+ * take an array of these, so the two lists can differ in items, order and icons.
+ */
+export type NavItem = {
+	text: string;
+	href: string;
+	/** Rendered before the text, hidden from assistive technology. */
+	icon?: IconComponent;
+	/** Marks the link `aria-current="page"` and draws it in the active color. */
+	current?: boolean;
+};
