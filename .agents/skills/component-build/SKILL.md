@@ -111,7 +111,10 @@ A component with a `color` prop has no default hue in its markup. Every **use** 
 - The fallback must equal the component's grey rule exactly, so `<X>` and `<X color="grey">` render identically; keep the grey rule too, so explicit grey behaves like every other hue.
 - Do **not** declare the grey values on the root class instead. That declares them on the element, and an ancestor could no longer theme an uncolored instance.
 - Consequence to document: an uncolored instance nested inside a colored instance of the same component inherits the outer hue.
-- **One exception to grey:** `TableOfContent`'s active-link color falls back to purple (`light-dark(var(--nf-purple-l-40), var(--nf-purple-d-50))`). Its mechanics are the same — fallback on every use site, no root declaration, a matching `[data-ui-color='purple']` rule — only the hue differs.
+- **Two exceptions to grey, both falling back to purple:** each colors only an active or current item, and a grey one would not stand out from the rest. Their mechanics are the same as above (fallback on every use site, no root declaration, a matching `[data-ui-color='purple']` rule); only the hue differs.
+  - `TableOfContent`'s active-link color falls back to `light-dark(var(--nf-purple-l-40), var(--nf-purple-d-50))`.
+  - `Navbar`'s `color` colors only the current item and falls back to `light-dark(var(--nf-purple-l-70), var(--nf-purple-d-30))`. The bar's own surface, text and border stay grey whatever `color` is.
+- **A set of components may share color properties by inheritance.** `NavItemsDesktop` and `NavItemsMobile` read `--nf-navbar-active-color`, which an enclosing `Navbar` sets, and `--nf-navbar-border-color`, which a consumer may set on it. They read them with the same fallbacks `Navbar` uses, so a list rendered on its own looks like one inside an uncolored `Navbar`. Reading an inherited property is not reaching outside the component's markup; never select into another component's elements to get the same effect.
 
 Reach for a second class only when the variation changes the component's _structure or role_ rather than selecting a value — and name it like any other part (below), never as a BEM modifier.
 

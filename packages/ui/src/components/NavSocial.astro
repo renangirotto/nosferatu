@@ -1,0 +1,62 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import type { IconComponent } from "../types/components";
+
+interface NavSocialItem {
+	icon: IconComponent;
+	href: string;
+	/** The link's accessible name: the icon is its only content. */
+	label: string;
+}
+
+interface Props extends HTMLAttributes<"ul"> {
+	items: NavSocialItem[];
+}
+
+const { items, class: className, ...attrs } = Astro.props;
+---
+
+<ul {...attrs} class:list={["nf-nav-social", className]}>
+	{items.map(({ icon: Icon, href, label }) => (
+		<li>
+			<a class="nf-nav-social-link" href={href} aria-label={label}>
+				<span class="nf-nav-social-icon" aria-hidden="true">
+					<Icon width="1em" height="1em" stroke-width="2" />
+				</span>
+			</a>
+		</li>
+	))}
+</ul>
+
+<style>
+	.nf-nav-social {
+		display: flex;
+		gap: var(--nf-spacing-base);
+		margin: var(--nf-spacing-none);
+		padding: var(--nf-spacing-none);
+		list-style: none;
+	}
+
+	.nf-nav-social-link {
+		/* 6px: no spacing step has it, so it is built from two that do */
+		--nf-nav-social-link-padding: calc(
+			var(--nf-spacing-base-low-3) + var(--nf-spacing-base-low-4)
+		);
+
+		display: flex;
+		padding: var(--nf-nav-social-link-padding);
+		color: inherit;
+
+		&:focus-visible {
+			outline: 2px solid currentColor;
+			outline-offset: -2px;
+		}
+	}
+
+	/* Never squashed: in a tight row, the text gives way instead */
+	.nf-nav-social-icon {
+		display: flex;
+		flex: none;
+		font-size: 22px;
+	}
+</style>

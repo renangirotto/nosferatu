@@ -1,0 +1,95 @@
+---
+/*
+ * A standalone document with the Navbar as a direct child of <body>, at the
+ * full viewport width. The docs content column is narrower than the navbar's
+ * 856px breakpoint, and a sticky element only sticks inside a parent taller
+ * than itself, so the desktop layout and the sticking can only be
+ * seen on a page of its own. It loads the library's styles and nothing else.
+ */
+import "astro-nosferatu/styles/index.css";
+import Navbar from "astro-nosferatu/components/Navbar.astro";
+import NavLogo from "astro-nosferatu/components/NavLogo.astro";
+import NavItemsDesktop from "astro-nosferatu/components/NavItemsDesktop.astro";
+import NavItemsMobile from "astro-nosferatu/components/NavItemsMobile.astro";
+import NavSocial from "astro-nosferatu/components/NavSocial.astro";
+import Github from "iconoir/icons/github.svg";
+import Linkedin from "iconoir/icons/linkedin.svg";
+import Youtube from "iconoir/icons/youtube.svg";
+
+const items = [
+	{ text: "Home", href: "#", current: true },
+	{ text: "Blog", href: "#" },
+	{ text: "Contact", href: "#" },
+];
+
+const social = [
+	{ icon: Github, href: "#", label: "GitHub" },
+	{ icon: Linkedin, href: "#", label: "LinkedIn" },
+	{ icon: Youtube, href: "#", label: "YouTube" },
+];
+
+const hues = [
+	"purple",
+	"blue",
+	"cyan",
+	"green",
+	"yellow",
+	"orange",
+	"red",
+	"pink",
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Navbar example</title>
+	</head>
+	<body>
+		<Navbar>
+			<NavLogo slot="nav-logo" text="Nosferatu" />
+			<NavItemsDesktop slot="nav-items-desktop" items={items} />
+			<NavSocial slot="nav-social" items={social} />
+			<NavItemsMobile slot="nav-items-mobile" items={items} />
+		</Navbar>
+		<main class="example">
+			<p>
+				Scroll down: the navbar sticks to the top as the colors pass under it.
+				Make the window narrower than 856px to see the burger.
+			</p>
+			{hues.map((hue) => (
+				<div class="example-band" style={`--band: var(--nf-${hue}-l-40)`}>
+					{hue}
+				</div>
+			))}
+		</main>
+	</body>
+</html>
+
+<style>
+	body {
+		background-color: light-dark(var(--nf-grey-l-10), var(--nf-grey-d-100));
+	}
+
+	.example {
+		display: grid;
+		gap: var(--nf-spacing-base);
+		margin-inline: auto;
+		padding: var(--nf-spacing-base);
+		max-inline-size: 1036px;
+		color: light-dark(var(--nf-grey-l-100), var(--nf-grey-d-10));
+	}
+
+	.example-band {
+		display: grid;
+		place-items: center;
+		block-size: 40vh;
+		border-radius: var(--nf-border-radius-base);
+		color: var(--nf-grey-l-100);
+		font-size: 2rem;
+		font-weight: 700;
+		background-color: var(--band);
+	}
+</style>
